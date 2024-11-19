@@ -1,0 +1,1 @@
+public final String[] top10FileExtensionTypesWithDot = {".java", ".js", ".html", ".css", ".xml", ".json", ".txt", ".md", ".yml", ".properties"};

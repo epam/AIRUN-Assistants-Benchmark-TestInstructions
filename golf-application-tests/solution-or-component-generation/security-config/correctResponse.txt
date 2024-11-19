@@ -1,0 +1,14 @@
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf().disable()
+        .authorizeHttpRequests((authorize) -> authorize
+            .requestMatchers(HttpMethod.POST).permitAll()
+            .requestMatchers("/login").permitAll()
+            .requestMatchers("/admin").hasRole(Role.ADMIN.name())
+            .anyRequest().authenticated()
+        )
+        .formLogin(withDefaults())
+        .httpBasic(withDefaults());
+    return http.build();
+}

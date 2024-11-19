@@ -1,0 +1,60 @@
+package com.golf.app.utils;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+public class PlayerUtilsTest {
+
+    @Test
+    void testCapitalizeName_singleWord() {
+        String name = "john";
+        String result = PlayerUtils.capitalizeName(name);
+        assertEquals("John", result);
+    }
+
+    @Test
+    void testCapitalizeName_multipleWords() {
+        String name = "john doe";
+        String result = PlayerUtils.capitalizeName(name);
+        assertEquals("John Doe", result);
+    }
+
+    @Test
+    void testCapitalizeName_mixedCase() {
+        String name = "joHN doE";
+        String result = PlayerUtils.capitalizeName(name);
+        assertEquals("John Doe", result);
+    }
+
+    @Test
+    void testCapitalizeName_singleSpace() {
+        String name = " ";
+        String result = PlayerUtils.capitalizeName(name);
+        assertEquals("", result);
+    }
+
+    @Test
+    public void testCalculateHandicapIndex_validScore() {
+        int score = 85;
+        double courseRating = 72.5;
+        int slopeRating = 130;
+
+        double expectedHandicapIndex = ((score - courseRating) * 113) / slopeRating;
+        double actualHandicapIndex = PlayerUtils.calculateHandicapIndex(score, courseRating, slopeRating);
+
+        Assertions.assertEquals(expectedHandicapIndex, actualHandicapIndex, 0.001);
+    }
+
+    @Test
+    public void testCalculateHandicapIndex_nullScore() {
+        int score = 0;
+        double courseRating = 72.5;
+        int slopeRating = 0;
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            PlayerUtils.calculateHandicapIndex(score, courseRating, slopeRating);
+        });
+    }
+}

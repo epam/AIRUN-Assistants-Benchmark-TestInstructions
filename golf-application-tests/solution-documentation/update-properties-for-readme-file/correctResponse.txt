@@ -1,0 +1,19 @@
+| Property | Value |
+|----------|-------|
+| **Database Configuration** | |
+| server.port | 8082 |
+| spring.datasource.url | changeIt |
+| spring.datasource.username | changeIt |
+| spring.datasource.password | changeIt |
+| **Logging Configuration** | |
+| logging.level.org.springframework | INFO |
+| logging.level.com.myapp | DEBUG |
+| **Hibernate Configuration** | |
+| spring.jpa.hibernate.ddl-auto | update |
+| **Swagger Configuration** | |
+| swagger.api.title | MyApp API |
+| swagger.api.version | 1.0 |
+| **Security Configuration** | |
+| security.jwt.header | Authorization |
+| security.jwt.prefix | Bearer |
+| security.jwt.expiration | 86400000 |

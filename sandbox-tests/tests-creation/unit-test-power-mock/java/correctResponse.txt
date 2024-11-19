@@ -1,0 +1,36 @@
+import com.epam.aicode.java.DataUtils;
+import com.epam.aicode.java.Invoice;
+import com.epam.aicode.java.InvoiceService;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.MockedStatic;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class InvoiceServiceTest {
+
+    @InjectMocks
+    private InvoiceService invoiceService;
+
+    @Test
+    void testBuildInvoice() {
+        String id = "123";
+        double price = 100.0;
+        String dateTime = "2023-11-10";
+
+        try (MockedStatic<DataUtils> mockedStatic = mockStatic(DataUtils.class)) {
+            mockedStatic.when(DataUtils::getIsoDateTime).thenReturn(dateTime);
+
+            Invoice invoice = invoiceService.buildInvoice(id, price);
+
+            assertEquals(id, invoice.getId());
+            assertEquals(price, invoice.getPrice());
+            assertEquals(dateTime, invoice.getDateTime());
+            mockedStatic.verify(DataUtils::getIsoDateTime, times(1));
+        }
+    }
+}

@@ -1,0 +1,91 @@
+package com.golf.app.api;
+
+import com.golf.app.dto.RoundDto;
+import com.golf.app.mapper.RoundMapper;
+import com.golf.app.model.Competition;
+import com.golf.app.model.Round;
+import com.golf.app.service.CompetitionService;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Optional;
+
+import static org.mockito.Mockito.when;
+
+@WebMvcTest(CompetitionRestController.class)
+public class CompetitionRestControllerIntegrationTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private CompetitionService competitionService;
+
+    @MockBean
+    private RoundMapper roundMapper;
+
+    @Test
+    @WithMockUser
+    public void testGetCompetitionRounds_Success() throws Exception {
+        Round round1 = new Round();
+        Round round2 = new Round();
+        Competition competition = new Competition();
+        competition.setRounds(Arrays.asList(round1, round2));
+
+        RoundDto roundDto1 = new RoundDto();
+        RoundDto roundDto2 = new RoundDto();
+
+        when(competitionService.getCompetitionById(1L)).thenReturn(Optional.of(competition));
+        when(roundMapper.roundDto(round1)).thenReturn(roundDto1);
+        when(roundMapper.roundDto(round2)).thenReturn(roundDto2);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/data/1/rounds")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0]").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("$[1]").exists());
+    }
+
+    @Test
+    @WithMockUser
+    public void testGetCompetitionRounds_CompetitionNotFound() throws Exception {
+        when(competitionService.getCompetitionById(1L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/data/1/rounds")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isNotFound())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Competition by ID not found"));
+    }
+
+    @Test
+    @WithMockUser
+    public void testGetCompetitionRounds_NoRoundsFound() throws Exception {
+        Competition competition = new Competition();
+        competition.setRounds(Collections.emptyList());
+
+        when(competitionService.getCompetitionById(1L)).thenReturn(Optional.of(competition));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/data/1/rounds")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
+    }
+
+    @Test
+    public void testGetCompetitionRounds_Unauthorized() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/data/1/rounds")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    }
+}

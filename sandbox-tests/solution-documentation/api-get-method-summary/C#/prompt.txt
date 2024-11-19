@@ -1,0 +1,13 @@
+C#, write a <summary> section for documenting the following api controller method. Please include only <summary> tags, without any trailing symbols
+[HttpGet()]
+public IEnumerable<Stat> GetMostTrendingSM()
+{
+    return Enumerable.Range(1, 5).Select(index => new Stat
+    {
+        Site = SocialMedias[Random.Shared.Next(SocialMedias.Length)],
+        OnlineUsers = Random.Shared.Next(0, 10000000),
+        TotalUsers = Random.Shared.Next(1000, 10000000),
+        IsDown = false
+    })
+    .ToArray();
+}

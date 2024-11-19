@@ -1,0 +1,18 @@
+import org.springframework.validation.BindingResult;
+import org.springframework.ui.Model;
+
+@PostMapping("/add")
+public String addCourse(@Valid @ModelAttribute CourseDto courseDto, BindingResult result, Model model) {
+    if (result.hasErrors()) {
+        model.addAttribute("errors", result.getAllErrors());
+        return "error-page";
+    }
+
+    Course course = new Course();
+    course.setName(courseDto.getName());
+    course.setLocation(courseDto.getLocation());
+    course.setHoles(CourseUtils.buildHoles(courseDto));
+    courseService.saveCourse(course);
+
+    return REDIRECT_COURSE_MAIN_PAGE;
+}

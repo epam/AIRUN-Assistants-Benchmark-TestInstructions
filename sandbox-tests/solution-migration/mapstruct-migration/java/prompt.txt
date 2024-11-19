@@ -1,0 +1,10 @@
+Implement the employeeDTOToEmployee method in the EmployeeMapperMapstruct class using MapStruct library and Mapping annotation:
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
+@Mapper
+public interface EmployeeMapperMapstruct {
+
+    EmployeeMapperMapstruct INSTANCE = Mappers.getMapper(EmployeeMapperMapstruct.class);
+}
+Only method implementation is needed in response

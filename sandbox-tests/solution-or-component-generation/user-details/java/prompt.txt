@@ -1,0 +1,7 @@
+Respond with an example of Java code of the UserDetailsImpl class that implements the UserDetails interface from org.springframework.security.core.userdetails.UserDetails.
+This class aggregates the User object that contains the roles, username and status.
+The package is com.epam.aicode.
+UserRole is a class that has a EUserRole title.
+UserRole is an enumeration of ROLE_ADMIN, ROLE_CLIENT, ROLE_MODERATOR.
+UserStatus is an enumeration of ACTIVE, BANNED, DELETED.
+Only implementation is needed. Omit any words not related to the class code.

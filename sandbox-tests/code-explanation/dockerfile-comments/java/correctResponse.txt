@@ -1,0 +1,27 @@
+# Use the official Eclipse Temurin OpenJDK JRE base image
+FROM eclipse-temurin:17-jre
+
+# Set the maintainer label
+LABEL maintainer="testUser@gmail.com"
+
+# Create a non-root user before copying files for better security practices
+RUN useradd -m -s /bin/bash appuser
+
+# Update package index, install necessary packages, and clean up package lists in one layer
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Expose the application port
+EXPOSE 8080
+
+# Define build-time variables and copy the JAR file into the image with proper ownership
+ARG JAR_FILE=target/infra-code-explanation-1.0-SNAPSHOT.jar
+COPY ${JAR_FILE} /home/appuser/app.jar
+RUN chown appuser:appuser /home/appuser/app.jar
+
+# Switch to the non-root user
+USER appuser
+
+# Define the entry point for the container
+ENTRYPOINT ["java", "-jar", "/home/appuser/app.jar"]

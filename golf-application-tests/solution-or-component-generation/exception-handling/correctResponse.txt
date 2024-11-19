@@ -1,0 +1,30 @@
+package com.golf.app.exception;
+
+public class CourseNotFoundException extends RuntimeException {
+
+    public CourseNotFoundException(String message) {
+        super(message);
+    }
+}
+
+package com.golf.app.controller;
+
+import com.golf.app.exception.CourseNotFoundException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
+
+@ControllerAdvice
+public class ExceptionHandlerController {
+
+    protected static final String ERROR_PAGE = "error/error-page";
+
+    @ExceptionHandler(CourseNotFoundException.class)
+    public ModelAndView handleCourseNotFoundException(CourseNotFoundException ex) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("errorMessage", ex.getMessage());
+        modelAndView.setViewName(ERROR_PAGE);
+        return modelAndView;
+    }
+}
+

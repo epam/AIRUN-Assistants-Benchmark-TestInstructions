@@ -1,0 +1,68 @@
+[Test]
+public void GenerateRandomPassword_LengthIsCorrect()
+{
+    // Arrange
+    int length = 10;
+
+    // Act
+    string password = PwdTools.GenerateRandomPassword(length, true, true, true, true);
+
+    // Assert
+    Assert.AreEqual(length, password.Length);
+}
+
+[Test]
+public void GenerateRandomPassword_OnlyLowercaseLetters()
+{
+    // Arrange
+    int length = 10;
+    string pattern = "^[a-z]+$";
+
+    // Act
+    string password = PwdTools.GenerateRandomPassword(length, true, false, false, false);
+
+    // Assert
+    Assert.IsTrue(Regex.IsMatch(password, pattern));
+}
+
+[Test]
+public void GenerateRandomPassword_OnlyUppercaseLetters()
+{
+    // Arrange
+    int length = 10;
+    string pattern = "^[A-Z]+$";
+
+    // Act
+    string password = PwdTools.GenerateRandomPassword(length, false, true, false, false);
+
+    // Assert
+    Assert.IsTrue(Regex.IsMatch(password, pattern));
+}
+
+[Test]
+public void GenerateRandomPassword_OnlyDigits()
+{
+    // Arrange
+    int length = 10;
+    string pattern = "^[0-9]+$";
+
+    // Act
+    string password = PwdTools.GenerateRandomPassword(length, false, false, true, false);
+
+    // Assert
+    Assert.IsTrue(Regex.IsMatch(password, pattern));
+}
+
+[Test]
+public void GenerateRandomPassword_OnlySpecialCharacters()
+{
+    // Arrange
+    int length = 10;
+    string pattern = "^[!@#$%^&*()_\\-+=<>?]+$";
+
+    // Act
+    string password = PwdTools.GenerateRandomPassword(length, false, false, false, true);
+
+    // Assert
+    Assert.IsTrue(Regex.IsMatch(password, pattern));
+}

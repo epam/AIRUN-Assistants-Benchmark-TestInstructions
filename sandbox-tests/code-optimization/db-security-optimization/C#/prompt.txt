@@ -1,0 +1,10 @@
+Optimize C# InsertUsersIntoEmployeeTable(SqliteConnection connection) method to use SqliteCommand with Parameters:
+public static void InsertUsersIntoUserTable(SqliteConnection connection)
+{
+    using (var command = new SqliteCommand("INSERT INTO user (id, name) VALUES (1, 'Name1')", connection))
+    {
+        command.ExecuteNonQuery();
+    }
+}
+Don't change the method parameters and use CommandText as a constructor argument.
+Only method implementation is needed in response.

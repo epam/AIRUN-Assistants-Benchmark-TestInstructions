@@ -1,0 +1,13 @@
+@PostMapping
+public String registerUser(@ModelAttribute User user) {
+    userService.registerUser(user);
+    return "redirect:/login";
+}
+
+or
+
+@PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+public String registerUser(User user) {
+    userService.registerUser(user);
+    return "redirect:/login";
+}

@@ -1,0 +1,3 @@
+Implement the following method in .NET/C#:
+public static string SerializeToCsv<T>(IEnumerable<T> list, bool hasHeader = true, string delimiter = \",\").
+The response requires only the method body, without the method signature and without any trailing characters.

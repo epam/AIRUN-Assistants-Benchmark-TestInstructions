@@ -1,0 +1,47 @@
+import com.golf.app.dto.CourseDto;
+import com.golf.app.enums.TeeColour;
+import com.golf.app.model.Hole;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class CourseUtilsTest {
+
+    @Test
+    void buildHoles_shouldCreateListOfHoles() {
+        // given
+        CourseDto courseDto = new CourseDto();
+        courseDto.setParHoles(Arrays.asList(3, 4, 5, 4, 3, 4, 5, 4, 3, 4, 5, 4, 3, 4, 5, 4, 3, 4));
+        courseDto.setStrokeIndexHoles(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18));
+        courseDto.setBlackTeeLengths(Arrays.asList(450, 480, 510, 470, 430, 460, 500, 460, 420, 450, 490, 450, 410, 440, 480, 440, 400, 430));
+        courseDto.setWhiteTeeLengths(Arrays.asList(420, 450, 480, 440, 400, 430, 470, 430, 390, 420, 460, 420, 380, 410, 450, 410, 370, 400));
+        courseDto.setYellowTeeLengths(Arrays.asList(390, 420, 450, 410, 370, 400, 440, 400, 360, 390, 430, 390, 350, 380, 420, 380, 340, 370));
+        courseDto.setBlueTeeLengths(Arrays.asList(360, 390, 420, 380, 340, 370, 410, 370, 330, 360, 400, 360, 320, 350, 390, 350, 310, 340));
+        courseDto.setRedTeeLengths(Arrays.asList(330, 360, 390, 350, 310, 340, 380, 340, 300, 330, 370, 330, 290, 320, 360, 320, 280, 310));
+
+        // when
+        List<Hole> holes = CourseUtils.buildHoles(courseDto);
+
+        // then
+        assertEquals(18, holes.size());
+        for (int i = 0; i < holes.size(); i++) {
+            assertEquals(i + 1, holes.get(i).getHoleNumber());
+            assertEquals(courseDto.getParHoles().get(i), holes.get(i).getPar());
+            assertEquals(courseDto.getStrokeIndexHoles().get(i), holes.get(i).getStrokeIndex());
+            assertEquals(5, holes.get(i).getTees().size());
+            assertEquals(TeeColour.BLACK, holes.get(i).getTees().get(0).getTeeColour());
+            assertEquals(courseDto.getBlackTeeLengths().get(i), holes.get(i).getTees().get(0).getLength());
+            assertEquals(TeeColour.WHITE, holes.get(i).getTees().get(1).getTeeColour());
+            assertEquals(courseDto.getWhiteTeeLengths().get(i), holes.get(i).getTees().get(1).getLength());
+            assertEquals(TeeColour.YELLOW, holes.get(i).getTees().get(2).getTeeColour());
+            assertEquals(courseDto.getYellowTeeLengths().get(i), holes.get(i).getTees().get(2).getLength());
+            assertEquals(TeeColour.BLUE, holes.get(i).getTees().get(3).getTeeColour());
+            assertEquals(courseDto.getBlueTeeLengths().get(i), holes.get(i).getTees().get(3).getLength());
+            assertEquals(TeeColour.RED, holes.get(i).getTees().get(4).getTeeColour());
+            assertEquals(courseDto.getRedTeeLengths().get(i), holes.get(i).getTees().get(4).getLength());
+        }
+    }
+}

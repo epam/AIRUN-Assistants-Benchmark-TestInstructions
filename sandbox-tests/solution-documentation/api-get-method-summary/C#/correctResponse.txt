@@ -1,0 +1,3 @@
+<summary>
+This API controller method returns a list of the most trending social media platforms. Each item in the list is a Stat object that contains the name of the social media platform, the number of online users, the total number of users, and a boolean indicating whether the platform is down or not. The list contains five items, and the data is randomly generated.
+</summary>

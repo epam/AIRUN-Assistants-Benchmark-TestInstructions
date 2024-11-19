@@ -1,0 +1,11 @@
+Fix the following C# method:
+public void Withdraw(decimal amount)
+{
+    if (Balance < amount)
+    {
+        throw new InvalidOperationException("Insufficient funds");
+    }
+    Balance -= amount;
+}
+It should be able to handle exceptions by printing them to the console.
+Name the new method WithdrawFixed. Without any additional wording or trailing characters in the response.

@@ -1,0 +1,26 @@
+import com.epam.aicode.java.Employee;
+import com.epam.aicode.java.EmployeeDTO;
+import com.epam.aicode.java.EmployeeMapperMapstruct;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class EmployeeMapperMapstructTest {
+
+    private static final String NAME = "name";
+    private static final String EMAIL = "email";
+
+    @Test
+    public void testEmployeeToEmployeeDTO() {
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        employeeDTO.setId(1L);
+        employeeDTO.setName(NAME);
+        employeeDTO.setEmail(EMAIL);
+
+        Employee employee = EmployeeMapperMapstruct.INSTANCE.employeeDTOToEmployee(employeeDTO);
+
+        assertEquals(1L, employee.getId().longValue());
+        assertEquals(NAME, employee.getName());
+        assertEquals(EMAIL, employee.getEmail());
+    }
+}

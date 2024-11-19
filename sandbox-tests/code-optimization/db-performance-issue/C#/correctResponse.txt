@@ -1,0 +1,6 @@
+public IEnumerable<Order> GetAllNonCompletedOrdersOptimized()
+{
+    return _context.Orders
+        .Where(o => !o.IsComplete)
+        .ToList();
+}

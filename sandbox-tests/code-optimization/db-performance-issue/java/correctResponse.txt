@@ -1,0 +1,3 @@
+public static void createIndex(Statement statement) throws SQLException {
+    statement.execute("CREATE INDEX name_index ON employee (name)");
+}

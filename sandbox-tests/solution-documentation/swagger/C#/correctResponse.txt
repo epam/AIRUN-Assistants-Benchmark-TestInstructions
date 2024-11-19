@@ -1,0 +1,49 @@
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+
+[ApiController]
+[Route("api/[controller]")]
+public class UsersController : ControllerBase
+{
+    private readonly IUserService _userService;
+
+    [HttpPost]
+    [SwaggerOperation("CreateUser")]
+    [SwaggerResponse(201, "User Created Successfully")]
+    public User CreateUser([FromBody] User user)
+    {
+        return _userService.CreateUser(user);
+    }
+
+    [HttpGet("{id}")]
+    [SwaggerOperation("GetUser")]
+    [SwaggerResponse(200, "User Retrieved Successfully")]
+    public User GetUser(long id)
+    {
+        return _userService.GetUser(id);
+    }
+
+    [HttpGet]
+    [SwaggerOperation("GetAllUsers")]
+    [SwaggerResponse(200, "Users Retrieved Successfully")]
+    public List<User> GetAllUsers()
+    {
+        return _userService.GetAllUsers();
+    }
+
+    [HttpPut("{id}")]
+    [SwaggerOperation("UpdateUser")]
+    [SwaggerResponse(200, "User Updated Successfully")]
+    public User UpdateUser(long id, [FromBody] User user)
+    {
+        return _userService.UpdateUser(id, user);
+    }
+
+    [HttpDelete("{id}")]
+    [SwaggerOperation("DeleteUser")]
+    [SwaggerResponse(200, "User Deleted Successfully")]
+    public void DeleteUser(long id)
+    {
+        _userService.DeleteUser(id);
+    }
+}

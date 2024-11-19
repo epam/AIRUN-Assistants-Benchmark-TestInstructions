@@ -1,0 +1,25 @@
+public static double[] toGaussKruger(double latitude, double longitude) {
+    double phi = Math.toRadians(latitude);
+    double lambda = Math.toRadians(longitude);
+    double lambda0 = CENTRAL_MERIDIAN;
+    double f = FLATTENING;
+    double a = EQUATORIAL_RADIUS;
+    double k0 = SCALE_FACTOR;
+    double FE = FALSE_EASTING;
+    double FN = FALSE_NORTHING;
+
+    double e2 = f * (2.0 - f);
+    double n = a / Math.sqrt(1.0 - e2 * Math.sin(phi) * Math.sin(phi));
+    double rho = n * (1.0 - e2) / (1.0 - e2 * Math.sin(phi) * Math.sin(phi));
+    double nu = n / Math.sqrt(1.0 - e2 * Math.sin(phi) * Math.sin(phi));
+    double psi = nu / rho;
+    double delta_lambda = lambda - lambda0;
+    double xi_prim = Math.atan(Math.tan(phi) / Math.cos(delta_lambda));
+    double eta_prim = Math.atan(Math.cos(phi) * Math.sin(delta_lambda) / Math.sqrt(1.0 - e2 * Math.sin(phi) * Math.sin(phi)));
+    double x = k0 * rho * Math.sin(eta_prim);
+    double y = k0 * (nu * xi_prim + (nu / 6.0) * Math.pow(Math.cos(phi), 3.0) * (psi - Math.pow(Math.tan(eta_prim), 2.0)) * Math.pow(Math.sin(xi_prim), 3.0));
+    x += FE;
+    y += FN;
+
+    return new double[] {x, y};
+}

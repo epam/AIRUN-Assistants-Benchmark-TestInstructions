@@ -1,0 +1,13 @@
+export function serializeToCsv(data: any[], hasHeader: boolean = true, delimiter: string = \",\"): string
+{
+  let csv = "";
+  if (hasHeader) {
+    const headers = Object.keys(data[0]);
+    csv += headers.join(delimiter) + "\n";
+  }
+  data.forEach((item) => {
+    const values = Object.values(item);
+    csv += values.join(delimiter) + "\n";
+  });
+  return csv;
+}

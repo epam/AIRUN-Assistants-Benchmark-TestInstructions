@@ -1,0 +1,23 @@
+Refactor Java processPayment(boolean isOnline) method by encapsulating duplicate code:
+
+public Payment processPayment(boolean isOnline) {
+    Payment payment = new Payment();
+    if (isOnline) {
+        payment.setPaymentDate(LocalDate.now());
+        payment.setPaymentStatus(ACTIVE);
+        payment.setPaymentType(CREDIT);
+
+        payment.setPaymentBank(ICICI);
+        payment.setPaymentMode(ONLINE);
+    } else {
+        payment.setPaymentDate(LocalDate.now());
+        payment.setPaymentStatus(ACTIVE);
+        payment.setPaymentType(CREDIT);
+
+        payment.setPaymentBank(HDFC);
+        payment.setPaymentMode(OFFLINE);
+    }
+    return payment;
+}
+
+Only method implementation is needed in response.

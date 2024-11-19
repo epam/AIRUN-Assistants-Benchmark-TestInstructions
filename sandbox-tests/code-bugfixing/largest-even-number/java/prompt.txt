@@ -1,0 +1,13 @@
+Given the next Java snippet:
+
+    public static int findLargestEvenNumber(List<Integer> numbers) {
+        return numbers.stream()
+            .filter(n -> n % 2 == 0)
+            .sorted((n1, n2) -> n2 - n1)
+            .findFirst()
+            .get();
+    }
+
+I'm expecting a result instead of an exception.
+Provide only the corrected implementation of the code, omitting other unnecessary words.
+Use int as the return value.

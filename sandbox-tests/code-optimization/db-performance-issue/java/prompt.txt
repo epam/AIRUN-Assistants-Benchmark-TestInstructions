@@ -1,0 +1,4 @@
+Implement an index on the name column in the Employee table for the following Java method:
+public static void createIndex(Statement statement) throws SQLException {
+}
+Only method implementation is needed in response.

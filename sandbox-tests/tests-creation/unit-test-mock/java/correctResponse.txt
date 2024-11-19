@@ -1,0 +1,67 @@
+import com.epam.aicode.java.Calculator;
+import com.epam.aicode.java.CalculatorService;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+public class CalculatorTest {
+
+    @Mock
+    private CalculatorService calculatorService;
+
+    @InjectMocks
+    private Calculator calculator;
+
+    @Test
+    public void testAdd() {
+        // when
+        when(calculatorService.add(10.0, 20.0)).thenReturn(30.0);
+
+        // act
+        double result = calculator.add(10.0, 20.0);
+
+        // assert
+        Assertions.assertEquals(30.0, result);
+
+        // verify
+        verify(calculatorService).add(10.0, 20.0);
+    }
+
+    @Test
+    public void testSubtract() {
+        // when
+        when(calculatorService.subtract(10.0, 20.0)).thenReturn(-10.0);
+
+        // act
+        double result = calculator.subtract(10.0, 20.0);
+
+        // assert
+        Assertions.assertEquals(-10.0, result);
+
+        // verify
+        verify(calculatorService).subtract(10.0, 20.0);
+    }
+
+    @Test
+    public void testMultiply() {
+        // when
+        when(calculatorService.multiply(10.0, 20.0)).thenReturn(200.0);
+
+        // act
+        double result = calculator.multiply(10.0, 20.0);
+
+        // assert
+        Assertions.assertEquals(200.0, result);
+
+        // verify
+        verify(calculatorService).multiply(10.0, 20.0);
+    }
+}

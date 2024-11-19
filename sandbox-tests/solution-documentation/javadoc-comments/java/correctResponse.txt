@@ -1,0 +1,27 @@
+/**
+ * The FileProcessor class provides functionalities to process CSV files
+ * and convert the data into JSON format.
+ */
+public class FileProcessor {
+
+    /**
+     * This method processes csv file and returns json string
+     *
+     * @param csvFile path to csv file
+     * @return json string
+     * @throws RuntimeException if there is an error while processing the CSV file.
+     */
+    public String processCsvToJson(String csvFile) {
+        Map<String, String> data = new HashMap<>();
+
+        try (CSVReader reader = new CSVReader(new FileReader(csvFile))) {
+            String[] line;
+            while ((line = reader.readNext()) != null) {
+                data.put(line[0], line[1]);
+            }
+        } catch (IOException | CsvValidationException e) {
+            throw new RuntimeException("Error while processing csv file", e);
+        }
+        return new Gson().toJson(data);
+    }
+}

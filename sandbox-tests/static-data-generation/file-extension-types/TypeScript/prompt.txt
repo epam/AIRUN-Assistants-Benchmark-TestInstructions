@@ -1,0 +1,2 @@
+Write a TypeScript field that contains 10 most common file extension types beginning with const top10FilesExtensionsWithDot: string[] = [
+Provide only code for initialization body. Don't include field name, type and the question in your response.

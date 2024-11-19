@@ -1,0 +1,38 @@
+// This class is responsible for creating a key store
+    public class Keystore
+    {
+        private const string PublicKeyFileName = "publicKey.xml";
+        private const string PrivateKeyFileName = "privateKey.xml";
+
+        // This method creates a key store
+        public void CreateKeyStore()
+        {
+            // An instance of RSACryptoServiceProvider is created to generate public and private keys
+            using var rsaServiceProvider = new RSACryptoServiceProvider();
+            try
+            {
+                // The RSA parameters are exported, including the private key
+                var rsaParameters = rsaServiceProvider.ExportParameters(true);
+
+                // The public key is exported to an XML string
+                var publicKey = rsaServiceProvider.ToXmlString(false);
+                // The private key is exported to an XML string
+                var privateKey = rsaServiceProvider.ToXmlString(true);
+
+                WriteToXmlFile(PublicKeyFileName, publicKey);
+                WriteToXmlFile(PrivateKeyFileName, privateKey);
+            }
+            // If a cryptographic exception occurs, it is caught and the error message is written to the console
+            catch (CryptographicException exception)
+            {
+                Console.WriteLine($"An error occurred while creating the keystore: {exception.Message}");
+            }
+        }
+
+        // This method writes a string to an XML file
+        private static void WriteToXmlFile(string fileName, string data)
+        {
+            File.WriteAllText(fileName, data);
+        }
+    }
+}

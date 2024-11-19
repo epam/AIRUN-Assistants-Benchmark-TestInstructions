@@ -1,0 +1,2 @@
+Generate a Dockerfile for a C# console application using SDK and runtime dotnet 6.0.
+Don't add // comments

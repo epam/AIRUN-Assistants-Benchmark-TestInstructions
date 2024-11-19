@@ -1,0 +1,24 @@
+public class FileProcessor {
+
+    // Method to convert CSV file to JSON format
+    public String processCsvToJson(String csvFile) {
+        // Create a HashMap to store CSV data
+        Map<String, String> data = new HashMap<>();
+
+        // Try to read the CSV file
+        try (CSVReader reader = new CSVReader(new FileReader(csvFile))) {
+            String[] line;
+            // Read each line of the CSV file
+            while ((line = reader.readNext()) != null) {
+                // Add each line of data to the HashMap
+                data.put(line[0], line[1]);
+            }
+        // Catch any IOException or CsvValidationException
+        } catch (IOException | CsvValidationException e) {
+            // Throw a new RuntimeException with a custom error message
+            throw new RuntimeException("Error while processing csv file", e);
+        }
+        // Convert the HashMap to a JSON string and return it
+        return new Gson().toJson(data);
+    }
+}

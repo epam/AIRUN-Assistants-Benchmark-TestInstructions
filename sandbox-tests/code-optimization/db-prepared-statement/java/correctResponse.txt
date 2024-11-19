@@ -1,0 +1,6 @@
+public static void insertUsersIntoUserTable(Connection connection) throws SQLException {
+    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO user (id, name) VALUES (?, ?)");
+    preparedStatement.setInt(1, 2);
+    preparedStatement.setString(2, "Name1");
+    preparedStatement.execute();
+}

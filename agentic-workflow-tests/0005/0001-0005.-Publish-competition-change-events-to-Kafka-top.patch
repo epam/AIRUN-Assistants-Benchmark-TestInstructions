@@ -1,0 +1,505 @@
+From ec48a371266a841751330e6ad7ac3957c607f8a8 Mon Sep 17 00:00:00 2001
+From: Name Surname <testuser@localhost>
+Date: Fri, 5 Jul 2024 01:52:08 +0300
+Subject: [PATCH] 0005. Publish competition change events to Kafka topic
+
+---
+ pom.xml                                       |  4 ++
+ .../java/com/golf/app/AppConfiguration.java   | 11 ++++
+ .../java/com/golf/app/event/AppEvent.java     | 17 +++++
+ .../com/golf/app/event/CompetitionEvent.java  | 37 +++++++++++
+ .../java/com/golf/app/event/DomainEvent.java  | 12 ++++
+ .../golf/app/mapper/CompetitionMapper.java    | 42 ++++++++++--
+ src/main/java/com/golf/app/model/Outbox.java  | 65 +++++++++++++++++++
+ .../com/golf/app/repo/OutboxRepository.java   | 16 +++++
+ .../app/service/CompetitionServiceImpl.java   | 31 +++++++--
+ .../app/service/OutboxListenerService.java    | 51 +++++++++++++++
+ .../app/service/OutboxPublisherService.java   | 54 +++++++++++++++
+ src/main/resources/application.properties     |  8 +++
+ 12 files changed, 340 insertions(+), 8 deletions(-)
+ create mode 100644 src/main/java/com/golf/app/event/AppEvent.java
+ create mode 100644 src/main/java/com/golf/app/event/CompetitionEvent.java
+ create mode 100644 src/main/java/com/golf/app/event/DomainEvent.java
+ create mode 100644 src/main/java/com/golf/app/model/Outbox.java
+ create mode 100644 src/main/java/com/golf/app/repo/OutboxRepository.java
+ create mode 100644 src/main/java/com/golf/app/service/OutboxListenerService.java
+ create mode 100644 src/main/java/com/golf/app/service/OutboxPublisherService.java
+
+diff --git a/pom.xml b/pom.xml
+index 151f090..3d9264a 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -43,6 +43,10 @@
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter-data-jpa</artifactId>
+         </dependency>
++        <dependency>
++            <groupId>org.springframework.kafka</groupId>
++            <artifactId>spring-kafka</artifactId>
++        </dependency>
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter-test</artifactId>
+diff --git a/src/main/java/com/golf/app/AppConfiguration.java b/src/main/java/com/golf/app/AppConfiguration.java
+index c7cb3ef..7f8f4ec 100644
+--- a/src/main/java/com/golf/app/AppConfiguration.java
++++ b/src/main/java/com/golf/app/AppConfiguration.java
+@@ -1,14 +1,25 @@
+ package com.golf.app;
+ 
++import org.apache.kafka.clients.admin.NewTopic;
+ import org.modelmapper.ModelMapper;
++import org.springframework.beans.factory.annotation.Value;
+ import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.Configuration;
++import org.springframework.kafka.config.TopicBuilder;
++import org.springframework.scheduling.annotation.EnableScheduling;
+ 
+ @Configuration
++@EnableScheduling
+ public class AppConfiguration {
+ 
+     @Bean
+     public ModelMapper modelMapper() {
+         return new ModelMapper();
+     }
++
++    @Bean
++    public NewTopic topic( @Value("${golf.kafka.topicName}") String topicName )
++    {
++        return TopicBuilder.name( topicName ).build();
++    }
+ }
+diff --git a/src/main/java/com/golf/app/event/AppEvent.java b/src/main/java/com/golf/app/event/AppEvent.java
+new file mode 100644
+index 0000000..9822394
+--- /dev/null
++++ b/src/main/java/com/golf/app/event/AppEvent.java
+@@ -0,0 +1,17 @@
++package com.golf.app.event;
++
++import lombok.Builder;
++import lombok.Data;
++
++@Data
++@Builder
++public class AppEvent<T>
++{
++    private String aggregateType;
++
++    private String aggregateId;
++
++    private String eventType;
++
++    private T event;
++}
+diff --git a/src/main/java/com/golf/app/event/CompetitionEvent.java b/src/main/java/com/golf/app/event/CompetitionEvent.java
+new file mode 100644
+index 0000000..763d362
+--- /dev/null
++++ b/src/main/java/com/golf/app/event/CompetitionEvent.java
+@@ -0,0 +1,37 @@
++package com.golf.app.event;
++
++import java.time.LocalDate;
++
++import lombok.AllArgsConstructor;
++import lombok.Data;
++import lombok.NoArgsConstructor;
++import lombok.experimental.SuperBuilder;
++
++@Data
++@SuperBuilder
++@AllArgsConstructor
++@NoArgsConstructor
++public class CompetitionEvent implements DomainEvent
++{
++    private Long id;
++
++    private LocalDate startDate;
++
++    private LocalDate endDate;
++
++    private String name;
++
++    private String courseName;
++
++    @SuperBuilder
++    @NoArgsConstructor
++    public static class Upserted extends CompetitionEvent
++    {
++    }
++
++    @SuperBuilder
++    @NoArgsConstructor
++    public static class Deleted extends CompetitionEvent
++    {
++    }
++}
+diff --git a/src/main/java/com/golf/app/event/DomainEvent.java b/src/main/java/com/golf/app/event/DomainEvent.java
+new file mode 100644
+index 0000000..e110cf2
+--- /dev/null
++++ b/src/main/java/com/golf/app/event/DomainEvent.java
+@@ -0,0 +1,12 @@
++package com.golf.app.event;
++
++import com.fasterxml.jackson.annotation.JsonTypeInfo;
++
++@JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
++public interface DomainEvent
++{
++    public enum Type
++    {
++        INSERTED, UPDATED, UPSERTED, DELETED;
++    }
++}
+diff --git a/src/main/java/com/golf/app/mapper/CompetitionMapper.java b/src/main/java/com/golf/app/mapper/CompetitionMapper.java
+index 4a16043..0fdfbaa 100644
+--- a/src/main/java/com/golf/app/mapper/CompetitionMapper.java
++++ b/src/main/java/com/golf/app/mapper/CompetitionMapper.java
+@@ -1,12 +1,46 @@
+ package com.golf.app.mapper;
+ 
++import org.mapstruct.Mapper;
++import org.mapstruct.Mapping;
++
+ import com.golf.app.dto.CompetitionDto;
++import com.golf.app.event.AppEvent;
++import com.golf.app.event.CompetitionEvent;
++import com.golf.app.event.DomainEvent;
+ import com.golf.app.model.Competition;
+-import org.mapstruct.Mapper;
+ 
+ @Mapper(componentModel = "spring")
+-public interface CompetitionMapper {
++public interface CompetitionMapper
++{
++
++    Competition competition( CompetitionDto competitionDto );
++    CompetitionDto competitionDto( Competition competition );
++
++    // have to use default impl due to bug:
++    // https://github.com/mapstruct/mapstruct/issues/2932
++    default AppEvent<CompetitionEvent.Upserted> appEventCompetitionEventUpserted( Competition competition )
++    {
++        return AppEvent.<CompetitionEvent.Upserted> builder()
++                .aggregateType(Competition.class.getSimpleName())
++                .aggregateId(competition.getId().toString())
++                .eventType( DomainEvent.Type.UPSERTED.name() )
++                .event( competitionEventUpserted( competition ) )
++                .build();
++    }
++
++    default AppEvent<CompetitionEvent.Deleted> appEventCompetitionEventDeleted( Competition competition )
++    {
++        return AppEvent.<CompetitionEvent.Deleted> builder()
++                .aggregateType(Competition.class.getSimpleName())
++                .aggregateId(competition.getId().toString())
++                .eventType( DomainEvent.Type.DELETED.name() )
++                .event( competitionEventDeleted( competition ) )
++                .build();
++    }
++
++    @Mapping(target = "courseName", source = "course.name")
++    CompetitionEvent.Deleted competitionEventDeleted( Competition competition );
+ 
+-    Competition competition(CompetitionDto competitionDto);
+-    CompetitionDto competitionDto(Competition competition);
++    @Mapping(target = "courseName", source = "course.name")
++    CompetitionEvent.Upserted competitionEventUpserted( Competition competition );
+ }
+diff --git a/src/main/java/com/golf/app/model/Outbox.java b/src/main/java/com/golf/app/model/Outbox.java
+new file mode 100644
+index 0000000..6323077
+--- /dev/null
++++ b/src/main/java/com/golf/app/model/Outbox.java
+@@ -0,0 +1,65 @@
++package com.golf.app.model;
++
++import org.hibernate.annotations.JdbcTypeCode;
++import org.hibernate.type.SqlTypes;
++
++import com.golf.app.event.CompetitionEvent;
++
++import jakarta.persistence.Column;
++import jakarta.persistence.Entity;
++import jakarta.persistence.GeneratedValue;
++import jakarta.persistence.GenerationType;
++import jakarta.persistence.Id;
++import lombok.AllArgsConstructor;
++import lombok.Data;
++import lombok.EqualsAndHashCode;
++import lombok.NoArgsConstructor;
++import lombok.experimental.SuperBuilder;
++
++@Data
++@AllArgsConstructor
++@NoArgsConstructor
++@SuperBuilder
++@Entity
++public abstract class Outbox<T extends CompetitionEvent>
++{
++    @Id
++    @GeneratedValue(strategy = GenerationType.IDENTITY)
++    private Long id;
++
++    private String aggregateType;
++
++    private String aggregateId;
++
++    private String eventType;
++
++    public abstract T getPayload();
++
++    public abstract void setPayload( T value );
++
++    @Data
++    @AllArgsConstructor
++    @NoArgsConstructor
++    @SuperBuilder
++    @EqualsAndHashCode(callSuper = true)
++    @Entity
++    public static class CompetitionEventUpserted extends Outbox<CompetitionEvent.Upserted>
++    {
++        @Column(columnDefinition = "json")
++        @JdbcTypeCode(SqlTypes.JSON)
++        private CompetitionEvent.Upserted payload;
++    }
++
++    @Data
++    @AllArgsConstructor
++    @NoArgsConstructor
++    @SuperBuilder
++    @EqualsAndHashCode(callSuper = true)
++    @Entity
++    public static class CompetitionEventDeleted extends Outbox<CompetitionEvent.Deleted>
++    {
++        @Column(columnDefinition = "json")
++        @JdbcTypeCode(SqlTypes.JSON)
++        private CompetitionEvent.Deleted payload;
++    }
++}
+diff --git a/src/main/java/com/golf/app/repo/OutboxRepository.java b/src/main/java/com/golf/app/repo/OutboxRepository.java
+new file mode 100644
+index 0000000..2bdefef
+--- /dev/null
++++ b/src/main/java/com/golf/app/repo/OutboxRepository.java
+@@ -0,0 +1,16 @@
++package com.golf.app.repo;
++
++import org.springframework.data.domain.Page;
++import org.springframework.data.domain.Pageable;
++import org.springframework.data.jpa.repository.Lock;
++import org.springframework.data.repository.CrudRepository;
++
++import com.golf.app.model.Outbox;
++
++import jakarta.persistence.LockModeType;
++
++public interface OutboxRepository<T extends Outbox> extends CrudRepository<T, Long>
++{
++    @Lock(LockModeType.PESSIMISTIC_WRITE)
++    Page<T> findAllByOrderByIdAsc( Pageable pageable );
++}
+diff --git a/src/main/java/com/golf/app/service/CompetitionServiceImpl.java b/src/main/java/com/golf/app/service/CompetitionServiceImpl.java
+index 27cfdde..023c05e 100644
+--- a/src/main/java/com/golf/app/service/CompetitionServiceImpl.java
++++ b/src/main/java/com/golf/app/service/CompetitionServiceImpl.java
+@@ -1,20 +1,37 @@
+ package com.golf.app.service;
+ 
+-import com.golf.app.model.Competition;
+-import com.golf.app.repo.CompetitionRepository;
+ import java.util.Optional;
++
+ import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.context.ApplicationEventPublisher;
+ import org.springframework.data.domain.Sort;
+ import org.springframework.stereotype.Service;
+ 
++import com.golf.app.event.AppEvent;
++import com.golf.app.event.CompetitionEvent;
++import com.golf.app.mapper.CompetitionMapper;
++import com.golf.app.model.Competition;
++import com.golf.app.repo.CompetitionRepository;
++
++import jakarta.transaction.Transactional;
++
+ @Service
++@Transactional
+ public class CompetitionServiceImpl implements CompetitionService {
+ 
+     private final CompetitionRepository competitionRepository;
+ 
++    private final CompetitionMapper competitionMapper;
++    private final ApplicationEventPublisher eventPublisher;
++
++
+     @Autowired
+-    public CompetitionServiceImpl(CompetitionRepository competitionRepository) {
++    public CompetitionServiceImpl(CompetitionRepository competitionRepository, CompetitionMapper competitionMapper,
++            ApplicationEventPublisher eventPublisher)
++    {
+         this.competitionRepository = competitionRepository;
++        this.competitionMapper = competitionMapper;
++        this.eventPublisher = eventPublisher;
+     }
+ 
+     @Override
+@@ -30,12 +47,18 @@ public class CompetitionServiceImpl implements CompetitionService {
+ 
+     @Override
+     public Competition saveCompetition(Competition competition) {
+-        return competitionRepository.save(competition);
++        Competition saved = competitionRepository.save( competition );
++        AppEvent<CompetitionEvent.Upserted> appEvent = competitionMapper.appEventCompetitionEventUpserted( saved );
++        eventPublisher.publishEvent( appEvent );
++        return saved;
+     }
+ 
+     @Override
+     public void deleteCompetition(Long id) {
++        Competition deleted = competitionRepository.findById( id ).get();
+         competitionRepository.deleteById(id);
++        AppEvent<CompetitionEvent.Deleted> appEvent = competitionMapper.appEventCompetitionEventDeleted( deleted );
++        eventPublisher.publishEvent( appEvent );
+     }
+ 
+     @Override
+diff --git a/src/main/java/com/golf/app/service/OutboxListenerService.java b/src/main/java/com/golf/app/service/OutboxListenerService.java
+new file mode 100644
+index 0000000..54eb99b
+--- /dev/null
++++ b/src/main/java/com/golf/app/service/OutboxListenerService.java
+@@ -0,0 +1,51 @@
++package com.golf.app.service;
++
++import org.springframework.context.event.EventListener;
++import org.springframework.stereotype.Service;
++
++import com.golf.app.event.AppEvent;
++import com.golf.app.event.CompetitionEvent;
++import com.golf.app.model.Outbox;
++import com.golf.app.repo.OutboxRepository;
++
++import jakarta.transaction.Transactional;
++
++@Service
++@Transactional
++public class OutboxListenerService
++{
++    private final OutboxRepository outboxRepository;
++
++    public OutboxListenerService(OutboxRepository outboxRepository)
++    {
++        this.outboxRepository = outboxRepository;
++    }
++
++    @SuppressWarnings("unchecked")
++    @EventListener
++    public void handleAppEvent( AppEvent<?> event )
++    {
++        Class<?> eventClass = event.getEvent().getClass();
++        if( CompetitionEvent.Upserted.class.equals( eventClass ) )
++        {
++            outboxRepository.save(
++                    Outbox.CompetitionEventUpserted.builder()
++                    .aggregateId( event.getAggregateId() )
++                    .aggregateType( event.getAggregateType() )
++                    .eventType( event.getEventType() )
++                    .payload( (CompetitionEvent.Upserted) event.getEvent() )
++                    .build() );
++            return;
++        }
++        if( CompetitionEvent.Deleted.class.equals( eventClass ) )
++        {
++            outboxRepository.save( Outbox.CompetitionEventDeleted.builder()
++                    .aggregateId( event.getAggregateId() )
++                    .aggregateType( event.getAggregateType() )
++                    .eventType( event.getEventType() )
++                    .payload( (CompetitionEvent.Deleted) event.getEvent() )
++                    .build() );
++            return;
++        }
++    }
++}
+diff --git a/src/main/java/com/golf/app/service/OutboxPublisherService.java b/src/main/java/com/golf/app/service/OutboxPublisherService.java
+new file mode 100644
+index 0000000..54888aa
+--- /dev/null
++++ b/src/main/java/com/golf/app/service/OutboxPublisherService.java
+@@ -0,0 +1,54 @@
++package com.golf.app.service;
++
++import java.util.List;
++
++import org.springframework.beans.factory.annotation.Value;
++import org.springframework.data.domain.Pageable;
++import org.springframework.kafka.core.KafkaTemplate;
++import org.springframework.scheduling.annotation.Scheduled;
++import org.springframework.stereotype.Service;
++
++import com.golf.app.model.Outbox;
++import com.golf.app.repo.OutboxRepository;
++
++import jakarta.transaction.Transactional;
++
++@Service
++@Transactional
++public class OutboxPublisherService
++{
++    private final OutboxRepository outboxRepository;
++
++    private final KafkaTemplate<String, Outbox<?>> kafkaTemplate;
++
++
++    private final String kafkaTopicName;
++
++
++    private final int publishBatchSize;
++
++    public OutboxPublisherService(OutboxRepository outboxRepository, KafkaTemplate<String, Outbox<?>> kafkaTemplate,
++            @Value("${golf.kafka.topicName}") String kafkaTopicName,
++            @Value("${golf.kafka.publish.batchSize}") int publishBatchSize)
++    {
++        this.outboxRepository = outboxRepository;
++        this.kafkaTemplate = kafkaTemplate;
++        this.kafkaTopicName = kafkaTopicName;
++        this.publishBatchSize = publishBatchSize;
++    }
++
++    @SuppressWarnings("unchecked")
++    @Scheduled(fixedDelayString = "${golf.kafka.publish.delay}")
++    public void publish()
++    {
++        List<Outbox<?>> entities = outboxRepository.findAllByOrderByIdAsc( Pageable.ofSize( publishBatchSize ) )
++                .toList();
++        entities.forEach( entity -> kafkaTemplate.send( kafkaTopicName, key( entity ), entity ) );
++        outboxRepository.deleteAll( entities );
++    }
++
++    private String key( Outbox<?> entity )
++    {
++        return entity.getAggregateType() + "." + entity.getAggregateId();
++    }
++}
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+index 4fea5c9..c3dcbce 100644
+--- a/src/main/resources/application.properties
++++ b/src/main/resources/application.properties
+@@ -19,3 +19,11 @@ swagger.api.version=1.0
+ security.jwt.header=Authorization
+ security.jwt.prefix=Bearer
+ security.jwt.expiration=86400000
++
++spring.kafka.bootstrap-servers=${KAFKA_HOST:localhost}:9092
++spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
++spring.kafka.consumer.group-id=golf-application
++
++golf.kafka.topicName=golf
++golf.kafka.publish.batchSize=10
++golf.kafka.publish.delay=10000
+-- 
+2.45.1
+

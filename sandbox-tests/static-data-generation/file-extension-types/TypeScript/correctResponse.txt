@@ -1,0 +1,1 @@
+".pdf", ".docx", ".xlsx", ".pptx", ".jpg", ".png", ".mp3", ".mp4", ".txt", ".html"

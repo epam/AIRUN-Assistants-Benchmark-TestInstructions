@@ -1,0 +1,110 @@
+package com.golf.app.service;
+
+import com.golf.app.model.Competition;
+import com.golf.app.repo.CompetitionRepository;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Sort;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+class CompetitionServiceImplTest {
+
+    @Mock
+    private CompetitionRepository competitionRepository;
+
+    @InjectMocks
+    private CompetitionServiceImpl competitionService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetAllCompetition() {
+        Competition competition1 = new Competition();
+        competition1.setName("Competition 1");
+
+        Competition competition2 = new Competition();
+        competition2.setName("Competition 2");
+
+        when(competitionRepository.findAll(Sort.by(Sort.Direction.DESC, "startDate")))
+            .thenReturn(Arrays.asList(competition1, competition2));
+
+        Iterable<Competition> result = competitionService.getAllCompetition();
+
+        assertNotNull(result);
+        assertTrue(((List<Competition>) result).contains(competition1));
+        assertTrue(((List<Competition>) result).contains(competition2));
+    }
+
+    @Test
+    void testGetCompetitionById() {
+        Competition competition = new Competition();
+        competition.setId(1L);
+        when(competitionRepository.findById(1L)).thenReturn(Optional.of(competition));
+
+        Optional<Competition> result = competitionService.getCompetitionById(1L);
+
+        assertTrue(result.isPresent());
+        assertEquals(competition, result.get());
+    }
+
+    @Test
+    void testSaveCompetition_validDates() {
+        Competition competition = new Competition();
+        competition.setStartDate(LocalDate.of(2023, 5, 5));
+        competition.setEndDate(LocalDate.of(2023, 5, 10));
+
+        when(competitionRepository.save(competition)).thenReturn(competition);
+        Competition result = competitionService.saveCompetition(competition);
+
+        assertEquals(competition, result);
+    }
+
+    @Test
+    void testSaveCompetition_invalidDates() {
+        Competition competition = new Competition();
+        competition.setStartDate(LocalDate.of(2023, 5, 10));
+        competition.setEndDate(LocalDate.of(2023, 5, 5));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            competitionService.saveCompetition(competition);
+        });
+
+        assertEquals("Start date must be before end date.", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteCompetition() {
+        Long id = 1L;
+        doNothing().when(competitionRepository).deleteById(id);
+
+        competitionService.deleteCompetition(id);
+
+        verify(competitionRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void testGetCompetitionByName() {
+        Competition competition = new Competition();
+        competition.setName("Competition Name");
+
+        when(competitionRepository.findByName("Competition Name")).thenReturn(Optional.of(competition));
+
+        Optional<Competition> result = competitionService.getCompetitionByName("Competition Name");
+
+        assertTrue(result.isPresent());
+        assertEquals(competition, result.get());
+    }
+}

@@ -1,0 +1,2 @@
+Initialize the following Java array with common MIME types:
+public String[] MIME_TYPES =

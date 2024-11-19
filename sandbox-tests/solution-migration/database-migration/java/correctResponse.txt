@@ -1,0 +1,12 @@
+public static void migrateUserTable(Connection sourceConnection, Connection targetConnection) throws SQLException {
+    PreparedStatement preparedStatement = sourceConnection.prepareStatement("SELECT * FROM user");
+    ResultSet resultSet = preparedStatement.executeQuery();
+    while (resultSet.next()) {
+        int id = resultSet.getInt("id");
+        String name = resultSet.getString("name");
+        PreparedStatement insertStatement = targetConnection.prepareStatement("INSERT INTO user (id, name) VALUES (?, ?)");
+        insertStatement.setInt(1, id);
+        insertStatement.setString(2, name);
+        insertStatement.execute();
+    }
+}

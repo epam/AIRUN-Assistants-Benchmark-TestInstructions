@@ -1,0 +1,4 @@
+public string GreetNew(string name)
+{
+    return name == null ? "Hello!" : "Hello, " + name + "!";
+}

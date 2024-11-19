@@ -1,0 +1,19 @@
+@Test
+void testExecute() throws IOException {
+    var tempDir = Files.createTempDirectory("tmpDir");
+    var inputFile = Files.createTempFile(tempDir, "source", ".csv");
+    var outputFile = Files.createTempFile(tempDir, "target", ".csv");
+
+    Files.write(inputFile, "col2,col1\n".getBytes());
+
+    CsvEtlCommand command = new CsvEtlCommand(inputFile.toString(), outputFile.toString());
+
+    command.execute();
+
+    var outputData = new String(Files.readAllBytes(outputFile));
+    assertEquals("col1,col2\n", outputData);
+
+    Files.deleteIfExists(inputFile);
+    Files.deleteIfExists(outputFile);
+    Files.deleteIfExists(tempDir);
+}

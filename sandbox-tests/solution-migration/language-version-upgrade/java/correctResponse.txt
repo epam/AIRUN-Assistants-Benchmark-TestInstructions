@@ -1,0 +1,8 @@
+public String getNormalizedNames(List<String> names) {
+    return names.stream()
+            .filter(name -> name != null && !name.trim().isEmpty())
+            .map(name -> name.trim())
+            .map(name -> name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase())
+            .sorted()
+            .collect(Collectors.joining("-"));
+}

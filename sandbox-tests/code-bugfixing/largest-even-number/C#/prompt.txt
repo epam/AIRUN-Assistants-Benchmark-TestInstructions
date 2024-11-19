@@ -1,0 +1,9 @@
+Given the following C# snippet:
+public static int FindLargestEvenNumber(List<int> numbers)
+{
+    return numbers.Where(n => n % 2 == 0)
+        .OrderByDescending(n => n)
+        .First();
+}
+I'm expecting a result instead of an exception.
+Provide only the corrected implementation of the code, omitting other unnecessary words.

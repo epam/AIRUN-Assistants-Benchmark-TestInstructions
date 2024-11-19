@@ -1,0 +1,13 @@
+public static Map<String, BigDecimal> priceSorting(Map<String, BigDecimal> products, String sortingType) {
+    List<Map.Entry<String, BigDecimal>> productList = new ArrayList<>(products.entrySet());
+    productList.sort(Map.Entry.comparingByValue());
+
+    if (sortingType.equals("DESC")) {
+        Collections.reverse(productList);
+    }
+
+    Map<String, BigDecimal> sortedProducts = new LinkedHashMap<>();
+    productList.forEach(entry -> sortedProducts.put(entry.getKey(), entry.getValue()));
+
+    return sortedProducts;
+}

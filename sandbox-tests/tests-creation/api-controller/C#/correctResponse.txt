@@ -1,0 +1,238 @@
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using src.Controllers;
+using src.Interface;
+
+namespace Tests
+{
+    [TestFixture]
+    public class BooksControllerTests
+    {
+        [Test]
+        public async Task GetBooks_ReturnsOkResult()
+        {
+            // Arrange
+            var mockRepo = new Mock<IBookService>();
+            mockRepo.Setup(repo => repo.GetAll())
+                .ReturnsAsync(GetTestBooks());
+            var controller = new BooksController(mockRepo.Object);
+
+            // Act
+            var result = await controller.GetBooks();
+
+            // Assert
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
+        }
+
+        [Test]
+        public async Task GetBook_ReturnsNotFoundResult_WhenBookDoesNotExist()
+        {
+            // Arrange
+            var mockRepo = new Mock<IBookService>();
+            mockRepo.Setup(repo => repo.Get(0))
+                .ReturnsAsync((Book)null);
+            var controller = new BooksController(mockRepo.Object);
+
+            // Act
+            var result = await controller.GetBook(1);
+
+            // Assert
+            Assert.IsInstanceOf<NotFoundResult>(result.Result);
+        }
+
+        [Test]
+        public async Task PostBook_ReturnsCreatedResult()
+        {
+            // Arrange
+            var mockRepo = new Mock<IBookService>();
+            var controller = new BooksController(mockRepo.Object);
+
+            // Act
+            var result = await controller.PostBook(new Book { Id = 1, Title = "The Lord of the Rings", Author = "J.R.R. Tolkien" });
+
+            // Assert
+            Assert.IsInstanceOf<CreatedAtActionResult>(result.Result);
+        }
+
+        [Test]
+        public async Task UpdateBook_ReturnsBadRequestResult_WhenIdsDoNotMatch()
+        {
+            // Arrange
+            var mockRepo = new Mock<IBookService>();
+            var controller = new BooksController(mockRepo.Object);
+
+            // Act
+            var result = await controller.PutBook(1, new Book { Id = 2 });
+
+            // Assert
+            Assert.IsInstanceOf<BadRequestResult>(result);
+        }
+
+        [Test]
+        public async Task DeleteBook_ReturnsNotFoundResult_WhenBookDoesNotExist()
+        {
+            // Arrange
+            var mockRepo = new Mock<IBookService>();
+            mockRepo.Setup(repo => repo.Get(0))
+                .ReturnsAsync((Book)null);
+            var controller = new BooksController(mockRepo.Object);
+
+            // Act
+            var result = await controller.DeleteBook(1);
+
+            // Assert
+            Assert.IsInstanceOf<NotFoundResult>(result);
+        }
+
+        public List<Book> GetTestBooks() =>
+            new List<Book>
+            {
+                new Book { Id = 1, Title = "The Lord of the Rings", Author = "J.R.R. Tolkien" },
+                new Book { Id = 2, Title = "The Hobbit", Author = "J.R.R. Tolkien" },
+                new Book { Id = 3, Title = "The Silmarillion", Author = "J.R.R. Tolkien" }
+            };
+    }
+}
+
+or
+
+using NSubstitute;
+using Microsoft.AspNetCore.Mvc;
+using src.Controllers;
+using src.Interface;
+
+
+namespace Tests
+{
+    [TestFixture]
+    public class BooksControllerTests
+    {
+        private IBookService _bookService;
+        private BooksController _booksController;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _bookService = Substitute.For<IBookService>();
+            _booksController = new BooksController(_bookService);
+        }
+
+        [Test]
+        public async Task GetBooks_ReturnsOkResult_WithListOfBooks()
+        {
+            // Arrange
+            var books = new List<Book> { new Book { Id = 1, Title = "Test Book" } };
+            _bookService.GetAll().Returns(Task.FromResult<IEnumerable<Book>>(books));
+
+            // Act
+            var result = await _booksController.GetBooks();
+
+            // Assert
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
+            var okResult = result.Result as OkObjectResult;
+            Assert.AreEqual(books, okResult.Value);
+        }
+
+        [Test]
+        public async Task GetBook_ValidId_ReturnsOkResult_WithBook()
+        {
+            // Arrange
+            var book = new Book { Id = 1, Title = "Test Book" };
+            _bookService.Get(1).Returns(Task.FromResult(book));
+
+            // Act
+            var result = await _booksController.GetBook(1);
+
+            // Assert
+            Assert.IsInstanceOf<OkObjectResult>(result.Result);
+            var okResult = result.Result as OkObjectResult;
+            Assert.AreEqual(book, okResult.Value);
+        }
+
+        [Test]
+        public async Task GetBook_InvalidId_ReturnsNotFoundResult()
+        {
+            // Arrange
+            _bookService.Get(1).Returns(Task.FromResult<Book>(null));
+
+            // Act
+            var result = await _booksController.GetBook(1);
+
+            // Assert
+            Assert.IsInstanceOf<NotFoundResult>(result.Result);
+        }
+
+        [Test]
+        public async Task PostBook_ValidBook_ReturnsCreatedAtActionResult()
+        {
+            // Arrange
+            var book = new Book { Id = 1, Title = "Test Book" };
+            _bookService.Create(book).Returns(Task.FromResult(book));
+
+            // Act
+            var result = await _booksController.PostBook(book);
+
+            // Assert
+            Assert.IsInstanceOf<CreatedAtActionResult>(result.Result);
+            var createdAtActionResult = result.Result as CreatedAtActionResult;
+            Assert.AreEqual(nameof(_booksController.GetBook), createdAtActionResult.ActionName);
+            Assert.AreEqual(book.Id, createdAtActionResult.RouteValues["id"]);
+            Assert.AreEqual(book, createdAtActionResult.Value);
+        }
+
+        [Test]
+        public async Task PutBook_ValidId_ReturnsNoContentResult()
+        {
+            // Arrange
+            var book = new Book { Id = 1, Title = "Updated Book" };
+            _bookService.Update(book).Returns(Task.FromResult(book));
+
+            // Act
+            var result = await _booksController.PutBook(1, book);
+
+            // Assert
+            Assert.IsInstanceOf<NoContentResult>(result);
+        }
+
+        [Test]
+        public async Task PutBook_InvalidId_ReturnsBadRequestResult()
+        {
+            // Arrange
+            var book = new Book { Id = 1, Title = "Updated Book" };
+
+            // Act
+            var result = await _booksController.PutBook(2, book);
+
+            // Assert
+            Assert.IsInstanceOf<BadRequestResult>(result);
+        }
+
+        [Test]
+        public async Task DeleteBook_ValidId_ReturnsNoContentResult()
+        {
+            // Arrange
+            var book = new Book { Id = 1, Title = "Test Book" };
+            _bookService.Get(1).Returns(Task.FromResult(book));
+            _bookService.Delete(1).Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _booksController.DeleteBook(1);
+
+            // Assert
+            Assert.IsInstanceOf<NoContentResult>(result);
+        }
+
+        [Test]
+        public async Task DeleteBook_InvalidId_ReturnsNotFoundResult()
+        {
+            // Arrange
+            _bookService.Get(1).Returns(Task.FromResult<Book>(null));
+
+            // Act
+            var result = await _booksController.DeleteBook(1);
+
+            // Assert
+            Assert.IsInstanceOf<NotFoundResult>(result);
+        }
+    }
+}

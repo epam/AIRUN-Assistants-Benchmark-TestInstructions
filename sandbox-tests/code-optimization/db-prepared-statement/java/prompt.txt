@@ -1,0 +1,6 @@
+Optimize insertUsersIntoEmployeeTable method to use Java PreparedStatement:
+public static void insertUsersIntoUserTable(Connection connection) throws SQLException {
+    Statement statement = connection.createStatement();
+    statement.execute("INSERT INTO user (id, name) VALUES (1, 'Name1')");
+}
+Only method implementation is needed in response.

@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.golf'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.springframework.security:spring-security-test:<version>'
+    compileOnly 'org.projectlombok:lombok:<version>'
+    testImplementation 'org.mockito:mockito-junit-jupiter:<version>'
+    implementation 'io.springfox:springfox-swagger2:<version>'
+    implementation 'org.apache.commons:commons-lang3:<version>'
+    implementation 'org.hibernate.validator:hibernate-validator:<version>'
+    implementation 'org.modelmapper:modelmapper:<version>'
+}

@@ -1,0 +1,7 @@
+Implement the method below, but optimize it and call it GetAllNonCompletedOrdersOptimized:
+public IEnumerable<Order> GetAllNonCompletedOrdersNonOptimized()
+{
+    return _context.Orders
+        .ToList()
+        .Where(o => o.IsComplete == false);
+}

@@ -1,0 +1,6 @@
+public static int findLargestEvenNumber(List<Integer> numbers) {
+    return numbers.stream()
+        .filter(n -> n % 2 == 0)
+        .max(Integer::compare)
+        .orElse(0);
+}

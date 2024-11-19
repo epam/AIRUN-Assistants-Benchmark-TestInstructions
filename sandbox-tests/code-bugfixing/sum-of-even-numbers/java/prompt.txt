@@ -1,0 +1,12 @@
+Given the following Java snippet:
+public static int sumOfEvenNumbers(int start, int end) {
+    int sum = 0;
+    for (int i = start; i <= end; i++) {
+        if (i % 2 != 0) {
+            sum += i;
+        }
+    }
+    return sum;
+}
+I'm expecting a sum of even numbers, but I'm getting an error. Please fix this.
+Provide only the corrected implementation of the code, omitting other unnecessary words.

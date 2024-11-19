@@ -1,0 +1,3 @@
+The GaussKrugerEvaluator class contains two methods convert between geographic coordinates and Gauss-Krüger coordinates. The methods use a number of mathematical equations to calculate the Gauss-Krüger coordinates.
+The toGaussKruger() method converts geographic coordinates to Gauss-Krüger coordinates using a number of mathematical equations.
+The fromGaussKruger() method converts Gauss-Krüger coordinates to geographic coordinates using the inverse of those equations.

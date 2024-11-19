@@ -1,0 +1,21 @@
+public static string SerializeToCsv(IEnumerable list, bool hasHeader = true, string delimiter = ",")
+{
+    var sb = new StringBuilder();
+    if (hasHeader)
+    {
+        var properties = typeof(T).GetProperties();
+        foreach (var prop in properties)
+        {
+            sb.Append(prop.Name);
+            sb.Append(delimiter);
+        }
+        sb.Remove(sb.Length - delimiter.Length, delimiter.Length);
+        sb.AppendLine();
+    }
+    foreach (var item in list)
+    {
+        var values = typeof(T).GetProperties().Select(prop => prop.GetValue(item)?.ToString() ?? string.Empty);
+        sb.AppendLine(string.Join(delimiter, values));
+    }
+    return sb.ToString();
+}

@@ -1,0 +1,3 @@
+Implement the following method in .NET/C#:
+public static List<T> RemoveDuplicates<T>(this List<T> list) where T : IEquatable<T>
+The response requires only the method body, without the method signature and without any trailing characters.

@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft/wright-00/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string",
+        "format": "email"
+      },
+      "password": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "phone": {
+        "type": "string"
+      }
+    },
+    "required": ["name", "email", "password", "address", "phone"]
+  }
+}

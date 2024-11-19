@@ -1,0 +1,4 @@
+/// <exception cref="System.ArgumentException">Thrown when the title or content is null or whitespace.</exception>
+/// <exception cref="System.NullReferenceException">Thrown when the author is null.</exception>
+/// <exception cref="System.InvalidOperationException">Thrown when the author does not have permission to publish.</exception>
+/// <exception cref="System.IO.FileNotFoundException">Thrown when the file to publish is not found or is corrupted.</exception>

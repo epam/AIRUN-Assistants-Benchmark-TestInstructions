@@ -1,0 +1,71 @@
+[Test]
+public void CalculateReferralBonus_ValidReferralCode_ReturnsCorrectBonus()
+{
+    // Arrange
+    var referralService = Substitute.For<IReferralService>();
+    referralService.IsValidReferralCode(Arg.Any<string>()).Returns(true);
+    var referralProgram = new ReferralProgram(referralService, 10);
+
+    // Act
+    var result = referralProgram.CalculateReferralBonus("ABC123", 100);
+
+    // Assert
+    Assert.AreEqual(10, result);
+}
+
+[Test]
+public void CalculateReferralBonus_InvalidReferralCode_ThrowsInvalidReferralCodeException()
+{
+    // Arrange
+    var referralService = Substitute.For<IReferralService>();
+    referralService.IsValidReferralCode(Arg.Any<string>()).Returns(false);
+    var referralProgram = new ReferralProgram(referralService, 10);
+
+    // Act & Assert
+    Assert.Throws<InvalidReferralCodeException>(() => referralProgram.CalculateReferralBonus("XYZ789", 100));
+}
+
+[Test]
+public void CalculateReferralBonus_ZeroPurchaseAmount_ReturnsZeroBonus()
+{
+    // Arrange
+    var referralService = Substitute.For<IReferralService>();
+    referralService.IsValidReferralCode(Arg.Any<string>()).Returns(true);
+    var referralProgram = new ReferralProgram(referralService, 10);
+
+    // Act
+    var result = referralProgram.CalculateReferralBonus("ABC123", 0);
+
+    // Assert
+    Assert.AreEqual(0, result);
+}
+
+[Test]
+public void CalculateReferralBonus_NegativePurchaseAmount_ReturnsNegativeBonus()
+{
+    // Arrange
+    var referralService = Substitute.For<IReferralService>();
+    referralService.IsValidReferralCode(Arg.Any<string>()).Returns(true);
+    var referralProgram = new ReferralProgram(referralService, 10);
+
+    // Act
+    var result = referralProgram.CalculateReferralBonus("ABC123", -100);
+
+    // Assert
+    Assert.AreEqual(-10, result);
+}
+
+[Test]
+public void CalculateReferralBonus_ValidReferralCodeWithDecimalPercentage_ReturnsCorrectBonus()
+{
+    // Arrange
+    var referralService = Substitute.For<IReferralService>();
+    referralService.IsValidReferralCode(Arg.Any<string>()).Returns(true);
+    var referralProgram = new ReferralProgram(referralService, 7.5m);
+
+    // Act
+    var result = referralProgram.CalculateReferralBonus("ABC123", 200);
+
+    // Assert
+    Assert.AreEqual(15, result);
+}

@@ -1,0 +1,13 @@
+{
+    "request": {
+        "method": "GET",
+        "url": "/.well-known/oauth-authorization-server"
+    },
+    "response": {
+        "status": 200,
+        "bodyFileName": "oauth-authorization-server.txt",
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+}

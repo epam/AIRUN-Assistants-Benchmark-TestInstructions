@@ -1,0 +1,68 @@
+public Discount calculateDiscount(double price, String userType, boolean isHoliday) {
+    double discount = getUserTypeDiscount(price, userType);
+
+    if (isHoliday) {
+        discount += getHolidayDiscount(price);
+    }
+
+    return buildDiscountObject(discount, userType, isHoliday);
+}
+
+private double getUserTypeDiscount(double price, String userType) {
+    double discountRate = 0;
+    switch (userType) {
+        case "STUDENT":
+            discountRate = price * 0.1;
+            break;
+        case "SENIOR":
+            discountRate = price * 0.15;
+            break;
+        case "EMPLOYEE":
+            discountRate = price * 0.2;
+            break;
+    }
+    return discountRate;
+}
+
+private double getHolidayDiscount(double price) {
+    return price * 0.05;
+}
+
+private Discount buildDiscountObject(double discountRate, String userType, boolean isHoliday) {
+    Discount discount = new Discount();
+    discount.setRate(discountRate);
+    discount.setUserType(userType);
+    discount.setHoliday(isHoliday);
+    return discount;
+}
+
+OR
+
+public Discount calculateDiscount(double price, String userType, boolean isHoliday) {
+    double discountRate = 0;
+    switch (userType) {
+        case "STUDENT":
+            discountRate = price * 0.1;
+            break;
+        case "SENIOR":
+            discountRate = price * 0.15;
+            break;
+        case "EMPLOYEE":
+            discountRate = price * 0.2;
+            break;
+    }
+    if (isHoliday) {
+        discountRate += price * 0.05;
+    }
+
+    return buildDiscount(discountRate, userType, isHoliday);
+}
+
+private Discount buildDiscount(double discountRate, String userType, boolean isHoliday) {
+    Discount discount = new Discount();
+    discount.setRate(discountRate);
+    discount.setUserType(userType);
+    discount.setHoliday(isHoliday);
+
+    return discount;
+}

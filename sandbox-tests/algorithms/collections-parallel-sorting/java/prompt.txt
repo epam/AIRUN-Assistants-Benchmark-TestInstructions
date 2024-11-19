@@ -1,0 +1,15 @@
+public static Map<String, BigDecimal> priceSorting(Map<String, BigDecimal> products,String sortingType) {
+    Comparator<Map.Entry<String, BigDecimal>>comparator = Map.Entry.comparingByValue();
+
+    if (sortingType.equals("DSC")) {
+        comparator = comparator.reversed();
+    }
+
+    return products.entrySet()
+        .stream()
+        .sorted(comparator)
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue,newValue) -> oldValue, LinkedHashMap::new));
+}
+
+Please use concurrency API.
+Only method implementation is needed in response.

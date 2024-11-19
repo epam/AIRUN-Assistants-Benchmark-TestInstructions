@@ -1,0 +1,14 @@
+public KeyStore createKeystoreAndSaveToFile(String filename, String password) {
+    try {
+        KeyStore keystore = KeyStore.getInstance("JKS");
+        char[] passwordCharArray = password.toCharArray();
+        keystore.load(null, passwordCharArray);
+
+        try (FileOutputStream fileOutputStream = new FileOutputStream(filename)) {
+            keystore.store(fileOutputStream, passwordCharArray);
+        }
+        return keystore;
+    } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
+        throw new RuntimeException("Error creating and saving JKS keystore to file", e);
+    }
+}

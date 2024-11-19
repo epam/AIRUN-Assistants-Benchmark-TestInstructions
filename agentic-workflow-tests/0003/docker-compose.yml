@@ -1,0 +1,38 @@
+version: "3"
+
+networks:
+  agentic-0003-net:
+    driver: bridge
+
+services:
+  wiremock:
+    image: "wiremock/wiremock:latest"
+    container_name: agentic-0003-wiremock
+    volumes:
+      - ./extensions:/var/wiremock/extensions
+      - ./__files:/home/wiremock/__files
+      - ./mappings:/home/wiremock/mappings
+    entrypoint: ["/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose"]
+    restart: always
+    networks:
+      - agentic-0003-net
+    ports:
+      - 50080:8080
+
+  mysql:
+    image: mysql:8.0
+    container_name: agentic-0003-mysql
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    restart: always
+    networks:
+      - agentic-0003-net
+    environment:
+        MYSQL_ROOT_PASSWORD: 1234
+        MYSQL_DATABASE: golf04
+    ports:
+        - "3306:3306"
+    volumes:
+        - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

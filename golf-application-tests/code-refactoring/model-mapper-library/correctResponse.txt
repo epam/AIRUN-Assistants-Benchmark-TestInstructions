@@ -1,0 +1,11 @@
+@GetMapping("data/{id}/round")
+public List<RoundDto> getCompetitionRounds(@PathVariable("id") Long id) {
+    Competition competition = competitionService.getCompetitionById(id)
+            .orElseThrow(() -> new CompetitionNotFoundException("Competition by ID not found"));
+
+    List<RoundDto> roundDtos = competition.getRounds().stream()
+        .map(round -> modelMapper.map(round, RoundDto.class))
+        .collect(Collectors.toList());
+
+    return roundDtos;
+}

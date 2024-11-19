@@ -1,0 +1,3 @@
+Implement the following method in .NET/C#:
+public static bool CheckIfNumberIsPalindrome(int n)
+Only method body without method signature and without any trailing symbols is needed in the response.

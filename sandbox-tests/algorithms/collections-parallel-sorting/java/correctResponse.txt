@@ -1,0 +1,11 @@
+public static Map<String, BigDecimal> priceSorting(Map<String, BigDecimal> products, String sortingType) {
+    if (sortingType.equalsIgnoreCase("DESC")) {
+        return products.entrySet().parallelStream()
+            .sorted(Map.Entry.<String, BigDecimal>comparingByValue().reversed())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    } else {
+        return products.entrySet().parallelStream()
+            .sorted(Map.Entry.comparingByValue())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
+}

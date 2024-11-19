@@ -1,0 +1,9 @@
+public String[] MIME_TYPES = {
+    "application/octet-stream",
+    "application/json",
+    "application/pdf",
+    "application/xml",
+    "application/zip",
+    "application/x-www-form-urlencoded",
+    "application/msword"
+};

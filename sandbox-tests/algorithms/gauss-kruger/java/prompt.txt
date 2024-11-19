@@ -1,0 +1,2 @@
+Implement public static double[] toGaussKruger(double latitude, double longitude) method using the Gauss Kruger algorithm.
+Provide only the code without explanation and descriptions.

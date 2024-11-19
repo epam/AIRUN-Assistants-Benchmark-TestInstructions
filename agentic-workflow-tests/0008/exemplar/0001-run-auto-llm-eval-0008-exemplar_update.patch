@@ -1,0 +1,454 @@
+From 269577a0cfac2bdb23b01efb66c64f551ee9f6f4 Mon Sep 17 00:00:00 2001
+From: Name Surname <testuser@localhost>
+Date: Fri, 20 Sep 2024 02:52:50 +0300
+Subject: [PATCH] run/auto-llm-eval/0008/exemplar_update
+
+---
+ pom.xml                                       | 33 +++++++++++++++++++
+ .../app/controller/CompetitionController.java |  9 +++--
+ .../golf/app/controller/PlayerController.java | 19 +++++------
+ .../golf/app/controller/RoundController.java  | 16 +++++----
+ .../security/CustomAccessDeniedHandler.java   | 14 ++++----
+ .../security/CustomLogoutSuccessHandler.java  |  5 ++-
+ src/main/resources/application.properties     |  4 ---
+ src/main/resources/log4j2.xml                 | 31 +++++++++++++++++
+ src/main/resources/logback-spring.xml         | 16 ---------
+ src/main/resources/logging.properties         | 26 ---------------
+ 10 files changed, 99 insertions(+), 74 deletions(-)
+ create mode 100644 src/main/resources/log4j2.xml
+ delete mode 100644 src/main/resources/logback-spring.xml
+ delete mode 100644 src/main/resources/logging.properties
+
+diff --git a/pom.xml b/pom.xml
+index 151f090..4a72da4 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -23,10 +23,22 @@
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter-thymeleaf</artifactId>
++            <exclusions>
++                <exclusion>
++                    <groupId>org.springframework.boot</groupId>
++                    <artifactId>spring-boot-starter-logging</artifactId>
++                </exclusion>
++            </exclusions>
+         </dependency>
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter-web</artifactId>
++            <exclusions>
++                <exclusion>
++                    <groupId>org.springframework.boot</groupId>
++                    <artifactId>spring-boot-starter-logging</artifactId>
++                </exclusion>
++            </exclusions>
+         </dependency>
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+@@ -42,6 +54,12 @@
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter-data-jpa</artifactId>
++            <exclusions>
++                <exclusion>
++                    <groupId>org.springframework.boot</groupId>
++                    <artifactId>spring-boot-starter-logging</artifactId>
++                </exclusion>
++            </exclusions>
+         </dependency>
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+@@ -92,6 +110,12 @@
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter-security</artifactId>
++            <exclusions>
++                <exclusion>
++                    <groupId>org.springframework.boot</groupId>
++                    <artifactId>spring-boot-starter-logging</artifactId>
++                </exclusion>
++            </exclusions>
+         </dependency>
+         <dependency>
+             <groupId>org.springframework.security</groupId>
+@@ -112,6 +136,15 @@
+             <artifactId>modelmapper</artifactId>
+             <version>3.2.0</version>
+         </dependency>
++        <dependency>
++            <groupId>org.springframework.boot</groupId>
++            <artifactId>spring-boot-starter-log4j2</artifactId>
++        </dependency>
++        <dependency>
++            <groupId>com.lmax</groupId>
++            <artifactId>disruptor</artifactId>
++            <version>3.4.4</version>
++        </dependency>
+     </dependencies>
+ 
+     <build>
+diff --git a/src/main/java/com/golf/app/controller/CompetitionController.java b/src/main/java/com/golf/app/controller/CompetitionController.java
+index 6362e0e..4081670 100644
+--- a/src/main/java/com/golf/app/controller/CompetitionController.java
++++ b/src/main/java/com/golf/app/controller/CompetitionController.java
+@@ -12,6 +12,7 @@ import com.golf.app.service.RoundService;
+ import com.golf.app.service.CompetitionService;
+ import com.golf.app.service.CourseService;
+ import com.golf.app.service.PlayerService;
++import lombok.extern.slf4j.Slf4j;
+ import org.modelmapper.ModelMapper;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Controller;
+@@ -23,8 +24,10 @@ import java.util.Optional;
+ import java.util.stream.Collectors;
+ import java.util.stream.StreamSupport;
+ 
++
+ @Controller
+ @RequestMapping("/competition")
++@Slf4j
+ public class CompetitionController {
+ 
+     private static final String COMPETITION_MAIN_PAGE = "competition/competition-main";
+@@ -160,7 +163,7 @@ public class CompetitionController {
+                 .orElseThrow(() -> new CompetitionNotFoundException("Competition by ID not found"));
+ 
+         model.addAttribute(COMPETITION_ATTRIBUTE, competition);
+-        System.out.println("333");
++        log.info( "333" );
+         return ROUND_ADD_PAGE;
+     }
+ 
+@@ -178,14 +181,14 @@ public class CompetitionController {
+         roundService.saveRound(round);
+ 
+         for (Player player : round.getRoundplayers()) {
+-            System.out.println(player.getName());
++            log.info( player.getName() );
+         }
+ 
+         List<Round> rounds = competition.get().getRounds();
+         rounds.add(round);
+ 
+         competitionService.saveCompetition(competition.get());
+-        System.out.println("competition saved");
++        log.info( "competition saved" );
+ 
+         return REDIRECT_COMPETITION_DETAILS_PAGE;
+     }
+diff --git a/src/main/java/com/golf/app/controller/PlayerController.java b/src/main/java/com/golf/app/controller/PlayerController.java
+index 2aefdc3..cc5027d 100644
+--- a/src/main/java/com/golf/app/controller/PlayerController.java
++++ b/src/main/java/com/golf/app/controller/PlayerController.java
+@@ -8,6 +8,7 @@ import com.golf.app.service.PlayerPhotoService;
+ import com.golf.app.service.PlayerService;
+ import com.golf.app.utils.ValidationUtils;
+ import jakarta.validation.Valid;
++import lombok.extern.slf4j.Slf4j;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.ui.Model;
+@@ -16,8 +17,7 @@ import org.springframework.web.bind.annotation.*;
+ 
+ import java.util.Base64;
+ import java.util.Optional;
+-import java.util.logging.Level;
+-import java.util.logging.Logger;
++
+ 
+ /**
+  * This class is a controller class for Client entity.
+@@ -25,10 +25,9 @@ import java.util.logging.Logger;
+  */
+ @Controller
+ @RequestMapping("/player")
++@Slf4j
+ public class PlayerController {
+ 
+-    private static final Logger LOGGER = Logger.getLogger(PlayerController.class.getName());
+-
+     private static final String PLAYER_MAIN_PAGE = "player/player-main";
+     private static final String PLAYER_ADD_PAGE = "player/player-add";
+     private static final String PLAYER_DETAILS_PAGE = "player/player-details";
+@@ -84,8 +83,8 @@ public class PlayerController {
+         }
+         player.setPhotoId(1L);
+         playerService.savePlayer(player);
+-        LOGGER.log(Level.INFO, "Player " + player.getSurname() + " " + player.getName()
+-                + " with ID " + player.getId() + " has been saved in the DB");
++        log.info( "Player {} {} with ID {} has been saved in the DB", player.getSurname(), player.getName(),
++                player.getId() );
+         return REDIRECT_TO_PLAYER;
+     }
+ 
+@@ -141,8 +140,8 @@ public class PlayerController {
+     @PostMapping("/{id}/edit")
+     public String updatePlayer(@ModelAttribute Player player, Model model) {
+         playerService.savePlayer(player);
+-        LOGGER.log(Level.INFO, "Player " + player.getSurname() + " " + player.getName() + " with ID " +
+-            player.getId() + " has been updated in the DB");
++        log.info( "Player {} {} with ID {} has been updated in the DB", player.getSurname(), player.getName(),
++                player.getId() );
+ 
+         model.addAttribute(PLAYER_ATTRIBUTE, player);
+         return PLAYER_DETAILS_PAGE;
+@@ -159,8 +158,8 @@ public class PlayerController {
+         Player player = playerService.getPlayerById(id)
+                 .orElseThrow(() -> new PlayerNotFoundException("Player by ID not found"));
+         playerService.deletePlayer(id);
+-        LOGGER.log(Level.INFO, "Player " + player.getSurname() + " " + player.getName() + " with ID " +
+-            player.getId() + " was REMOVED from DB");
++        log.info( "Player {} {} with ID {} was REMOVED from DB", player.getSurname(), player.getName(),
++                player.getId() );
+         return REDIRECT_TO_PLAYER;
+     }
+ }
+\ No newline at end of file
+diff --git a/src/main/java/com/golf/app/controller/RoundController.java b/src/main/java/com/golf/app/controller/RoundController.java
+index 162f0ea..85efc45 100644
+--- a/src/main/java/com/golf/app/controller/RoundController.java
++++ b/src/main/java/com/golf/app/controller/RoundController.java
+@@ -8,6 +8,7 @@ import com.golf.app.service.RoundService;
+ import com.golf.app.service.CompetitionService;
+ import com.golf.app.service.CourseService;
+ import com.golf.app.service.PlayerService;
++import lombok.extern.slf4j.Slf4j;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.ui.Model;
+@@ -21,6 +22,7 @@ import java.util.stream.StreamSupport;
+ 
+ @Controller
+ @RequestMapping("/round")
++@Slf4j
+ public class RoundController {
+ 
+     private static final String ROUND_MAIN_PAGE = "round/round-main";
+@@ -84,7 +86,7 @@ public class RoundController {
+         round.setCompetition(competition.get());
+ 
+         roundService.saveRound(round);
+-        System.out.println("round choose competition saved");
++        log.info("round choose competition saved");
+ 
+         List<Round> rounds = competition.get().getRounds();
+         rounds.add(round);
+@@ -92,7 +94,7 @@ public class RoundController {
+         competition.get().setRounds(rounds);
+ 
+         competitionService.saveCompetition(competition.get());
+-        System.out.println("competition saved");
++        log.info("competition saved");
+ 
+         return REDIRECT_ROUND;
+     }
+@@ -105,7 +107,7 @@ public class RoundController {
+         Optional<Competition> competition = competitionService.getCompetitionById(competitionId);
+ 
+         model.addAttribute(COMPETITION_ATTRIBUTE, competition);
+-        System.out.println("comp attr");
++        log.info("comp attr");
+         return ROUND_ADD_PAGE;
+     }
+ 
+@@ -123,7 +125,7 @@ public class RoundController {
+         round.setCompetition(competition.get());
+ 
+         roundService.saveRound(round);
+-        System.out.println("round choose competition saved");
++        log.info("round choose competition saved");
+ 
+         List<Round> rounds = competition.get().getRounds();
+         rounds.add(round);
+@@ -131,7 +133,7 @@ public class RoundController {
+         competition.get().setRounds(rounds);
+ 
+         competitionService.saveCompetition(competition.get());
+-        System.out.println("competition saved");
++        log.info("competition saved");
+ 
+         return REDIRECT_COMPETITION_DETAILS_PAGE;
+     }
+@@ -143,9 +145,9 @@ public class RoundController {
+ 
+         model.addAttribute(ROUND_ATTRIBUTE, round);
+ 
+-        System.out.println("3");
++        log.info("3");
+         for (Player player : round.getRoundplayers()) {
+-            System.out.println(player.getName());
++            log.info(player.getName());
+         }
+ 
+         return ROUND_DETAILS_PAGE;
+diff --git a/src/main/java/com/golf/app/security/CustomAccessDeniedHandler.java b/src/main/java/com/golf/app/security/CustomAccessDeniedHandler.java
+index 822864b..736bcdd 100644
+--- a/src/main/java/com/golf/app/security/CustomAccessDeniedHandler.java
++++ b/src/main/java/com/golf/app/security/CustomAccessDeniedHandler.java
+@@ -1,24 +1,24 @@
+ package com.golf.app.security;
+ 
+-import jakarta.servlet.http.HttpServletRequest;
+-import jakarta.servlet.http.HttpServletResponse;
+ import java.io.IOException;
+-import org.slf4j.Logger;
+-import org.slf4j.LoggerFactory;
++
+ import org.springframework.security.access.AccessDeniedException;
+ import org.springframework.security.core.Authentication;
+ import org.springframework.security.core.context.SecurityContextHolder;
+ import org.springframework.security.web.access.AccessDeniedHandler;
+ 
+-public class CustomAccessDeniedHandler implements AccessDeniedHandler {
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++import lombok.extern.slf4j.Slf4j;
+ 
+-    public static final Logger LOG = LoggerFactory.getLogger(CustomAccessDeniedHandler.class);
++@Slf4j
++public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+ 
+     @Override
+     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exc) throws IOException {
+         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+         if (auth != null) {
+-            LOG.warn("User: " + auth.getName() + " attempted to access the protected URL: " + request.getRequestURI());
++            log.warn( "User: {} attempted to access the protected URL: {}", auth.getName(), request.getRequestURI() );
+         }
+         response.sendRedirect(request.getContextPath() + "/accessDenied");
+     }
+diff --git a/src/main/java/com/golf/app/security/CustomLogoutSuccessHandler.java b/src/main/java/com/golf/app/security/CustomLogoutSuccessHandler.java
+index 7364539..dc1ed31 100644
+--- a/src/main/java/com/golf/app/security/CustomLogoutSuccessHandler.java
++++ b/src/main/java/com/golf/app/security/CustomLogoutSuccessHandler.java
+@@ -7,7 +7,10 @@ import java.io.IOException;
+ import org.springframework.security.core.Authentication;
+ import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+ import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
++import lombok.extern.slf4j.Slf4j;
+ 
++
++@Slf4j
+ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler implements LogoutSuccessHandler {
+ 
+     @Override
+@@ -15,7 +18,7 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
+                                 final HttpServletResponse response,
+                                 final Authentication authentication) throws IOException, ServletException {
+         final String refererUrl = request.getHeader("Referer");
+-        System.out.println(refererUrl);
++        log.info(refererUrl);
+         super.onLogoutSuccess(request, response, authentication);
+     }
+ }
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+index 4fea5c9..75e0860 100644
+--- a/src/main/resources/application.properties
++++ b/src/main/resources/application.properties
+@@ -4,10 +4,6 @@ spring.datasource.url=jdbc:mysql://${MYSQL_HOST:localhost}:3306/golf04
+ spring.datasource.username=root
+ spring.datasource.password=1234
+ 
+-# Logging Configuration
+-logging.level.org.springframework=INFO
+-logging.level.com.myapp=DEBUG
+-
+ # Hibernate Configuration
+ spring.jpa.hibernate.ddl-auto=update
+ 
+diff --git a/src/main/resources/log4j2.xml b/src/main/resources/log4j2.xml
+new file mode 100644
+index 0000000..ffe9553
+--- /dev/null
++++ b/src/main/resources/log4j2.xml
+@@ -0,0 +1,31 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<Configuration status="WARN">
++    <Appenders>
++        <Console name="Console" target="SYSTEM_OUT">
++            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %X{data} %msg%n"/>
++        </Console>
++        <RollingRandomAccessFile name="FileAppender" fileName="${LOG_DIR:-logs}/golf-app.log"
++                     filePattern="${LOG_DIR:-logs}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
++            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %X{data} %msg%n"/>
++            <Policies>
++                <TimeBasedTriggeringPolicy />
++                <SizeBasedTriggeringPolicy size="10 MB"/>
++            </Policies>
++            <DefaultRolloverStrategy max="20"/>
++        </RollingRandomAccessFile>
++    </Appenders>
++    <Loggers>
++        <AsyncLogger name="com.golf.app" level="info" additivity="false">
++            <AppenderRef ref="Console"/>
++            <AppenderRef ref="FileAppender"/>
++        </AsyncLogger>
++        <AsyncLogger name="org.springframework.web" level="info" additivity="false">
++            <AppenderRef ref="Console"/>
++            <AppenderRef ref="FileAppender"/>
++        </AsyncLogger>
++        <AsyncRoot level="info">
++            <AppenderRef ref="Console"/>
++            <AppenderRef ref="FileAppender"/>
++        </AsyncRoot>
++    </Loggers>
++</Configuration>
+diff --git a/src/main/resources/logback-spring.xml b/src/main/resources/logback-spring.xml
+deleted file mode 100644
+index bac110d..0000000
+--- a/src/main/resources/logback-spring.xml
++++ /dev/null
+@@ -1,16 +0,0 @@
+-<configuration>
+-    <!-- Console Appender -->
+-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+-        <encoder>
+-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %X{data} %msg%n</pattern>
+-        </encoder>
+-    </appender>
+-
+-    <!-- Root Logger -->
+-    <root level="info">
+-        <appender-ref ref="console"/>
+-    </root>
+-
+-    <logger name="org.springframework.web" level="INFO"/>
+-    <logger name="com.golf.app" level="INFO"/>
+-</configuration>
+\ No newline at end of file
+diff --git a/src/main/resources/logging.properties b/src/main/resources/logging.properties
+deleted file mode 100644
+index 4024e63..0000000
+--- a/src/main/resources/logging.properties
++++ /dev/null
+@@ -1,26 +0,0 @@
+-# Default global logging level
+-.level=INFO
+-
+-# Set the default logging level for the root logger
+-handlers=java.util.logging.FileHandler
+-
+-# Set the default logging level for the FileHandler
+-java.util.logging.FileHandler.level=ALL
+-
+-# Define the pattern for the file name
+-java.util.logging.FileHandler.pattern=myapp-log.%u.%g.txt
+-
+-# Limit the size of a single log file to 500KB
+-java.util.logging.FileHandler.limit=500000
+-
+-# Number of rotating log files to use
+-java.util.logging.FileHandler.count=10
+-
+-# Output format for FileHandler
+-java.util.logging.FileHandler.formatter=java.util.logging.SimpleFormatter
+-
+-## Log file location
+-logging.file=myapp.log
+-
+-# Log level (DEBUG, INFO, WARN, ERROR, etc.)
+-logging.level.root=INFO
+-- 
+2.45.1
+

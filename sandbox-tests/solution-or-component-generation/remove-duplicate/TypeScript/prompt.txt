@@ -1,0 +1,3 @@
+Implement the following function in TypeScript that removes duplicates and return distinct array:
+export function removeDuplicates<T>(array: T[]): T[]
+The response requires only the method body, without the method signature and without any trailing characters.

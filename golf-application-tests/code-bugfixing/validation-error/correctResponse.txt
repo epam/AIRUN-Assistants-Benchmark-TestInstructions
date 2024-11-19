@@ -1,0 +1,6 @@
+public static Map<String, String> getFieldErrors(BindingResult bindingResult) {
+    return bindingResult.getFieldErrors().stream()
+        .collect(Collectors.groupingBy(FieldError::getField,
+            Collectors.mapping(FieldError::getDefaultMessage,
+                Collectors.joining(", "))));
+}

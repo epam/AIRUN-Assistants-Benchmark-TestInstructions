@@ -1,0 +1,112 @@
+Given the following Java snippet:
+
+@RestController
+@RequestMapping("/api")
+public class Controller {
+
+    @GetMapping(value = "/users")
+    public List<User> getListOfUsers() {
+        return List.of(
+            new User.Builder()
+                .name("John Doe")
+                .email("some-firstE@email.www")
+                .password("some-password")
+                .address("some-address")
+                .phone("some-phone")
+                .build(),
+            new User.Builder()
+                .name("Jane Doe")
+                .email("some-secondE@email.www")
+                .password("some-password2")
+                .address("some-address2")
+                .phone("some-phone2")
+                .build(),
+            new User.Builder()
+                .name("Jane Doe")
+                .email("some-thirdE@email.www")
+                .password("some-password3")
+                .address("some-address3")
+                .phone("some-phone3")
+                .build()
+        );
+    }
+}
+
+and
+
+public class User {
+    private final String name;
+    private final String email;
+    private final String password;
+    private final String address;
+    private final String phone;
+
+    private User(Builder builder) {
+        this.name = builder.name;
+        this.email = builder.email;
+        this.password = builder.password;
+        this.address = builder.address;
+        this.phone = builder.phone;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    // Builder class
+
+    public static class Builder {
+        private String name;
+        private String email;
+        private String password;
+        private String address;
+        private String phone;
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder address(String address) {
+            this.address = address;
+            return this;
+        }
+
+        public Builder phone(String phone) {
+            this.phone = phone;
+            return this;
+        }
+
+        public User build() {
+            return new User(this);
+        }
+    }
+}
+
+Output: OpenApi JSON documentation without formatting, escaping, or other unnecessary words.

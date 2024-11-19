@@ -1,0 +1,21 @@
+protected static void setStableford(Score score, int netScorePar) {
+    switch (netScorePar) {
+        case 1:
+            score.setStableford(1);
+            break;
+        case 0:
+            score.setStableford(2);
+            break;
+        case -1:
+            score.setStableford(3);
+            break;
+        case -2:
+            score.setStableford(4);
+            break;
+        case -3:
+            score.setStableford(5);
+            break;
+        default:
+            score.setStableford(0);
+    }
+}

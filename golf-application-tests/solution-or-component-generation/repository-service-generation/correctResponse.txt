@@ -1,0 +1,53 @@
+package com.golf.app.service;
+
+import com.golf.app.model.Marker;
+
+import com.golf.app.repo.MarkerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.List;
+
+@Service
+public class MarkerService {
+
+    private final MarkerRepository markerRepository;
+
+    @Autowired
+    public MarkerService(MarkerRepository markerRepository) {
+        this.markerRepository = markerRepository;
+    }
+
+    public List<Marker> getAllMarkers() {
+        return (List<Marker>) markerRepository.findAll();
+    }
+
+    public Optional<Marker> getMarkerById(Long id) {
+        return markerRepository.findById(id);
+    }
+
+    public Marker saveMarker(Marker marker) {
+        return markerRepository.save(marker);
+    }
+
+    public Optional<Marker> updateMarker(Long id, Marker markerDetails) {
+        Optional<Marker> marker = markerRepository.findById(id);
+        if (marker.isPresent()) {
+            Marker existingMarker = marker.get();
+            existingMarker.setName(markerDetails.getName());
+            existingMarker.setSurname(markerDetails.getSurname());
+            return Optional.of(markerRepository.save(existingMarker));
+        }
+        return Optional.empty();
+    }
+
+    public boolean deleteMarker(Long id) {
+        Optional<Marker> marker = markerRepository.findById(id);
+        if (marker.isPresent()) {
+            markerRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+}

@@ -1,0 +1,3 @@
+Implement the following method in Java that returns the representation of HTTP basic authentication header:
+public String createHttpBasicAuthenticationHeader(String username, String password)
+The response requires only the method body, without the method signature and without any trailing characters.

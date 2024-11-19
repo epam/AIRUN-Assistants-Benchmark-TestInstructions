@@ -1,0 +1,36 @@
+public Payment processPayment(boolean isOnline) {
+    Payment payment = new Payment();
+    payment.setPaymentDate(LocalDate.now());
+    payment.setPaymentStatus(ACTIVE);
+    payment.setPaymentType(CREDIT);
+    if (isOnline) {
+        payment.setPaymentBank(ICICI);
+        payment.setPaymentMode(ONLINE);
+    } else {
+        payment.setPaymentBank(HDFC);
+        payment.setPaymentMode(OFFLINE);
+    }
+    return payment;
+}
+
+OR
+
+public Payment processPayment(boolean isOnline) {
+    Payment payment = new Payment();
+    setCommonPaymentAttributes(payment);
+
+    if (isOnline) {
+        payment.setPaymentBank(ICICI);
+        payment.setPaymentMode(ONLINE);
+    } else {
+        payment.setPaymentBank(HDFC);
+        payment.setPaymentMode(OFFLINE);
+    }
+    return payment;
+}
+
+private void setCommonPaymentAttributes(Payment payment) {
+    payment.setPaymentDate(LocalDate.now());
+    payment.setPaymentStatus(ACTIVE);
+    payment.setPaymentType(CREDIT);
+}

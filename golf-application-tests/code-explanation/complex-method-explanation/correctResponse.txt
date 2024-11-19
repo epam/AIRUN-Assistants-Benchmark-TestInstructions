@@ -1,0 +1,97 @@
+@GetMapping("/{id}")
+    public String displayScoreCardPage(@PathVariable Long id, Model model) {
+        // Get the round score by ID
+        Optional<RoundScore> roundScore = roundScoreService.getRoundScoreById(id);
+
+        // Get the list of scores for the round
+        List<Score> scores = roundScore.get().getScores();
+
+        // Get the player's handicap
+        Integer playerHcp = Math.toIntExact(Math.round(roundScore.get().getPlayer().getHcp()));
+
+        // Initialize the variables to store the sum of the stroke, score subtract par, score subtract par hcp, and stableford
+        int sumScore = 0;
+        int sumScoreSubtractPar = 0;
+        int sumScoreSubtractParHcp = 0;
+        int sumStableford = 0;
+
+        // Iterate over the scores
+        for (Score score : scores) {
+            // Calculate the sum of the stroke
+            sumScore = sumScore + score.getStroke();
+            roundScore.get().setSumStroke(sumScore);
+
+            // Calculate the score subtract par
+            score.setScoreSubtractPar(score.getStroke() - roundScore.get().getCompetition().getCourse().getHoles().get(scores.indexOf(score)).getPar());
+
+            // Calculate the sum of the score subtract par
+            sumScoreSubtractPar = sumScoreSubtractPar + score.getScoreSubtractPar();
+            roundScore.get().setSumScoreSubtractPar(sumScoreSubtractPar);
+
+            // Calculate the stroke index
+            Integer strokeIndex = roundScore.get().getCompetition().getCourse().getHoles().get(scores.indexOf(score)).getStrokeIndex();
+
+            // Calculate the score to correct
+            Integer scoreToCorrect = playerHcp % roundScore.get().getCompetition().getCourse().getHoles().size() - strokeIndex;
+
+            // Calculate the par
+            int par2 = roundScore.get().getCompetition().getCourse().getHoles().get(scores.indexOf(score)).getPar();
+
+            // Calculate the score subtract par hcp
+            if (scoreToCorrect >= 0) {
+                int allHolesCorrection = playerHcp / scores.size();
+                scoreToCorrect = allHolesCorrection + 1;
+                score.setScoreSubtractParHcp(score.getStroke() - par2 - scoreToCorrect);
+            } else {
+                int allHolesCorrection = playerHcp / scores.size();
+                scoreToCorrect = allHolesCorrection;
+                score.setScoreSubtractParHcp(score.getStroke() - par2 - scoreToCorrect);
+            }
+
+            // Get the score subtract par hcp
+            int scoreSubtractParHcp = score.getScoreSubtractParHcp();
+
+            // Check if the player played in par
+            boolean playedInPar = scoreSubtractParHcp == 0;
+
+            // Calculate the sum of the score subtract par hcp
+            sumScoreSubtractParHcp = sumScoreSubtractParHcp + scoreSubtractParHcp;
+            roundScore.get().setSumScoreSubtractParHcp(sumScoreSubtractParHcp);
+
+            // Calculate the stableford
+            if (scoreSubtractParHcp >= 2) {
+                score.setStableford(0);
+            } else if (scoreSubtractParHcp == 1) {
+                score.setStableford(1);
+            } else if (playedInPar) {
+                score.setStableford(2);
+            } else if (scoreSubtractParHcp == -1) {
+                score.setStableford(3);
+            } else if (scoreSubtractParHcp == -2) {
+                score.setStableford(4);
+            } else if (scoreSubtractParHcp == -3) {
+                score.setStableford(5);
+            }
+
+            // Calculate the sum of the stableford
+            sumStableford = sumStableford + score.getStableford();
+            roundScore.get().setSumStableford(sumStableford);
+        }
+
+        // Save the round score
+        roundScoreService.saveRoundScore(roundScore.get());
+
+        // Add the player to the model
+        model.addAttribute(PLAYER_ATTRIBUTE, roundScore.get().getPlayer());
+
+        // Add the player's surname and name to the model
+        model.addAttribute(PLAYER_SURNAME_NAME_ATTRIBUTE, roundScore.get().getPlayer().getSurname() + " " +
+                roundScore.get().getPlayer().getName());
+
+        // Add the round score to the model
+        model.addAttribute(ROUND_SCORE_ATTRIBUTE, roundScore.get());
+
+        // Return the round score page
+        return ROUND_SCORE_PAGE;
+    }
+}

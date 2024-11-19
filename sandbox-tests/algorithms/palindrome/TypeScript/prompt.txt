@@ -1,0 +1,1 @@
+Implement the following method in TypeScript. export function checkIfNumberIsPalindrome(num: number): boolean. Only method body without method signature and without any trailing symbols is needed in the response.

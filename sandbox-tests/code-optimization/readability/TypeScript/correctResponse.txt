@@ -1,0 +1,35 @@
+type UserType = 'STUDENT' | 'SENIOR' | 'EMPLOYEE';
+
+interface Discount {
+    rate: number;
+    userType: UserType;
+    isHoliday: boolean;
+}
+
+function calculateDiscount(price: number, userType: UserType, isHoliday: boolean): Discount {
+    let discountRate = 0;
+
+    switch(userType) {
+        case 'STUDENT':
+            discountRate = price * 0.1;
+            break;
+        case 'SENIOR':
+            discountRate = price * 0.15;
+            break;
+        case 'EMPLOYEE':
+            discountRate = price * 0.2;
+            break;
+        default:
+            discountRate = 0;
+    }
+
+    if (isHoliday) {
+        discountRate += price * 0.05;
+    }
+
+    return {
+        rate: discountRate,
+        userType: userType,
+        isHoliday: isHoliday
+    };
+}

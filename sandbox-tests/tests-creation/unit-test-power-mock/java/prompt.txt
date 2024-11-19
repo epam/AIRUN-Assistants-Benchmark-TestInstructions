@@ -1,0 +1,25 @@
+Mock DataUtils class and implement Unit tests applying PowerMock library for the buildInvoice method of the InvoiceService class:
+public class InvoiceService {
+
+    public Invoice buildInvoice(String id, double price) {
+        Invoice invoice = new Invoice();
+        invoice.setId(id);
+        invoice.setPrice(price);
+        invoice.setDateTime(DataUtils.getIsoDateTime());
+        return invoice;
+    }
+}
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+public final class DataUtils {
+
+    private DataUtils() {
+    }
+
+    public static String getIsoDateTime() {
+        return LocalTime.now().format(DateTimeFormatter.ISO_DATE);
+    }
+}
+Only method implementation is needed in response.

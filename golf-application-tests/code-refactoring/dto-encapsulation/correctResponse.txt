@@ -1,0 +1,34 @@
+@GetMapping("/input")
+public String displayScoreCardInputPage(Model model) {
+    Iterable<Player> players = playerService.getAllPlayers();
+
+    List<String> playersSurnameName = StreamSupport.stream(players.spliterator(), false)
+        .map(player -> player.getSurname() + ", " + player.getName())
+        .collect(Collectors.toList());
+
+    Map<Competition,List<Round>> competitionRounds = new HashMap<>();
+    Iterable<Competition> competitions = competitionService.getAllCompetition();
+    for (Competition competition : competitions) {
+        List<Round> rounds = (List<Round>) roundService.getAllRoundByCompetitionName(competition.getName());
+        competitionRounds.put(competition, rounds);
+    }
+
+    Map<Round, List<Player>> roundPlayers = new HashMap<>();
+    Iterable<Round> rounds = roundService.getAllRound();
+    for (Round round : rounds) {
+        List<Player> playersByRound = (List<Player>) playerService.getAllPlayersByRound(round.getName());
+        roundPlayers.put(round, playersByRound);
+    }
+
+    RoundScoreDto roundScoreDto = new RoundScoreDto();
+    roundScoreDto.setRoundPlayers(roundPlayers);
+    roundScoreDto.setCompetitionRounds(competitionRounds);
+    roundScoreDto.setPlayersSurnameName(playersSurnameName);
+    roundScoreDto.setPlayers((List<Player>) players);
+    roundScoreDto.setCompetitions((List<Competition>) competitions);
+    roundScoreDto.setRounds((List<Round>) rounds);
+
+    model.addAttribute("roundScoreDto", roundScoreDto);
+
+    return ROUND_SCORE_INPUT_PAGE;
+}

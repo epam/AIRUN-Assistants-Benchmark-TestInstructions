@@ -1,0 +1,16 @@
+public class PaymentProcessor
+{
+    public Payment ProcessPayment(bool isOnline)
+    {
+        Payment payment = new Payment
+        {
+            PaymentDate = DateTime.Now,
+            PaymentStatus = "active",
+            PaymentType = "credit",
+            PaymentMode = isOnline ? "online" : "offline",
+            PaymentBank = isOnline ? "ICICI" : "HDFC"
+        };
+
+        return payment;
+    }
+}

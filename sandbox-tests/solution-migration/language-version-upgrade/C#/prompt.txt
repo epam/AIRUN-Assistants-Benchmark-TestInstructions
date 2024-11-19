@@ -1,0 +1,12 @@
+Convert this C#1.0 code to C#8.0. Name a new method GreetNew. The response must not contain any trailing characters.
+public string Greet(string name)
+{
+    if (name == null)
+    {
+        return "Hello!";
+    }
+    else
+    {
+        return "Hello, " + name + "!";
+    }
+}

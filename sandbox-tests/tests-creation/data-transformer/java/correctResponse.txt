@@ -1,0 +1,59 @@
+package com.epam.aicode.java;
+
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class DataTransformerTest {
+
+    private DataTransformer dataTransformer;
+
+    @BeforeEach
+    public void setUp() {
+        dataTransformer = new DataTransformer();
+    }
+
+    @Test
+    public void transformCsvToJson_NullOrEmptyCsvData_ReturnsNull() throws IOException {
+        String nullCsvData = null;
+        String emptyCsvData = "";
+
+        String resultForNull = dataTransformer.transformCsvToJson(nullCsvData);
+        String resultForEmpty = dataTransformer.transformCsvToJson(emptyCsvData);
+
+        assertNull(resultForNull);
+        assertNull(resultForEmpty);
+    }
+
+    @Test
+    public void transformCsvToJson_InsufficientLines_ReturnsNull() throws IOException {
+        String csvData = "header1,header2";
+
+        String result = dataTransformer.transformCsvToJson(csvData);
+
+        assertNull(result);
+    }
+
+    @Test
+    public void transformCsvToJson_MalformedCsvData_ThrowsIllegalArgumentException() {
+        String csvData = "header1,header2\nvalue1";
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            dataTransformer.transformCsvToJson(csvData);
+        });
+        assertEquals("CSV data is malformed at line 2", exception.getMessage());
+    }
+
+    @Test
+    public void transformCsvToJson_ValidCsvData_ReturnsJsonString() throws IOException {
+        String csvData = "header1,header2\nvalue1,value2\nvalue3,value4";
+        String expectedJson = "[{\"header1\":\"value1\",\"header2\":\"value2\"},{\"header1\":\"value3\",\"header2\":\"value4\"}]";
+
+        String result = dataTransformer.transformCsvToJson(csvData);
+
+        assertEquals(expectedJson, result);
+    }
+}

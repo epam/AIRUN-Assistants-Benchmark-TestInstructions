@@ -1,0 +1,38 @@
+public Discount CalculateDiscount(double price, string userType, bool isHoliday)
+{
+    double discountRate = 0;
+    const double studentDiscount = 0.1;
+    const double seniorDiscount = 0.15;
+    const double employeeDiscount = 0.2;
+    const double holidayDiscount = 0.05;
+
+    switch (userType)
+    {
+        case "STUDENT":
+            discountRate = price * studentDiscount;
+            break;
+        case "SENIOR":
+            discountRate = price * seniorDiscount;
+            break;
+        case "EMPLOYEE":
+            discountRate = price * employeeDiscount;
+            break;
+    }
+
+    if (isHoliday)
+    {
+        discountRate += price * holidayDiscount;
+    }
+
+    return BuildDiscount(discountRate, userType, isHoliday);
+}
+
+private Discount BuildDiscount(double rate, string userType, bool isHoliday)
+{
+    Discount discount = new Discount();
+    discount.Rate = rate;
+    discount.UserType = userType;
+    discount.IsHoliday = isHoliday;
+
+    return discount;
+}

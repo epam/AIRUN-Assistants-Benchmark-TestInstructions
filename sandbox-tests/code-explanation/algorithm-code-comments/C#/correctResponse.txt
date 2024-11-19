@@ -1,0 +1,34 @@
+public class GaussKruger
+{
+    private const double a = 6378137.0;
+    private const double f = 1 / 298.257223563;
+    private const double e2 = 2 * f - f * f;
+
+    // This method is used to convert Gauss-Kruger coordinates to WGS84 coordinates
+    public double[] GaussKrugerToWGS84(double x, double y)
+    {
+        // Calculate the central meridian (lon0) in radians and the radius of curvature in the meridian (k0) at the central meridian
+        double lon0 = 15 * Math.PI / 180;
+        double k0 = a / Math.Sqrt(1 - e2 * Math.Sin(lon0) * Math.Sin(lon0));
+
+        // Calculate the normalized Gauss-Kruger coordinates xi and eta by dividing the input coordinates by the radius of curvature in the meridian
+        double xi = x / k0;
+        double eta = y / k0;
+
+        // Calculate the footpoint latitude. This is the latitude where the meridian line of the input coordinates intersects the central meridian
+        double footpoint = lon0 + xi / Math.Cos(lon0);
+
+        // The radius of curvature in the prime vertical (rf) at the footpoint latitude is then calculated
+        double rf = a * (1 - e2) / Math.Pow(1 - e2 * Math.Sin(footpoint) * Math.Sin(footpoint), 1.5);
+
+        // The latitude (lat) and longitude (lon) in the WGS84 system are then calculated using the footpoint latitude, the radius of curvature in the prime vertical, the normalized Gauss-Kruger coordinates, and the central meridian
+        double lat = footpoint - (e2 * rf / k0) * eta * eta / 2;
+        double lon = lon0 + eta / Math.Cos(footpoint);
+
+        lat = lat * 180 / Math.PI;
+        lon = lon * 180 / Math.PI;
+
+        // The latitude and longitude are converted from radians to degrees and returned in an array
+        return new double[] { lat, lon };
+    }
+}

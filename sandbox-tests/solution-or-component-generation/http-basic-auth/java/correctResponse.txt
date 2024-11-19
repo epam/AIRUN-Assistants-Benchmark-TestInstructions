@@ -1,0 +1,11 @@
+import java.util.Base64;
+
+public class HttpBasicAuthentication {
+
+    public static String createHttpBasicAuthenticationHeader(String username, String password) {
+        String auth = username + ":" + password;
+        byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes());
+        String authHeader = "Basic " + new String(encodedAuth);
+        return authHeader;
+    }
+}

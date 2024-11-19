@@ -1,0 +1,23 @@
+public void handleResponse(AccountResponse accountResponse) {
+   validateAccountResponse(accountResponse);
+   Account account = new Account();
+   account.setId(accountResponse.getId());
+   account.setName(accountResponse.getName());
+   account.setEmail(accountResponse.getEmail());
+   account.setPhone(accountResponse.getPhone());
+}
+
+private void validateAccountResponse(AccountResponse accountResponse) {
+   if (accountResponse.getId() == null) {
+       throw new IllegalArgumentException("Id is required");
+   }
+   if (accountResponse.getName() == null) {
+       throw new IllegalArgumentException("Name is required");
+   }
+   if (accountResponse.getEmail() == null) {
+       throw new IllegalArgumentException("Email is required");
+   }
+   if (accountResponse.getPhone() == null) {
+       throw new IllegalArgumentException("Phone is required");
+   }
+}

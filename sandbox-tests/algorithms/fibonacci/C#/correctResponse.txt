@@ -1,0 +1,14 @@
+public static int Fibonacci(int n)
+{
+    if (n < 0)
+    {
+        throw new ArgumentException("n must be greater than or equal to 0");
+    }
+
+    if (n == 0 || n == 1)
+    {
+        return n;
+    }
+
+    return Fibonacci(n - 1) + Fibonacci(n - 2);
+}

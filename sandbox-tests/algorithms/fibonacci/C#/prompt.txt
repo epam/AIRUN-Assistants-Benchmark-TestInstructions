@@ -1,0 +1,3 @@
+Implement the following method in .NET/C#:
+public static int Fibonacci(int n)
+The response requires only the method body, without the method signature and without any trailing characters

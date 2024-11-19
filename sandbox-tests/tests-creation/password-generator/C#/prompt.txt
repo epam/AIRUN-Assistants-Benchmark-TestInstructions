@@ -1,0 +1,29 @@
+Implement unit tests using C#, regex and nUnit for the following class:
+public static class PwdTools
+    {
+        private const string LowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
+        private const string UppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private const string Digits = "0123456789";
+        private const string SpecialCharacters = "!@#$%^&*()_-+=<>?";
+
+        public static string GenerateRandomPassword(int length, bool includeLowercase, bool includeUppercase, bool includeDigits, bool includeSpecialCharacters)
+        {
+            var characterPool = string.Empty;
+            if (includeLowercase)
+                characterPool += LowercaseLetters;
+            if (includeUppercase)
+                characterPool += UppercaseLetters;
+            if (includeDigits)
+                characterPool += Digits;
+            if (includeSpecialCharacters)
+                characterPool += SpecialCharacters;
+
+            var random = new Random();
+            var password = new string(Enumerable.Repeat(characterPool, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+
+            return password;
+        }
+    }
+Provide only unit test methods without trailing characters.
+Unit test should be GenerateRandomPassword_LengthIsCorrect(), GenerateRandomPassword_OnlyLowercaseLetters(), GenerateRandomPassword_OnlyUppercaseLetters(), GenerateRandomPassword_OnlyDigits(), GenerateRandomPassword_OnlySpecialCharacters()

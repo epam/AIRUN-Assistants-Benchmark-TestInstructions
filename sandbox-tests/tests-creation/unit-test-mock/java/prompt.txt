@@ -1,0 +1,29 @@
+Create Java Unit tests for the Calculator methods applying Jupiter and Mockito extension for the following code:
+public class Calculator {
+
+    private CalculatorService calculatorService;
+
+    public Calculator(CalculatorService calculatorService) {
+        this.calculatorService = calculatorService;
+    }
+
+    public double add(double a, double b) {
+        return calculatorService.add(a, b);
+    }
+
+    public double subtract(double a, double b) {
+        return calculatorService.subtract(a, b);
+    }
+
+    public double multiply(double a, double b) {
+        return calculatorService.multiply(a, b);
+    }
+}
+
+public interface CalculatorService {
+
+    double add(double a, double b);
+    double subtract(double a, double b);
+    double multiply(double a, double b);
+}
+Only method implementation is needed in response.

@@ -1,0 +1,7 @@
+public static Map<String, BigDecimal> priceSorting(Map<String, BigDecimal> products, String sortingType) {
+    return products.entrySet().stream()
+        .sorted((e1, e2) -> sortingType.equals("ASC")
+            ? e1.getValue().compareTo(e2.getValue())
+            : e2.getValue().compareTo(e1.getValue()))
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+}

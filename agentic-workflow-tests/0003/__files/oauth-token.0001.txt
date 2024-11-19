@@ -1,0 +1,19 @@
+{{#trim}}
+{{#assign 'scope'}}
+{{formData request.body 'form' urlDecode=true}}{{form.scope}}
+{{/assign}}
+{{#assign 'accessToken'}}{{#trim}}
+{{{jwt 
+  alg='RS256'
+  scope=scope
+  iss=request.requestLine.baseUrl
+  aud='GOLF'
+  sub='user'
+}}}
+{{/trim}}{{/assign}}
+
+{ 
+  "access_token":"{{{accessToken}}}",
+  "token_type": "Bearer"
+}
+{{/trim}}

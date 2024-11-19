@@ -1,0 +1,12 @@
+public static bool CheckIfNumberIsPalindrome(int n)
+{
+    int reversed = 0;
+    int original = n;
+    while (n > 0)
+    {
+        int remainder = n % 10;
+        reversed = reversed * 10 + remainder;
+        n /= 10;
+    }
+    return original == reversed;
+}

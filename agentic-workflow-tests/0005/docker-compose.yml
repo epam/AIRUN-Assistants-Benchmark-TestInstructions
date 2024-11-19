@@ -1,0 +1,104 @@
+version: "3"
+
+networks:
+  bridgenet:
+    driver: bridge
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: agentic-0005-mysql
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    restart: always
+    networks:
+      - bridgenet
+    environment:
+        MYSQL_ROOT_PASSWORD: 1234
+        MYSQL_DATABASE: golf04
+    ports:
+        - "3306:3306"
+    volumes:
+        - mysql_data:/var/lib/mysql
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:${CP_TAG}
+    hostname: zookeeper
+    container_name: agentic-0005-zookeeper
+    restart: always
+    networks:
+      - bridgenet
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: "2181"
+      ZOOKEEPER_TICK_TIME: "2000"
+    volumes:
+      - zkdata:/var/lib/zookeeper/data
+      - zklogs:/var/lib/zookeeper/log
+
+  kafka:
+    image: confluentinc/cp-kafka:${CP_TAG}
+    hostname: kafka
+    container_name: agentic-0005-kafka
+    depends_on:
+      - zookeeper
+    restart: always
+    networks:
+      - bridgenet
+    ports:
+      - 9092:9092
+      - 19092:19092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:19092,PLAINTEXT_INTERNAL://kafka:29092,CONNECTIONS_FROM_HOST://${KAFKA_FROM_HOST}:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    volumes:
+      - kafkadata:/var/lib/kafka/data
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:${CP_TAG}
+    hostname: schema-registry
+    container_name: agentic-0005-schema-registry
+    depends_on:
+      - zookeeper
+      - kafka
+    restart: always
+    networks:
+      - bridgenet
+    ports:
+      - 8081:8081
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:29092
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    hostname: kafka-ui
+    container_name: agentic-0005-kafka-ui
+    depends_on:
+      - kafka
+      - schema-registry
+    restart: always
+    networks:
+      - bridgenet
+    ports:
+      - 8080:8080
+    environment:
+      KAFKA_CLUSTERS_0_NAME: kafka
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:19092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
+      DYNAMIC_CONFIG_ENABLED: 'true'
+
+volumes:
+  mysql_data:
+  zkdata:
+  zklogs:
+  kafkadata:

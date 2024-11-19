@@ -1,0 +1,13 @@
+public string[] MIME_TYPES = {
+    "audio/aac",
+    "application/x-abiword",
+    "application/x-freearc",
+    "image/avif",
+    "video/x-msvideo",
+    "application/vnd.amazon.ebook",
+    "application/octet-stream",
+    "image/bmp",
+    "application/x-bzip",
+    "application/x-bzip2"
+};
+ 

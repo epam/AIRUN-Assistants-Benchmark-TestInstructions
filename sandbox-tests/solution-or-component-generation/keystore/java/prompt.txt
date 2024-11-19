@@ -1,0 +1,3 @@
+Implement the following method in Java that create a keystore of JKS type and save to the file system.
+public KeyStore createKeystoreAndSaveToFile(String filename, String password)
+The response requires only the method body, without the method signature and without any trailing characters.

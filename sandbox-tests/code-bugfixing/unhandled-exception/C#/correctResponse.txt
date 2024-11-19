@@ -1,0 +1,15 @@
+public static void CheckBalance(double initialAmount, List<double> credits, List<double> debits)
+{
+    try
+    {
+        ValidateInputs(initialAmount, credits, debits);
+    }
+    catch (ArgumentNullException ex)
+    {
+        Console.WriteLine($"Exception caught: {ex.Message}");
+    }
+
+    Console.WriteLine("Initial amount: " + initialAmount);
+    Console.WriteLine("Credits: " + credits);
+    Console.WriteLine("Debits: " + debits);
+}
