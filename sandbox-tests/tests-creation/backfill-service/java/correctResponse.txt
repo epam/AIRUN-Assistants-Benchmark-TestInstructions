@@ -1,0 +1,76 @@
+package com.epam.aicode.java;
+
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Date;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+class BackfillServiceTestSample {
+    @Mock
+    private SrcSystem srcSystem;
+
+    @Mock
+    private DstSystem dstSystem;
+
+    @InjectMocks
+    private BackfillService backfillService;
+
+    @Test
+    void testBackfill_NewAccount() {
+        // Arrange
+        Transfer transfer = new Transfer("ACC1", new Date(), new BigDecimal("100"));
+        when(srcSystem.getTransfers()).thenReturn(Arrays.asList(transfer));
+        when(dstSystem.getAccount("ACC1")).thenReturn(null);
+
+        // Act
+        backfillService.backfill();
+
+        // Assert
+        verify(dstSystem).createAccount(argThat(account -> account.getAccountId().equals("ACC1")
+                && account.getCurrentAmount().equals(new BigDecimal("100"))));
+    }
+
+    @Test
+    void testBackfill_ExistingAccount() {
+        // Arrange
+        Transfer transfer = new Transfer("ACC1", new Date(), new BigDecimal("100"));
+        when(srcSystem.getTransfers()).thenReturn(Arrays.asList(transfer));
+
+        Account existingAccount = new Account("ACC1");
+        existingAccount.setCurrentAmount(new BigDecimal("50"));
+        when(dstSystem.getAccount("ACC1")).thenReturn(existingAccount);
+
+        // Act
+        backfillService.backfill();
+
+        // Assert
+        verify(dstSystem).updateAccount(argThat(account -> account.getAccountId().equals("ACC1")
+                && account.getCurrentAmount().equals(new BigDecimal("100"))));
+    }
+
+    @Test
+    void testBackfill_MultipleTransfers() {
+        // Arrange
+        Transfer transfer1 = new Transfer("ACC1", new Date(), new BigDecimal("100"));
+        Transfer transfer2 = new Transfer("ACC1", new Date(), new BigDecimal("50"));
+        when(srcSystem.getTransfers()).thenReturn(Arrays.asList(transfer1, transfer2));
+        when(dstSystem.getAccount("ACC1")).thenReturn(null);
+
+        // Act
+        backfillService.backfill();
+
+        // Assert
+        verify(dstSystem).createAccount(argThat(account -> account.getAccountId().equals("ACC1")
+                && account.getCurrentAmount().equals(new BigDecimal("150"))));
+    }
+}

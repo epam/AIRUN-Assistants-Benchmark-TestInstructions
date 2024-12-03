@@ -1,0 +1,4 @@
+    @Scheduled(cron = "0 0/5 7-23 1/2 * ?", zone = "Europe/Paris")
+    public void scheduleTask() {
+        System.out.println("Scheduled task is being executed");
+    }

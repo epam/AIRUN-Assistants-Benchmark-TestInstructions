@@ -1,0 +1,7 @@
+    public static final List<File> findExecutableFiles(File directory) throws IOException {
+        return Files.walk(directory.toPath())
+                .filter(Files::isRegularFile)
+                .filter(Files::isExecutable)
+                .map(Path::toFile)
+                .collect(Collectors.toList());
+    }
