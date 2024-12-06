@@ -12,7 +12,7 @@ A developer is trying to configure a repetitive task execution with a Cron expre
 - Open the project solution-or-component-generation/spring-boot/java
 - Open the SchedulingConfig class
 - Add annotation to the class `@EnableScheduling`
-- Type in the class body and press Enter
+- Type in the class body (replace *odd* with *even* if today is even day) and press Enter
 
 ```java
 // scheduling a task to be executed every five minutes since 7 AM till 11 PM every odd day of the month within Europe/Paris time zone
@@ -20,6 +20,11 @@ A developer is trying to configure a repetitive task execution with a Cron expre
 
 - Accept the best suggested implementation using the TAB and ENTER keys
 - Add all necessary imports
+- Add a message print to standard output`to the method if it is missing:
+
+```java
+System.out.println("Scheduled task is being executed");
+```
 
 </details>
 

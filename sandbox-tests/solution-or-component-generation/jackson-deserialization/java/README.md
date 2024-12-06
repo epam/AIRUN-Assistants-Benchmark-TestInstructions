@@ -60,6 +60,12 @@ curl -v -d "{\"name\":\"nameX2\",\"fieldX\":\"valueX2\"}" -H "Content-Type: appl
 
     - verify an error is returned
 
+```
+< HTTP/1.1 400
+<
+{"timestamp":1733503903833,"status":400,"error":"Bad Request","path":"/api/items"}
+``
+
 *Additional note*
 
 An example of solution is in the correctResponse.txt file
