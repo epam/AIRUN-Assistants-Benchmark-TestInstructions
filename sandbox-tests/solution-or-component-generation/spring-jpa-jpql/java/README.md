@@ -73,7 +73,7 @@ curl -d "{\"name\":\"nameX2\",\"expiredAfter\":\"2023-03-25T00:00:00\"}" -H "Con
     - get all expired items with the request:
 
 ```bash
-curl http://localhost:8080/api/items
+curl -s http://localhost:8080/api/items/:expired | jq
 ```
 
     - expected output:
