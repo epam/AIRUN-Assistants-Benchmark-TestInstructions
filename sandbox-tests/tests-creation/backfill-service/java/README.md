@@ -20,8 +20,11 @@ A developer is trying to implement unit tests for a business service by typed me
 - Accept the best suggestion using the TAB and ENTER keys
 - Move cursor into the test method testBackfill_ExistingAccount() body and press Enter
 - Accept the best suggestion using the TAB and ENTER keys
+- Move cursor into the test method testBackfill_NotNeeded() body and press Enter
+- Accept the best suggestion using the TAB and ENTER keys
 - Move cursor into the test method testBackfill_MultipleTransfers() body and press Enter
 - Accept the best suggestion using the TAB and ENTER keys
+- Add throws declarations to the test methods if it is required
 - Add all necessary imports
 
 </details>
@@ -30,7 +33,8 @@ A developer is trying to implement unit tests for a business service by typed me
 
 - Code must compile
 - Tests must be generated for all the test methods
-- Run tests. Tests must pass successfully
+- Build the project and run the test with the command `gradle clean build` and verify no errors reported
+- Open  _ build/reports/jacoco/test/html/index.html _  in browser and verify the code coverage is 100%
 
 *Additional note*
 
