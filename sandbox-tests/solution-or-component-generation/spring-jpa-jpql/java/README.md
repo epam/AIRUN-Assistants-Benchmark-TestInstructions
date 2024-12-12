@@ -18,6 +18,7 @@ A developer is trying to Query database using JPQL in Spring Boot project
 ```
 
 - Accept the best suggested implementation using the TAB and ENTER keys
+- *Optional*: Add the line with `@Query` annotation after the comment if it is not suggested. Invoke code generation and accept suggestion
 - Add all necessary imports
 - Open ItemService class
 - Go to `findExprireByNow` method
