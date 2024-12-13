@@ -10,5 +10,5 @@ public interface ItemRepository extends PagingAndSortingRepository<Item, Long>, 
 
     // search for items that have been expired by now
     @Query("FROM Item i WHERE i.expiredAfter < CURRENT_TIMESTAMP()")
-    Iterable<Item> findExprireByNow();
+    Iterable<Item> findExpiredByNow();
 }

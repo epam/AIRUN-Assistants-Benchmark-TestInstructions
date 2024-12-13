@@ -54,7 +54,8 @@ spotbugsTest {
 rev_spotbugs=6.0.26
 ```
 
-- list build/reports/spotbugs/ directory and check the following files exist:
+- Build the project with the command `gradle build`
+- List build/reports/spotbugs/ directory and check the following files exist:
 
 ```
 main.html

@@ -28,65 +28,9 @@ A developer is trying to implement Rest Controller Request Mappings methods
 *Assert conditions*
 
 - Code must compile
+- Copy ItemResourceTest.java to the solution-or-component-generation/spring-boot/java/src/test/java/com/epam/aicode/springpr directory
 - Build the project with the command `gradle build` and verify no errors reported
-- Run the application with the command `gradle bootRun`
-- Verify the generated mapping methods
-    - create an item with the request:
-
-```bash
-curl -d "{\"name\":\"nameX1\"}" -H "Content-Type: application/json" -X POST http://localhost:8080/api/items
-```
-
-    - expected output:
-
-```json
-{"id":1,"name":"nameX1"}
-```
-
-    - update the created item with the request:
-
-```bash
-curl -d "{\"id\":1,\"name\":\"nameX1updated\"}" -H "Content-Type: application/json" -X PUT http://localhost:8080/api/items/1
-```
-
-    - get the item with the request:
-
-```bash
-curl -s http://localhost:8080/api/items/1 | jq
-```
-
-    - expected output:
-
-```json
-{
-  "id": 1,
-  "name": "nameX1updated"
-}
-```
-
-    - delete the item with the request:
-
-```bash
-curl -v -X DELETE http://localhost:8080/api/items/1
-```
-
-    - verify 204 code is returned:
-
-```
-< HTTP/1.1 204
-```
-
-    - get all items with the request:
-
-```bash
-curl http://localhost:8080/api/items
-```
-
-- expected output:
-
-```json
-[]
-```
+- Check if the application run successfully with the command `gradle bootRun`
 
 *Additional note*
 

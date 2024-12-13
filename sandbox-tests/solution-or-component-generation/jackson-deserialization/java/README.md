@@ -37,34 +37,9 @@ A developer is trying to configure Jackson Object Mapper Deserialization in Spri
 *Assert conditions*
 
 - Code must compile
+- Copy JacksonDeserializationTest.java to the solution-or-component-generation/spring-boot/java/src/test/java/com/epam/aicode/springpr directory
 - Build the project with the command `gradle build` and verify no errors reported
-- Run the application with the command `gradle bootRun`
-- Verify the generated mapping methods
-    - create an item with the request:
-
-```bash
-curl -d "{\"name\":\"nameX1\"}" -H "Content-Type: application/json" -X POST http://localhost:8080/api/items
-```
-
-    - expected output:
-
-```json
-{"id":1,"name":"nameX1"}
-```
-
-    - try to create an item with unknown property:
-
-```bash
-curl -v -d "{\"name\":\"nameX2\",\"fieldX\":\"valueX2\"}" -H "Content-Type: application/json" -X POST http://localhost:8080/api/items
-```
-
-    - verify an error is returned
-
-```
-< HTTP/1.1 400
-<
-{"timestamp":1733503903833,"status":400,"error":"Bad Request","path":"/api/items"}
-``
+- Check if the application run successfully with the command `gradle bootRun`
 
 *Additional note*
 

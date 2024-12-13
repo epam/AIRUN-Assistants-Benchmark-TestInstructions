@@ -18,10 +18,10 @@ A developer is trying to Query database using JPQL in Spring Boot project
 ```
 
 - Accept the best suggested implementation using the TAB and ENTER keys
-- *Optional*: Add the line with `@Query` annotation after the comment if it is not suggested. Invoke code generation and accept suggestion
+- *Optional*: Add the line with `@Query` annotation after the comment if correct implementation is not proposed. Invoke code generation and accept suggestion
 - Add all necessary imports
 - Open ItemService class
-- Go to `findExprireByNow` method
+- Go to `findExpiredByNow` method
 - Remove line with `return` statement
 - Move cursor to the end of TODO comment and press Enter
 - Accept the best suggested implementation using the TAB and ENTER keys
@@ -44,51 +44,10 @@ A developer is trying to Query database using JPQL in Spring Boot project
 *Assert conditions*
 
 - Code must compile
+- Copy JpqlTest.java to the solution-or-component-generation/spring-boot/java/src/test/java/com/epam/aicode/springpr directory
 - Build the project with the command `gradle build` and verify no errors reported
-- Run the application with the command `gradle bootRun`
-- Verify the generated mapping methods
-    - create non-expired item with the request:
-
-```bash
-curl -d "{\"name\":\"nameX1\"}" -H "Content-Type: application/json" -X POST http://localhost:8080/api/items
-```
-
-    - expected output:
-
-```json
-{"id":1,"name":"nameX1"}
-```
-
-    - create an expired item with the request:
-
-```bash
-curl -d "{\"name\":\"nameX2\",\"expiredAfter\":\"2023-03-25T00:00:00\"}" -H "Content-Type: application/json" -X POST http://localhost:8080/api/items
-```
-
-    - expected output:
-
-```json
-{"id":2,"name":"nameX2","expiredAfter":"2023-03-25T00:00:00"}
-```
-
-    - get all expired items with the request:
-
-```bash
-curl -s http://localhost:8080/api/items/:expired | jq
-```
-
-    - expected output:
-
-```json
-[
-  {
-    "id": 2,
-    "name": "nameX2",
-    "expiredAfter": "2023-03-25T00:00:00"
-  }
-]
-```
+- Check if the application run successfully with the command `gradle bootRun`
 
 *Additional note*
 
-An example of solution is in the correctResponse.txt file
+An example of solution is in the correctResponse\*.txt files

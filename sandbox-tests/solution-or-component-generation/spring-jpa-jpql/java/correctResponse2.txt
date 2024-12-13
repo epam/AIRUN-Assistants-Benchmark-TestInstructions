@@ -1,0 +1,4 @@
+    public List<Item> findExpiredByNow() {
+        return StreamSupport.stream(itemRepository.findExpiredByNow().spliterator(), false)
+                .collect(Collectors.toList());
+    }
