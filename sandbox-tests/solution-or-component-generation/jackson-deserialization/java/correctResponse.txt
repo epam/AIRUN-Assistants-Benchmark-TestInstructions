@@ -1,0 +1,20 @@
+package com.epam.aicode.springpr.config;
+
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+
+@Configuration
+public class JacksonConfig {
+
+    @Bean
+    Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
+        return jacksonObjectMapperBuilder -> {
+            jacksonObjectMapperBuilder.featuresToDisable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                    DeserializationFeature.ACCEPT_FLOAT_AS_INT);
+        };
+    }
+
+}

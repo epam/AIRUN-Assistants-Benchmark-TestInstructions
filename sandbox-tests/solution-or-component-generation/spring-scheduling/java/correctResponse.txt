@@ -1,0 +1,11 @@
+//every odd day
+    @Scheduled(cron = "0 0/5 7-23 1/2 * ?", zone = "Europe/Paris")
+    public void scheduleTask() {
+        System.out.println("Scheduled task is being executed");
+    }
+
+//every even day
+    @Scheduled(cron = "0 0/5 7-23 2/2 * ?")
+    public void scheduleTask() {
+        System.out.println("Scheduled task is being executed");
+    }

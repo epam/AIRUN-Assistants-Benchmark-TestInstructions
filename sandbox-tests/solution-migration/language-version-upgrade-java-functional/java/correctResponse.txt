@@ -1,0 +1,1 @@
+return Arrays.asList(directory.list((dir, name) -> name.startsWith(filePrefix) && name.endsWith(".csv")));

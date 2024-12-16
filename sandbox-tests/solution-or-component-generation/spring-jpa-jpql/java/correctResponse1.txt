@@ -1,0 +1,14 @@
+package com.epam.aicode.springpr.repository;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+import com.epam.aicode.springpr.domain.Item;
+
+public interface ItemRepository extends PagingAndSortingRepository<Item, Long>, CrudRepository<Item, Long> {
+
+    // search for items that have been expired by now
+    @Query("FROM Item i WHERE i.expiredAfter < CURRENT_TIMESTAMP()")
+    Iterable<Item> findExpiredByNow();
+}
