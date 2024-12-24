@@ -19,8 +19,11 @@ public class OrderRepositoryTest {
     @Autowired
     private OrderRepository orderRepository;
 
+    private LocalDateTime fixedNow;
+
     @BeforeEach
     public void setUp() {
+        fixedNow = LocalDateTime.now();
         orderRepository.saveAll(setupOrders());
     }
 
@@ -43,8 +46,8 @@ public class OrderRepositoryTest {
     public void shouldReturnOrdersWithinBoundaryDates() {
         // Arrange
         Pageable pageable = PageRequest.of(0, 10);
-        LocalDateTime startDate = LocalDateTime.now().minusDays(5);
-        LocalDateTime endDate = LocalDateTime.now();
+        LocalDateTime startDate = fixedNow.minusDays(5);
+        LocalDateTime endDate = fixedNow;
 
         // Act
         Page<Order> ordersPage = orderRepository.findOrders(
@@ -92,10 +95,10 @@ public class OrderRepositoryTest {
 
     private List<Order> setupOrders() {
         return List.of(
-            createOrder(100L, LocalDateTime.now().minusDays(1), "NEW", 200.0),
-            createOrder(101L, LocalDateTime.now().minusDays(2), "SHIPPED", 500.0),
-            createOrder(102L, LocalDateTime.now(), null, 50.0),
-            createOrder(103L, LocalDateTime.now().minusDays(5), "CANCELLED", 800.0)
+            createOrder(100L, fixedNow.minusDays(1), "NEW", 200.0),
+            createOrder(101L, fixedNow.minusDays(2), "SHIPPED", 500.0),
+            createOrder(102L, fixedNow, null, 50.0),
+            createOrder(103L, fixedNow.minusDays(5), "CANCELLED", 800.0)
         );
     }
 
