@@ -23,54 +23,45 @@ public class OrderRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        fixedNow = LocalDateTime.now();
+        fixedNow = LocalDateTime.now().withSecond(0).withNano(0);
         orderRepository.saveAll(setupOrders());
     }
 
     @Test
     public void shouldReturnOrdersWithMultipleFilters() {
-        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
 
-        // Act
         Page<Order> ordersPage = orderRepository.findOrders(
             "SHIPPED", 101L, 400.0, 600.0, null, null, pageable
         );
 
-        // Assert
         assertThat(ordersPage.getTotalElements()).isEqualTo(1);
         assertThat(ordersPage.getContent().get(0).getCustomerId()).isEqualTo(101L);
     }
 
     @Test
     public void shouldReturnOrdersWithinBoundaryDates() {
-        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
         LocalDateTime startDate = fixedNow.minusDays(5);
         LocalDateTime endDate = fixedNow;
 
-        // Act
         Page<Order> ordersPage = orderRepository.findOrders(
             null, null, null, null, startDate, endDate, pageable
         );
 
-        // Assert
         assertThat(ordersPage.getTotalElements()).isEqualTo(4);
     }
 
     @Test
     public void shouldReturnOrdersForExactMinMaxTotalCost() {
-        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
 
-        // Act & Assert for Min Total Cost
         Page<Order> ordersPage1 = orderRepository.findOrders(
             null, null, 200.0, 200.0, null, null, pageable
         );
         assertThat(ordersPage1.getTotalElements()).isEqualTo(1);
         assertThat(ordersPage1.getContent().get(0).getTotalCost()).isEqualTo(200.0);
 
-        // Act & Assert for Max Total Cost
         Page<Order> ordersPage2 = orderRepository.findOrders(
             null, null, 800.0, 800.0, null, null, pageable
         );
@@ -80,15 +71,12 @@ public class OrderRepositoryTest {
 
     @Test
     public void shouldReturnOrdersWithNullValuesInEntityFields() {
-        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
 
-        // Act
         Page<Order> ordersPage = orderRepository.findOrders(
             null, 102L, null, null, null, null, pageable
         );
 
-        // Assert
         assertThat(ordersPage.getTotalElements()).isEqualTo(1);
         assertThat(ordersPage.getContent().get(0).getStatus()).isNull();
     }
