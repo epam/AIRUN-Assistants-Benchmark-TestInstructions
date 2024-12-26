@@ -9,7 +9,7 @@ public class PasswordValidator
         @"(?=.*[A-Z])" +
         @"(?=.*[@#$%^&+=!])" +
         @"(?=\S+$)" +
-        @".{10,}";
+        @".{8,}$";
 
     private static readonly Regex PASSWORD_PATTERN = new Regex(PASSWORD_REGEX);
 
