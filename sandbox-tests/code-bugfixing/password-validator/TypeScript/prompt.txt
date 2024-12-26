@@ -1,0 +1,25 @@
+Given the following TypeScript code:
+
+export class PasswordValidator {
+
+    // Regular expression for a strong password
+    private static readonly PASSWORD_REGEX: RegExp = new RegExp(
+        "^(?=.*[0-9])" +
+        "(?=.*[a-z])" +
+        "(?=.*[A-Z])" +
+        "(?=.*[@#$%^&+=!])" +
+        "(?=\\S+$)" +
+        ".{8,}$"
+    );
+
+    public static isValidPassword(password: string | null): boolean {
+        if (password === null) {
+            return false;
+        }
+        return PasswordValidator.PASSWORD_REGEX.test(password);
+    }
+}
+
+Rewrite the PASSWORD_REGEX variable to fix the bug.
+The password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character. Whitespace is not allowed.
+Provide only the corrected implementation of the code.
