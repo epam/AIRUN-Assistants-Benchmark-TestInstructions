@@ -1,0 +1,27 @@
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class OrderService {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+
+    public void processOrder(String orderId) {
+        if (orderId == null || orderId.isEmpty()) {
+            logger.error("Order ID is null or empty");
+            return;
+        }
+
+        logger.info("Processing order: {}", orderId);
+
+        try {
+            logger.debug("Fetching order details for {}", orderId);
+            // Simulating potential exception
+            if ("invalid".equals(orderId)) {
+                throw new RuntimeException("Order processing error");
+            }
+            logger.info("Order {} processed successfully", orderId);
+        } catch (Exception e) {
+            logger.error("Error processing order: {}", orderId, e);
+        }
+    }
+}
