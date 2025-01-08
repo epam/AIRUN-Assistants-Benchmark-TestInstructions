@@ -23,7 +23,7 @@ public class DateHandler {
     }
 
     public static void main(String[] args) {
-        DateHandlerNew dateHandler = new DateHandlerNew();
+        DateHandler dateHandler = new DateHandler();
         LocalDate currentDate = dateHandler.getCurrentDate();
         System.out.println("Current Date: " + dateHandler.formatDate(currentDate));
         LocalDate newDate = dateHandler.addDaysToCurrentDate(5);
