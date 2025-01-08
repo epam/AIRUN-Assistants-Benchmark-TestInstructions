@@ -1,7 +1,7 @@
 **Refactor logging implementations from older frameworks to SLF4J test**
 
 *Test Description*
-A developer is trying to refactor a class by utilizing new Date and Time API features
+A developer is trying to refactor a class using SLF4J instead of the older Java logging framework
 
 *Act*
 
@@ -12,7 +12,7 @@ A developer is trying to refactor a class by utilizing new Date and Time API fea
 - Copy a question located in the prompt.txt file to the chat window
 - Submit the question
 - Open the project code-refactoring/legacy-logging/java
-- Open the DateHandler class
+- Open the OrderService class
 - Change the class implementation to the suggested implementation
 - Add all necessary imports
 
@@ -20,8 +20,8 @@ A developer is trying to refactor a class by utilizing new Date and Time API fea
 <details>
 <summary>Code Completion instructions:</summary>
 
-- Open the project code-bugfixing/legacy-logging/java
-- Open the DateHandler class
+- Open the project code-refactoring/legacy-logging/java
+- Open the OrderService class
 - Type at the end of the class:
 
 ```java
@@ -38,10 +38,10 @@ A developer is trying to refactor a class by utilizing new Date and Time API fea
 <summary>Chat IDE:</summary>
 
 - Open the project code-refactoring/legacy-logging/java
-- Open the DateHandler class
+- Open the OrderService class
 - Type in the chat window:
 
-> refactor logging implementations from older frameworks to SLF4J
+> Refactor logging implementations from older frameworks to SLF4J
 
 - Change the processPayment method to the suggested method
 - Add all necessary imports
@@ -51,8 +51,6 @@ A developer is trying to refactor a class by utilizing new Date and Time API fea
 *Assert conditions*
 
 - Code must compile
-- Copy the DateHandlerTest.java file to the code-refactoring/legacy-logging/java/src/test/java folder
-- Run tests in the DateHandlerTest class. Tests must pass successfully
 
 *Additional note*
 
