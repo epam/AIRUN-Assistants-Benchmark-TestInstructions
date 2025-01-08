@@ -1,0 +1,33 @@
+package com.epam.aicode.java;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public class DateHandler {
+
+    public LocalDate getCurrentDate() {
+        return LocalDate.now();
+    }
+
+    public String formatDate(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return date.format(formatter);
+    }
+
+    public LocalDate addDaysToCurrentDate(int daysToAdd) {
+        return getCurrentDate().plusDays(daysToAdd);
+    }
+
+    public String getDayOfWeek(LocalDate date) {
+        return date.getDayOfWeek().toString();
+    }
+
+    public static void main(String[] args) {
+        DateHandlerNew dateHandler = new DateHandlerNew();
+        LocalDate currentDate = dateHandler.getCurrentDate();
+        System.out.println("Current Date: " + dateHandler.formatDate(currentDate));
+        LocalDate newDate = dateHandler.addDaysToCurrentDate(5);
+        System.out.println("Date after adding 5 days: " + dateHandler.formatDate(newDate));
+        System.out.println("Day of the week: " + dateHandler.getDayOfWeek(currentDate));
+    }
+}
