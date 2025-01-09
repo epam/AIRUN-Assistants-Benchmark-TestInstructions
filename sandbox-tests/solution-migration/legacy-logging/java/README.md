@@ -11,7 +11,7 @@ A developer is trying to refactor a class using SLF4J instead of the older Java 
 - Open the prompt.txt file
 - Copy a question located in the prompt.txt file to the chat window
 - Submit the question
-- Open the project code-refactoring/legacy-logging/java
+- Open the project solution-migration/legacy-logging/java
 - Open the OrderService class
 - Change the class implementation to the suggested implementation
 - Add all necessary imports
@@ -20,7 +20,7 @@ A developer is trying to refactor a class using SLF4J instead of the older Java 
 <details>
 <summary>Code Completion instructions:</summary>
 
-- Open the project code-refactoring/legacy-logging/java
+- Open the project solution-migration/legacy-logging/java
 - Open the OrderService class
 - Type at the end of the class:
 
@@ -37,7 +37,7 @@ A developer is trying to refactor a class using SLF4J instead of the older Java 
 <details>
 <summary>Chat IDE:</summary>
 
-- Open the project code-refactoring/legacy-logging/java
+- Open the project solution-migration/legacy-logging/java
 - Open the OrderService class
 - Type in the chat window:
 
