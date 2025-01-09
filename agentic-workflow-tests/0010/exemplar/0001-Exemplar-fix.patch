@@ -1,0 +1,54 @@
+From 7e555f7c14a4112cbe7b0577fd46893d3618ab96 Mon Sep 17 00:00:00 2001
+From: siarhei-z1 <148881157+siarhei-z1@users.noreply.github.com>
+Date: Thu, 9 Jan 2025 16:41:13 +0300
+Subject: [PATCH] Exemplar fix
+
+---
+ .../java/com/golf/app/controller/PlayerController.java    | 8 ++++----
+ src/main/resources/templates/player/player-details.html   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src/main/java/com/golf/app/controller/PlayerController.java b/src/main/java/com/golf/app/controller/PlayerController.java
+index 87b6d43..739d461 100644
+--- a/src/main/java/com/golf/app/controller/PlayerController.java
++++ b/src/main/java/com/golf/app/controller/PlayerController.java
+@@ -88,7 +88,6 @@ public class PlayerController {
+             model.addAttribute(ERRORS_ATTRIBUTE, ValidationUtils.getFieldErrors(bindingResult));
+             return PLAYER_ADD_PAGE;
+         }
+-        player.setPhotoId(1L);
+         playerService.savePlayer(player);
+         LOGGER.log(Level.INFO, "Player " + player.getSurname() + " " + player.getName()
+                 + " with ID " + player.getId() + " has been saved in the DB");
+@@ -109,11 +108,12 @@ public class PlayerController {
+ 
+         PlayerPhotoDto playerPhotoDto = null;
+ 
+-        Long photoId = player.getPhotoId() != null ? player.getPhotoId() : 1L;
+-        Optional<PlayerPhoto> playerPhoto = playerPhotoService.findPlayerPhotoById(photoId);
+-        if (playerPhoto.isPresent()) {
++        if (player.getPhotoId() != null) {
++            Optional<PlayerPhoto> playerPhoto = playerPhotoService.findPlayerPhotoById(player.getPhotoId());
++            if (playerPhoto.isPresent()) {
+                 playerPhotoDto = new PlayerPhotoDto(playerPhoto.get().getId(), playerPhoto.get().getName(),
+                         Base64.getEncoder().encodeToString(playerPhoto.get().getData()));
++            }
+         }
+ 
+         model.addAttribute(PLAYER_ATTRIBUTE, player);
+diff --git a/src/main/resources/templates/player/player-details.html b/src/main/resources/templates/player/player-details.html
+index fb9235d..250834f 100644
+--- a/src/main/resources/templates/player/player-details.html
++++ b/src/main/resources/templates/player/player-details.html
+@@ -52,7 +52,7 @@
+ 
+     <!-- Display scoreCardImage -->
+     <img th:if="${playerPhotoDto != null}" th:src="|data:scoreCardImage/jpeg;base64,${playerPhotoDto.base64Data}|" alt="Player Photo" style="width: 300px; height: auto; margin: 10px;"/>
+-    <img th:if="${playerPhotoDto == null}"                                                                         alt="Player Photo" style="width: 300px; height: auto; margin: 10px;"/>
++    <img th:if="${playerPhotoDto == null}" src="/images/no-photo-available.png" alt="No Photo Available" style="width: 300px; height: auto; margin: 10px;"/>
+ 
+     <!-- Table with player details -->
+     <table class="table_for_details">
+-- 
+2.45.1
+
