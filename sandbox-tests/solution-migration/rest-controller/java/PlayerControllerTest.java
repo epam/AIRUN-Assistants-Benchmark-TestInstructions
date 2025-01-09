@@ -33,30 +33,19 @@ public class PlayerControllerTest {
     void setUp() {
         player = new Player();
         player.setId(1L);
-        player.setName("John");
-        player.setSurname("Doe");
+        player.setName("testName");
+        player.setSurname("testSurname");
     }
 
-   @Test
-    void testGetAllPlayers() {
+    @Test
+    void testGetPlayers() {
         when(playerService.getAllPlayers()).thenReturn(Arrays.asList(player));
 
-        ResponseEntity<List<Player>> response = playerController.getAllPlayers();
+        ResponseEntity<List<Player>> response = playerController.getPlayers();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
         verify(playerService, times(1)).getAllPlayers();
-    }
-
-    @Test
-    void testGetPlayerById() {
-        when(playerService.getPlayerById(1L)).thenReturn(Optional.of(player));
-
-        ResponseEntity<Player> response = playerController.getPlayerById(1L);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(player, response.getBody());
-        verify(playerService, times(1)).getPlayerById(anyLong());
     }
 
     @Test
@@ -68,6 +57,17 @@ public class PlayerControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(player, response.getBody());
         verify(playerService, times(1)).savePlayer(any(Player.class));
+    }
+
+    @Test
+    void testGetPlayerById() {
+        when(playerService.getPlayerById(1L)).thenReturn(Optional.of(player));
+
+        ResponseEntity<Player> response = playerController.getPlayerById(1L);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(player, response.getBody());
+        verify(playerService, times(1)).getPlayerById(anyLong());
     }
 
     @Test
