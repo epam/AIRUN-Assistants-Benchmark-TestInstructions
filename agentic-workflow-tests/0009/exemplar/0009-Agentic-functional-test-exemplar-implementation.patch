@@ -312,7 +312,7 @@ index 0000000..7ae7000
 --- /dev/null
 +++ b/src/test/resources/application-functionalTest.properties
 @@ -0,0 +1,12 @@
-+spring.datasource.url=jdbc:mysql://alpine2docker.local:3306/golf_test_db
++spring.datasource.url=jdbc:mysql://localhost:3306/golf_test_db
 +spring.datasource.username=root
 +spring.datasource.password=root
 +spring.jpa.hibernate.ddl-auto=create-drop
