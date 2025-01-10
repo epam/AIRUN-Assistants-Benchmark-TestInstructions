@@ -26,6 +26,7 @@ A developer is trying to refactor a class to make it immutable
 
 ```java
 // Rewrite the class to make it immutable using Lombok annotations
+// Remove unnecessary code
 ```
 
 - Press ENTER
@@ -41,7 +42,8 @@ A developer is trying to refactor a class to make it immutable
 - Open the Player class
 - Type in the chat window:
 
-> Rewrite the code above to make it immutable using Lombok annotations
+> Rewrite the code above to make it immutable using Lombok annotations.
+  Remove unnecessary code
 
 - Change the class implementation to the suggested implementation
 - Add all necessary imports
@@ -51,8 +53,6 @@ A developer is trying to refactor a class to make it immutable
 *Assert conditions*
 
 - Code must compile
-- Copy the PlayerTest.java file to the code-refactoring/immutable-class/java/src/test/java folder
-- Run tests in the PlayerTest class. Tests must pass successfully
 
 *Additional note*
 
