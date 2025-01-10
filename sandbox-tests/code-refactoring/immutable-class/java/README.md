@@ -42,8 +42,7 @@ A developer is trying to refactor a class to make it immutable
 - Open the Player class
 - Type in the chat window:
 
-> Rewrite the code above to make it immutable using Lombok annotations.
-  Remove unnecessary code
+> Rewrite the code above to make it immutable using Lombok annotations. Remove unnecessary code
 
 - Change the class implementation to the suggested implementation
 - Add all necessary imports
