@@ -14,7 +14,6 @@ A developer is trying to refactor the POM file to move library versions into the
 - Open the project code-refactoring/pom-file/java
 - Open the pom file
 - Change the file implementation to the suggested implementation
-- Add all necessary imports
 
 </details>
 <details>
@@ -25,7 +24,7 @@ A developer is trying to refactor the POM file to move library versions into the
 - Type at the end of the file:
 
 ```java
-// Refactor the POM file to move library versions into the properties section
+// Refactored POM file by moving library versions into the properties section
 ```
 
 - Press ENTER
@@ -44,7 +43,6 @@ A developer is trying to refactor the POM file to move library versions into the
 > Refactor the POM file to move library versions into the properties section
 
 - Change the file implementation to the suggested implementation
-- Add all necessary imports
 
 </details>
 
