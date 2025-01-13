@@ -26,7 +26,7 @@ A developer is trying to migrate a controller to a REST controller for handling 
 - Type at the end of the class:
 
 ```java
-// Rewrite the PlayerController as a REST controller that responds with JSON data using Spring Web
+// Rewrite the PlayerController class as a REST controller that responds with JSON data using Spring Web. Apply ResponseEntity where required
 ```
 
 - Press ENTER
@@ -42,7 +42,7 @@ A developer is trying to migrate a controller to a REST controller for handling 
 - Open the PlayerController class
 - Type in the chat window:
 
-> Rewrite the PlayerController as a REST controller that responds with JSON data using Spring Web
+> Rewrite the PlayerController as a REST controller that responds with JSON data using Spring Web. Apply ResponseEntity where required
 
 - Change the PlayerController implementation to the suggested implementation
 - Add all necessary imports

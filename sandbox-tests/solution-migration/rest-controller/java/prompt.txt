@@ -76,4 +76,4 @@ public class PlayerController {
     }
 }
 
-Rewrite the PlayerController as a REST controller that responds with JSON data using Spring Web.
+Rewrite the PlayerController as a REST controller that responds with JSON data using Spring Web. Apply ResponseEntity where required.
