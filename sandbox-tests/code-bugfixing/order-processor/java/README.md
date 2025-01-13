@@ -19,7 +19,8 @@ A developer is trying to fix a bug in the method that calculates the most popula
 <details>
 <summary>Code Completion instructions:</summary>
 
-- Open the project code-bugfixing/order-processor/java
+- Open the project code-bugfixing/order-processor/java 
+- Open the Product class
 - Open the OrderProcessor class
 - Type after the calculateMostPopularProduct method:
 
@@ -37,6 +38,7 @@ A developer is trying to fix a bug in the method that calculates the most popula
 <summary>Chat IDE:</summary>
 
 - Open the project code-bugfixing/order-processor/java
+- Open the Product class
 - Open the OrderProcessor class
 - Type in the chat window:
 
