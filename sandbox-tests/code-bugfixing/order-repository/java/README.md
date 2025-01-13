@@ -49,8 +49,6 @@ A developer is trying to fix a bug related to the method for retrieving orders f
 *Assert conditions*
 
 - Code must compile
-- Copy the OrderRepositoryTest.java file to the code-bugfixing/order-repository/java/src/test/java/com/aicode/java folder
-- Run tests in the OrderRepositoryTest class. Tests must pass successfully
 
 *Additional note*
 
