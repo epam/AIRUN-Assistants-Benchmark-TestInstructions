@@ -60,4 +60,3 @@ public class Player {
 }
 
 Rewrite the code above to make it immutable using Lombok annotations. Remove unnecessary code.
-Provide only the corrected implementation of the code.
