@@ -51,6 +51,8 @@ A developer is trying to refactor a class to use SLF4J instead of the older Java
 *Assert conditions*
 
 - Code must compile
+- Copy the OrderServiceTest.java file to the solution-migration/legacy-logging/java/src/test/java/com/aicode/java folder
+- Run tests in the OrderServiceTest class. Tests must pass successfully
 
 *Additional note*
 
