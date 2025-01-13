@@ -1,20 +1,20 @@
 import { passwordValidator } from './passwordValidator';
 
-describe('PasswordValidator', () => {
+describe('passwordValidator', () => {
     test('valid passwords', () => {
-        expect(PasswordValidator.isValidPassword('Password1!')).toBe(true);
-        expect(PasswordValidator.isValidPassword('StrongPass123$')).toBe(true);
-        expect(PasswordValidator.isValidPassword('Good#Pass1')).toBe(true);
-        expect(PasswordValidator.isValidPassword('Valid1@Pass')).toBe(true);
+        expect(passwordValidator.isValidPassword('Password1!')).toBe(true);
+        expect(passwordValidator.isValidPassword('StrongPass123$')).toBe(true);
+        expect(passwordValidator.isValidPassword('Good#Pass1')).toBe(true);
+        expect(passwordValidator.isValidPassword('Valid1@Pass')).toBe(true);
     });
 
     test('invalid passwords', () => {
-        expect(PasswordValidator.isValidPassword('Pass1!')).toBe(false);
-        expect(PasswordValidator.isValidPassword('password1!')).toBe(false);
-        expect(PasswordValidator.isValidPassword('PASSWORD1!')).toBe(false);
-        expect(PasswordValidator.isValidPassword('Password!')).toBe(false);
-        expect(PasswordValidator.isValidPassword('Password1')).toBe(false);
-        expect(PasswordValidator.isValidPassword('Password 1!')).toBe(false);
-        expect(PasswordValidator.isValidPassword(null)).toBe(false);
+        expect(passwordValidator.isValidPassword('Pass1!')).toBe(false);
+        expect(passwordValidator.isValidPassword('password1!')).toBe(false);
+        expect(passwordValidator.isValidPassword('PASSWORD1!')).toBe(false);
+        expect(passwordValidator.isValidPassword('Password!')).toBe(false);
+        expect(passwordValidator.isValidPassword('Password1')).toBe(false);
+        expect(passwordValidator.isValidPassword('Password 1!')).toBe(false);
+        expect(passwordValidator.isValidPassword(null)).toBe(false);
     });
 });
