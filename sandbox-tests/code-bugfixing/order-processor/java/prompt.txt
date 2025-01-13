@@ -1,0 +1,76 @@
+Given the following Java classes:
+
+class Product {
+
+    String productId;
+    String productName;
+    String productGroup;
+    int quantity;
+    double price;
+
+    public Product(String productId, String productName, String productGroup, int quantity, double price) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productGroup = productGroup;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(String productGroup) {
+        this.productGroup = productGroup;
+    }
+}
+
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class OrderProcessor {
+
+    private static final String NO_PRODUCTS = "No Products";
+
+    /**
+     * Calculates the most popular product based on the total quantity sold from orders
+     * placed in the last 30 days.
+     *
+     * <p>This method processes a list of orders and identifies the product with the highest
+     * cumulative quantity sold in the last 30 days. If no products are found within this
+     * timeframe, "No Products" is returned.</p>
+     *
+     * @return the name of the most popular product as determined by the highest total quantity sold
+     *         in the last 30 days, or "No Products" if there are no qualifying products.
+     */
+    public String calculateMostPopularProduct(List<Order> orders) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_YEAR, -30);
+        Date thirtyDaysAgo = calendar.getTime();
+
+        return orders.stream()
+            .filter(order -> order.getOrderDate().before(thirtyDaysAgo))
+            .flatMap(order -> order.getProducts().stream())
+            .collect(Collectors.groupingBy(Product::getProductGroup, Collectors.summingInt(Product::getQuantity)))
+            .entrySet().stream()
+            .max(Map.Entry.comparingByValue())
+            .map(Map.Entry::getKey)
+            .orElse(NO_PRODUCTS);
+    }
+}
+
+Rewrite the calculateMostPopularProduct method to fix the bug.

@@ -1,0 +1,13 @@
+package com.epam.aicode.java;
+
+import lombok.Value;
+
+@Value
+public class Player {
+
+    private Integer age;
+    private String email;
+    private String phone;
+    private String name;
+    private String surname;
+}
