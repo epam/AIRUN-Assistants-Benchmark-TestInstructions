@@ -25,8 +25,7 @@ A developer is trying to refactor a class to make it immutable
 - Type at the end of the class:
 
 ```java
-// Rewrite the class to make it immutable using Lombok annotations
-// Remove unnecessary code
+// Rewrite the class to make it immutable using Lombok annotations. Remove unnecessary code
 ```
 
 - Press ENTER
