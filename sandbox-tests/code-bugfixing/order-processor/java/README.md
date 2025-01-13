@@ -1,7 +1,7 @@
 **Order processor test**
 
 *Test Description*
-A developer is trying to fix a bug related to the order processing method
+A developer is trying to fix a bug in the method that calculates the most popular products in orders
 
 *Act:*
 
@@ -13,7 +13,7 @@ A developer is trying to fix a bug related to the order processing method
 - Submit the question
 - Open the project code-bugfixing/order-processor/java
 - Open the OrderProcessor class
-- Change the findOrders method to the suggested method
+- Change the calculateMostPopularProduct method to the suggested method
 
 </details>
 <details>
@@ -21,7 +21,7 @@ A developer is trying to fix a bug related to the order processing method
 
 - Open the project code-bugfixing/order-processor/java
 - Open the OrderProcessor class
-- Type after the findOrders method:
+- Type after the calculateMostPopularProduct method:
 
 ```java
 // Rewrite the calculateMostPopularProduct method to fix the bug
@@ -29,7 +29,7 @@ A developer is trying to fix a bug related to the order processing method
 
 - Press ENTER
 - Accept a sequence of suggestions using the TAB and ENTER keys
-- Change the findOrders method to the suggested method
+- Change the calculateMostPopularProduct method to the suggested method
 
 </details>
 
@@ -42,7 +42,7 @@ A developer is trying to fix a bug related to the order processing method
 
 > Rewrite the calculateMostPopularProduct method to fix the bug
 
-- Change the findOrders method to the suggested method
+- Change the calculateMostPopularProduct method to the suggested method
 
 </details>
 

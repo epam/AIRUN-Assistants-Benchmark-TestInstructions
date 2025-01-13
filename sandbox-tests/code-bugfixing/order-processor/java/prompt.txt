@@ -37,6 +37,4 @@ public class OrderProcessor {
     }
 }
 
-
 Rewrite the calculateMostPopularProduct method to fix the bug.
-Provide only the corrected implementation of the code.
