@@ -49,7 +49,7 @@ A developer is trying to fix a bug related to the password validation
 *Assert conditions*
 
 - Code must compile
-- Copy the PasswordValidator.test.ts file to the code-bugfixing/password-validator/TypeScript/VSCode/src folder
+- Copy the passwordValidator.test.ts file to the code-bugfixing/password-validator/TypeScript/VSCode/src folder
 - Install project dependencies. Run under VSCode folder:
   npm install
 - Run tests under VSCode folder:
