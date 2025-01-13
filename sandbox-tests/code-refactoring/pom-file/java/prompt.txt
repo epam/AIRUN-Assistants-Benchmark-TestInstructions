@@ -82,4 +82,3 @@ Given the following POM file:
 </project>
 
 Refactor the POM file to move library versions into the properties section.
-Provide only the corrected implementation of the code.

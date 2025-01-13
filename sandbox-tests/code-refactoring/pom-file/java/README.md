@@ -1,4 +1,4 @@
-**Refactor the POM file test**
+**Refactoring the POM file test**
 
 *Test Description*
 A developer is trying to refactor the POM file to move library versions into the properties section
