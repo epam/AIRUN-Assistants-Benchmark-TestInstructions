@@ -1,5 +1,7 @@
 Given the following Java class:
 
+package com.epam.aicode.java;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -41,5 +43,4 @@ public class OrderService {
     }
 }
 
-Refactor logging implementations from older frameworks to SLF4J.
-Provide only the corrected implementation of the code.
+Migrate the logging implementation to SLF4J.

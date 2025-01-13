@@ -1,7 +1,7 @@
-**Refactor logging implementations from older frameworks to SLF4J test**
+**Migrate the logging implementations to SLF4J test**
 
 *Test Description*
-A developer is trying to refactor a class using SLF4J instead of the older Java logging framework
+A developer is trying to refactor a class to use SLF4J instead of the older Java logging framework
 
 *Act*
 
@@ -25,7 +25,7 @@ A developer is trying to refactor a class using SLF4J instead of the older Java 
 - Type at the end of the class:
 
 ```java
-// Refactored logging implementations from older frameworks to SLF4J 
+// Migrate the logging implementation to SLF4J 
 ```
 
 - Press ENTER
@@ -41,9 +41,9 @@ A developer is trying to refactor a class using SLF4J instead of the older Java 
 - Open the OrderService class
 - Type in the chat window:
 
-> Refactor logging implementations from older frameworks to SLF4J
+> Migrate the logging implementation to SLF4J
 
-- Change the processPayment method to the suggested method
+- Change the class implementation to the suggested implementation
 - Add all necessary imports
 
 </details>
