@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 public class OrderProcessor {
 
+    private static final String NO_PRODUCTS = "No Products";
+
     /**
      * Calculates the most popular product based on the total quantity sold from orders
      * placed in the last 30 days.
@@ -17,15 +19,11 @@ public class OrderProcessor {
      *         in the last 30 days, or "No Products" if there are no qualifying products.
      */
     public String calculateMostPopularProduct(List<Order> orders) {
-        Date currentDate = new Date();
-
-        // Calculate the date 30 days prior to the current date
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
+        calendar.setTime(new Date());
         calendar.add(Calendar.DAY_OF_YEAR, -30);
         Date thirtyDaysAgo = calendar.getTime();
 
-        // Filter and process orders from the last 30 days
         return orders.stream()
             .filter(order -> !order.getOrderDate().before(thirtyDaysAgo))
             .flatMap(order -> order.getProducts().stream())
@@ -33,6 +31,6 @@ public class OrderProcessor {
             .entrySet().stream()
             .max(Map.Entry.comparingByValue())
             .map(Map.Entry::getKey)
-            .orElse("No Products");
+            .orElse(NO_PRODUCTS);
     }
 }
