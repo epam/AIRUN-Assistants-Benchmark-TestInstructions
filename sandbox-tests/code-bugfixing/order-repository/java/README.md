@@ -20,6 +20,7 @@ A developer is trying to fix a bug related to the method for retrieving orders f
 <summary>Code Completion instructions:</summary>
 
 - Open the project code-bugfixing/order-repository/java
+- Open the Order class
 - Open the OrderRepository class
 - Type after the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method:
 
@@ -37,6 +38,7 @@ A developer is trying to fix a bug related to the method for retrieving orders f
 <summary>Chat IDE:</summary>
 
 - Open the project code-bugfixing/order-repository/java
+- Open the Order class
 - Open the OrderRepository class
 - Type in the chat window:
 
