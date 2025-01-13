@@ -2,7 +2,8 @@ Given the following TypeScript code:
 
 export class PasswordValidator {
 
-    // Regular expression for a strong password
+    // The password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number,
+    // and one special character. Whitespace is not allowed
     private static readonly PASSWORD_REGEX: RegExp = new RegExp(
         "^(?=.*[0-9])" +
         "(?=.*[a-z])" +
@@ -20,6 +21,4 @@ export class PasswordValidator {
     }
 }
 
-Rewrite the PASSWORD_REGEX variable to fix the bug.
-The password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character. Whitespace is not allowed.
-Provide only the corrected implementation of the code.
+Rewrite the PASSWORD_REGEX regular expression variable to fix the bug.

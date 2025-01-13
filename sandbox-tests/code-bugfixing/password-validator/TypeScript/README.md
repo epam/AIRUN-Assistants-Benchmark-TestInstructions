@@ -1,4 +1,4 @@
-**Password validator test**
+**Password validation test**
 
 *Test Description*
 A developer is trying to fix a bug related to the password validation
@@ -23,9 +23,8 @@ A developer is trying to fix a bug related to the password validation
 - Open the PasswordValidator.ts file
 - Type after the PASSWORD_REGEX variable:
 
-```java
-// Rewrite the PASSWORD_REGEX variable to fix the bug.
-// The password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character. Whitespace is not allowed.
+```TypeScript
+// Rewrite the PASSWORD_REGEX regular expression variable to fix the bug
 ```
 
 - Press ENTER
@@ -41,8 +40,7 @@ A developer is trying to fix a bug related to the password validation
 - Open the PasswordValidator.ts file
 - Type in the chat window:
 
-> Rewrite the PASSWORD_REGEX variable to fix the bug.
-The password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number, and one special character. Whitespace is not allowed.
+> Rewrite the PASSWORD_REGEX regular expression variable to fix the bug
 
 - Change the PASSWORD_REGEX variable to the suggested variable
 
