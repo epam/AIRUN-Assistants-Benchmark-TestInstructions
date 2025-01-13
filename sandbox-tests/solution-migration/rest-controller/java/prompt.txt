@@ -76,5 +76,4 @@ public class PlayerController {
     }
 }
 
-Migrate the PlayerController to a REST controller that responds with JSON data using Spring Web.
-Provide only the corrected implementation of the code.
+Rewrite the PlayerController as a REST controller that responds with JSON data using Spring Web.

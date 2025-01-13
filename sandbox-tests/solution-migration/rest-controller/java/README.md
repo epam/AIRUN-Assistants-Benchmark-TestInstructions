@@ -1,7 +1,7 @@
-**REST controller test**
+**Migrate to REST controller test**
 
 *Test Description*
-A developer is trying to migrate a controller to the REST controller for calls from the frontend service
+A developer is trying to migrate a controller to a REST controller for handling calls from the frontend service.
 
 *Act*
 
@@ -26,7 +26,7 @@ A developer is trying to migrate a controller to the REST controller for calls f
 - Type at the end of the class:
 
 ```java
-// Migrated the PlayerController to a REST controller that responds with JSON data using Spring Web
+// Rewrite the PlayerController as a REST controller that responds with JSON data using Spring Web
 ```
 
 - Press ENTER
@@ -42,7 +42,7 @@ A developer is trying to migrate a controller to the REST controller for calls f
 - Open the PlayerController class
 - Type in the chat window:
 
-> Migrate the PlayerController to a REST controller that responds with JSON data using Spring Web
+> Rewrite the PlayerController as a REST controller that responds with JSON data using Spring Web
 
 - Change the PlayerController implementation to the suggested implementation
 - Add all necessary imports
