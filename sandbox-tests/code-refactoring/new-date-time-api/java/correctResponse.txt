@@ -21,13 +21,4 @@ public class DateHandler {
     public String getDayOfWeek(LocalDate date) {
         return date.getDayOfWeek().toString();
     }
-
-    public static void main(String[] args) {
-        DateHandler dateHandler = new DateHandler();
-        LocalDate currentDate = dateHandler.getCurrentDate();
-        System.out.println("Current Date: " + dateHandler.formatDate(currentDate));
-        LocalDate newDate = dateHandler.addDaysToCurrentDate(5);
-        System.out.println("Date after adding 5 days: " + dateHandler.formatDate(newDate));
-        System.out.println("Day of the week: " + dateHandler.getDayOfWeek(currentDate));
-    }
 }

@@ -1,7 +1,7 @@
-**Utilizing new Date and Time API features test**
+**New Date and Time API test**
 
 *Test Description*
-A developer is trying to refactor a class by utilizing new Date and Time API features
+A developer is trying to refactor a class to implement the new Date and Time API
 
 *Act*
 
@@ -20,12 +20,12 @@ A developer is trying to refactor a class by utilizing new Date and Time API fea
 <details>
 <summary>Code Completion instructions:</summary>
 
-- Open the project code-bugfixing/new-date-time-api/java
+- Open the project code-refactoring/new-date-time-api/java
 - Open the DateHandler class
 - Type at the end of the class:
 
 ```java
-// Refactored the above code to use the java.time package
+// Refactor the code to use the java.time package
 ```
 
 - Press ENTER
@@ -41,9 +41,9 @@ A developer is trying to refactor a class by utilizing new Date and Time API fea
 - Open the DateHandler class
 - Type in the chat window:
 
-> Rewrite the above code to use the java.time package
+> Refactor the code to use the java.time package
 
-- Change the processPayment method to the suggested method
+- Change the class implementation to the suggested implementation
 - Add all necessary imports
 
 </details>

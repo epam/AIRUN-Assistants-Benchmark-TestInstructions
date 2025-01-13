@@ -28,6 +28,4 @@ public class DateHandler {
     }
 }
 
-
-Rewrite the above code to use the java.time package.
-Provide only the corrected implementation of the code.
+Refactor the code to use the java.time package.
