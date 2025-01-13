@@ -1,7 +1,7 @@
-**Order repository test**
+**Order retrieving test**
 
 *Test Description*
-A developer is trying to fix a bug related to the method in the Order repository
+A developer is trying to fix a bug related to the method for retrieving orders from the database using specific parameters
 
 *Act:*
 
@@ -13,7 +13,7 @@ A developer is trying to fix a bug related to the method in the Order repository
 - Submit the question
 - Open the project code-bugfixing/order-repository/java
 - Open the OrderRepository class
-- Change the findOrders method to the suggested method
+- Change the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method to the suggested method
 
 </details>
 <details>
@@ -21,15 +21,15 @@ A developer is trying to fix a bug related to the method in the Order repository
 
 - Open the project code-bugfixing/order-repository/java
 - Open the OrderRepository class
-- Type after the findOrders method:
+- Type after the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method:
 
 ```java
-// Rewrite the findOrders method to fix the bug
+// Rewrite the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method to fix the bug
 ```
 
 - Press ENTER
 - Accept a sequence of suggestions using the TAB and ENTER keys
-- Change the findOrders method to the suggested method
+- Change the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method to the suggested method
 
 </details>
 
@@ -40,9 +40,9 @@ A developer is trying to fix a bug related to the method in the Order repository
 - Open the OrderRepository class
 - Type in the chat window:
 
-> Rewrite the findOrders method to fix the bug
+> Rewrite the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method to fix the bug
 
-- Change the findOrders method to the suggested method
+- Change the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method to the suggested method
 
 </details>
 

@@ -1,4 +1,4 @@
-**Order processor test**
+**Order processing test**
 
 *Test Description*
 A developer is trying to fix a bug in the method that calculates the most popular products in orders
