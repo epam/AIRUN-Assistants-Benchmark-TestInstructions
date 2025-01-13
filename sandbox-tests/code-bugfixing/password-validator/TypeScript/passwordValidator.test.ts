@@ -1,4 +1,4 @@
-import { PasswordValidator } from './PasswordValidator';
+import { passwordValidator } from './passwordValidator';
 
 describe('PasswordValidator', () => {
     test('valid passwords', () => {
