@@ -1,4 +1,4 @@
-From 02a6c59b0ba4092a932c48fa5f6e0452c2c82160 Mon Sep 17 00:00:00 2001
+From 29ce96ba9d5919b16ff569488bef55a96c3ab443 Mon Sep 17 00:00:00 2001
 From: siarhei-z1 <148881157+siarhei-z1@users.noreply.github.com>
 Date: Thu, 16 Jan 2025 18:46:22 +0300
 Subject: [PATCH] Migrate in-memory user and roles definitions to database
@@ -6,11 +6,11 @@ Subject: [PATCH] Migrate in-memory user and roles definitions to database
 Exemplar impementation for agentic workflow test 0011.
 ---
  .../golf/app/security/AppSecurityConfig.java  | 34 +++++--------------
- src/main/resources/db/security/data.sql       | 13 +++++++
- src/main/resources/db/security/schema.sql     | 13 +++++++
+ .../resources/db/migration/V11_0__schema.sql  | 13 +++++++
+ .../resources/db/migration/V11_1__data.sql    | 13 +++++++
  3 files changed, 35 insertions(+), 25 deletions(-)
- create mode 100644 src/main/resources/db/security/data.sql
- create mode 100644 src/main/resources/db/security/schema.sql
+ create mode 100644 src/main/resources/db/migration/V11_0__schema.sql
+ create mode 100644 src/main/resources/db/migration/V11_1__data.sql
 
 diff --git a/src/main/java/com/golf/app/security/AppSecurityConfig.java b/src/main/java/com/golf/app/security/AppSecurityConfig.java
 index 73383ca..6c67ad2 100644
@@ -71,31 +71,11 @@ index 73383ca..6c67ad2 100644
      }
  
      @Bean
-diff --git a/src/main/resources/db/security/data.sql b/src/main/resources/db/security/data.sql
-new file mode 100644
-index 0000000..7e7eaad
---- /dev/null
-+++ b/src/main/resources/db/security/data.sql
-@@ -0,0 +1,13 @@
-+-- Insert existing users
-+INSERT INTO users (username, password, enabled) VALUES
-+('user', '$2a$10$eWpP7/tdQM1gShtMC2dEtOReHUgRC6ImkoaKygE0JSRKDoDvOWLRW', true),
-+('1', '$2a$10$Uh7aJbjjCIZjfgfRYD2lxuWNAsFXZIfFDBnL/75yUh959WmtHK.VO', true),
-+('coach', '$2a$10$QAlLQjUrC9D/XlDkveCGm.oU53ufhXYqO7blYkL5OVL2LJRYooewq', true),
-+('a', '$2a$10$jn5UYee96Ay8OWss1QAAHO61hDakVLaUFmQ/fFiUmttQXMfLVfVUq', true);
-+
-+-- Insert roles
-+INSERT INTO authorities (username, authority) VALUES
-+('user', 'ROLE_USER'),
-+('1', 'ROLE_USER'),
-+('coach', 'ROLE_COACH'),
-+('a', 'ROLE_ADMIN');
-\ No newline at end of file
-diff --git a/src/main/resources/db/security/schema.sql b/src/main/resources/db/security/schema.sql
+diff --git a/src/main/resources/db/migration/V11_0__schema.sql b/src/main/resources/db/migration/V11_0__schema.sql
 new file mode 100644
 index 0000000..8846ff7
 --- /dev/null
-+++ b/src/main/resources/db/security/schema.sql
++++ b/src/main/resources/db/migration/V11_0__schema.sql
 @@ -0,0 +1,13 @@
 +CREATE TABLE IF NOT EXISTS users (
 +    username VARCHAR(50) NOT NULL PRIMARY KEY,
@@ -110,6 +90,26 @@ index 0000000..8846ff7
 +);
 +
 +CREATE UNIQUE INDEX ix_auth_username ON authorities (username, authority);
+\ No newline at end of file
+diff --git a/src/main/resources/db/migration/V11_1__data.sql b/src/main/resources/db/migration/V11_1__data.sql
+new file mode 100644
+index 0000000..7e7eaad
+--- /dev/null
++++ b/src/main/resources/db/migration/V11_1__data.sql
+@@ -0,0 +1,13 @@
++-- Insert existing users
++INSERT INTO users (username, password, enabled) VALUES
++('user', '$2a$10$eWpP7/tdQM1gShtMC2dEtOReHUgRC6ImkoaKygE0JSRKDoDvOWLRW', true),
++('1', '$2a$10$Uh7aJbjjCIZjfgfRYD2lxuWNAsFXZIfFDBnL/75yUh959WmtHK.VO', true),
++('coach', '$2a$10$QAlLQjUrC9D/XlDkveCGm.oU53ufhXYqO7blYkL5OVL2LJRYooewq', true),
++('a', '$2a$10$jn5UYee96Ay8OWss1QAAHO61hDakVLaUFmQ/fFiUmttQXMfLVfVUq', true);
++
++-- Insert roles
++INSERT INTO authorities (username, authority) VALUES
++('user', 'ROLE_USER'),
++('1', 'ROLE_USER'),
++('coach', 'ROLE_COACH'),
++('a', 'ROLE_ADMIN');
 \ No newline at end of file
 -- 
 2.45.1
