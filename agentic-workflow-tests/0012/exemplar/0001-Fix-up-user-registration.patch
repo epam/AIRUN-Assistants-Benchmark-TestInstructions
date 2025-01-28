@@ -1,0 +1,264 @@
+From 73d0d61d929f218177d4f448829d550a18dbaa1f Mon Sep 17 00:00:00 2001
+From: siarhei-z1 <148881157+siarhei-z1@users.noreply.github.com>
+Date: Fri, 24 Jan 2025 16:07:27 +0300
+Subject: [PATCH] Fix up user registration
+
+Exemplar impementation for agentic workflow test 0012.
+---
+ .../golf/app/controller/UserController.java   |  8 +--
+ src/main/java/com/golf/app/model/Role.java    | 20 ++++++
+ src/main/java/com/golf/app/model/User.java    | 64 +++++++++++++++++--
+ .../golf/app/security/AppSecurityConfig.java  |  3 +-
+ .../com/golf/app/service/UserServiceImpl.java | 37 +++++++++--
+ .../migration/V12_0__add_email_to_users.sql   |  5 ++
+ .../templates/registration/registration.html  |  2 +-
+ 7 files changed, 121 insertions(+), 18 deletions(-)
+ create mode 100644 src/main/java/com/golf/app/model/Role.java
+ create mode 100644 src/main/resources/db/migration/V12_0__add_email_to_users.sql
+
+diff --git a/src/main/java/com/golf/app/controller/UserController.java b/src/main/java/com/golf/app/controller/UserController.java
+index 5a4a4d3..cee47fe 100644
+--- a/src/main/java/com/golf/app/controller/UserController.java
++++ b/src/main/java/com/golf/app/controller/UserController.java
+@@ -1,14 +1,14 @@
+ package com.golf.app.controller;
+ 
+-import com.golf.app.model.User;
+-import com.golf.app.service.UserService;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.PostMapping;
+-import org.springframework.web.bind.annotation.RequestBody;
+ import org.springframework.web.bind.annotation.RequestMapping;
+ 
++import com.golf.app.model.User;
++import com.golf.app.service.UserService;
++
+ @Controller
+ @RequestMapping("/register")
+ public class UserController {
+@@ -28,7 +28,7 @@ public class UserController {
+     }
+ 
+     @PostMapping
+-    public String registerUser(@RequestBody User user) {
++    public String registerUser(User user) {
+         userService.registerUser(user);
+         return "redirect:/login";
+     }
+diff --git a/src/main/java/com/golf/app/model/Role.java b/src/main/java/com/golf/app/model/Role.java
+new file mode 100644
+index 0000000..e48d241
+--- /dev/null
++++ b/src/main/java/com/golf/app/model/Role.java
+@@ -0,0 +1,20 @@
++package com.golf.app.model;
++
++import jakarta.persistence.Column;
++import jakarta.persistence.Entity;
++import jakarta.persistence.Id;
++import jakarta.persistence.Table;
++import lombok.Getter;
++import lombok.Setter;
++
++@Entity
++@Table(name = "authorities")
++@Getter
++@Setter
++public class Role {
++    @Id
++    private String username;
++    
++    @Column(name = "authority")
++    private String authority;
++}
+\ No newline at end of file
+diff --git a/src/main/java/com/golf/app/model/User.java b/src/main/java/com/golf/app/model/User.java
+index 868191b..b0e182c 100644
+--- a/src/main/java/com/golf/app/model/User.java
++++ b/src/main/java/com/golf/app/model/User.java
+@@ -1,23 +1,75 @@
+ package com.golf.app.model;
+ 
++import java.util.Collection;
++import java.util.HashSet;
++import java.util.Set;
++import java.util.stream.Collectors;
++
++import org.springframework.security.core.CredentialsContainer;
++import org.springframework.security.core.GrantedAuthority;
++import org.springframework.security.core.authority.SimpleGrantedAuthority;
++import org.springframework.security.core.userdetails.UserDetails;
++
++import jakarta.persistence.CascadeType;
++import jakarta.persistence.Column;
+ import jakarta.persistence.Entity;
+-import jakarta.persistence.GeneratedValue;
+-import jakarta.persistence.GenerationType;
++import jakarta.persistence.FetchType;
+ import jakarta.persistence.Id;
++import jakarta.persistence.OneToMany;
++import jakarta.persistence.Table;
+ import lombok.Getter;
+ import lombok.Setter;
+ 
+ @Entity
++@Table(name = "users")
+ @Setter
+ @Getter
+-public class User {
++public class User implements UserDetails, CredentialsContainer {
+ 
+     @Id
+-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+-    private Long id;
+-
+     private String username;
++
++    @Column(nullable = false)
+     private String password;
++
++    @Column(unique = true, nullable = false)
+     private String email;
++
++    @Column(nullable = false)
++    private boolean enabled = true;
++
++    @OneToMany(mappedBy = "username", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
++    private Set<Role> authorities = new HashSet<>();
++
++    @Override
++    public Collection<? extends GrantedAuthority> getAuthorities() {
++        return authorities.stream().map(role -> new SimpleGrantedAuthority(role.getAuthority()))
++                .collect(Collectors.toSet());
++    }
++
++    @Override
++    public boolean isAccountNonExpired() {
++        return true;
++    }
++
++    @Override
++    public boolean isAccountNonLocked() {
++        return true;
++    }
++
++    @Override
++    public boolean isCredentialsNonExpired() {
++        return true;
++    }
++
++    @Override
++    public boolean isEnabled() {
++        return enabled;
++    }
++
++    @Override
++    public void eraseCredentials() {
++        this.password = null;
++    }
+ }
+ 
+diff --git a/src/main/java/com/golf/app/security/AppSecurityConfig.java b/src/main/java/com/golf/app/security/AppSecurityConfig.java
+index 6c67ad2..e3655e7 100644
+--- a/src/main/java/com/golf/app/security/AppSecurityConfig.java
++++ b/src/main/java/com/golf/app/security/AppSecurityConfig.java
+@@ -7,7 +7,6 @@ import javax.sql.DataSource;
+ 
+ import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.Configuration;
+-import org.springframework.http.HttpMethod;
+ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+ import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+ import org.springframework.security.core.userdetails.UserDetailsService;
+@@ -31,7 +30,7 @@ public class AppSecurityConfig {
+         http
+             .csrf().disable()
+             .authorizeHttpRequests((authorize) -> authorize
+-                .requestMatchers(HttpMethod.POST).permitAll()
++                .requestMatchers("/register/**", "/styles/**", "/js/**", "/images/**").permitAll()
+                 .anyRequest().authenticated()
+             )
+             .formLogin(withDefaults())
+diff --git a/src/main/java/com/golf/app/service/UserServiceImpl.java b/src/main/java/com/golf/app/service/UserServiceImpl.java
+index c1f6746..39bfa93 100644
+--- a/src/main/java/com/golf/app/service/UserServiceImpl.java
++++ b/src/main/java/com/golf/app/service/UserServiceImpl.java
+@@ -1,17 +1,44 @@
+ package com.golf.app.service;
+ 
++import java.util.HashSet;
++import java.util.Set;
++
++import org.springframework.security.crypto.password.PasswordEncoder;
++import org.springframework.stereotype.Service;
++
++import com.golf.app.model.Role;
+ import com.golf.app.model.User;
+ import com.golf.app.repo.UserRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.stereotype.Service;
++
++import jakarta.transaction.Transactional;
+ 
+ @Service
+ public class UserServiceImpl implements UserService {
+ 
+-    @Autowired
+-    private UserRepository userRepository;
++    private final UserRepository userRepository;
++    private final PasswordEncoder passwordEncoder;
+ 
++    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
++        this.userRepository = userRepository;
++        this.passwordEncoder = passwordEncoder;
++    }
++
++    @Override
++    @Transactional
+     public User registerUser(User user) {
+-        return userRepository.save(user);
++        user.setPassword(passwordEncoder.encode(user.getPassword()));
++
++        user.setEnabled(true);
++
++        Role userRole = new Role();
++        userRole.setUsername(user.getUsername());
++        userRole.setAuthority("ROLE_USER");
++
++        Set<Role> authorities = new HashSet<>();
++        authorities.add(userRole);
++        user.setAuthorities(authorities);
++
++        User saved = userRepository.save(user);
++        return saved;
+     }
+ }
+diff --git a/src/main/resources/db/migration/V12_0__add_email_to_users.sql b/src/main/resources/db/migration/V12_0__add_email_to_users.sql
+new file mode 100644
+index 0000000..352143b
+--- /dev/null
++++ b/src/main/resources/db/migration/V12_0__add_email_to_users.sql
+@@ -0,0 +1,5 @@
++ALTER TABLE users ADD COLUMN email VARCHAR(255);
++
++UPDATE users SET email = CONCAT(username, '@golf.com');
++
++CREATE UNIQUE INDEX idx_users_email ON users(email);
+diff --git a/src/main/resources/templates/registration/registration.html b/src/main/resources/templates/registration/registration.html
+index c018000..133d55c 100644
+--- a/src/main/resources/templates/registration/registration.html
++++ b/src/main/resources/templates/registration/registration.html
+@@ -45,7 +45,7 @@ button {
+     <input type="text" id="username" name="username" required><br><br>
+ 
+     <label for="password">Password:</label>
+-    <input type="text" id="password" name="password" required><br><br>
++    <input type="password" id="password" name="password" required><br><br>
+ 
+     <label for="email">Email:</label>
+     <input type="text" id="email" name="email" required><br><br>
+-- 
+2.45.1
+
