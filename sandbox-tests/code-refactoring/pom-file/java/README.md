@@ -21,7 +21,7 @@ A developer is trying to refactor the POM file to move library versions into the
 
 - Open the project code-refactoring/pom-file/java
 - Open the pom file
-- Type at the end of the file:
+- Type after the <build> tag:
 
 ```
 // moved library versions into properties section
