@@ -24,7 +24,7 @@ A developer is trying to refactor the POM file to move library versions into the
 - Type at the end of the file:
 
 ```
-// moved library versions into the properties section
+// moved library versions into properties section
 ```
 
 - Press ENTER

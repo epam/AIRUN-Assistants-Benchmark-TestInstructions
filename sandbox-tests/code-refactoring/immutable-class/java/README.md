@@ -25,7 +25,7 @@ A developer is trying to refactor a class to make it immutable
 - Type at the end of the class:
 
 ```java
-// Rewrite the class to make it immutable using Lombok annotations. Remove unnecessary code
+// immutable Player class with Lombok annotations
 ```
 
 - Press ENTER
@@ -41,11 +41,8 @@ A developer is trying to refactor a class to make it immutable
 - Open the Player class
 - Type in the chat window:
 
-```java
-// immutable Player class with Lombok annotations
-```
+> Rewrite the class to make it immutable using Lombok annotations. Remove unnecessary code
 
-- Press ENTER
 - Change the class implementation to the suggested implementation
 - Add all necessary imports
 
