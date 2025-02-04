@@ -25,7 +25,7 @@ A developer is trying to refactor a class to implement the new Date and Time API
 - Type at the end of the class:
 
 ```java
-// refactored class using the java.time package
+// refactored class with java.time package
 ```
 
 - Press ENTER
