@@ -1,0 +1,74 @@
+From a6230be80cf41b9a45ce34874eb73c9ec27469df Mon Sep 17 00:00:00 2001
+From: siarhei-z1 <148881157+siarhei-z1@users.noreply.github.com>
+Date: Thu, 30 Jan 2025 21:32:27 +0300
+Subject: [PATCH] add User Account Menu
+
+Exemplar impementation for agentic workflow test 0014.
+---
+ pom.xml                                       |  5 ++++
+ .../resources/templates/blocks/header.html    | 28 ++++++++++++-------
+ 2 files changed, 23 insertions(+), 10 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index 7d465cc..db39bf7 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -112,6 +112,11 @@
+             <artifactId>modelmapper</artifactId>
+             <version>3.2.0</version>
+         </dependency>
++        <dependency>
++            <groupId>org.thymeleaf.extras</groupId>
++            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
++        </dependency>
++
+     </dependencies>
+ 
+     <build>
+diff --git a/src/main/resources/templates/blocks/header.html b/src/main/resources/templates/blocks/header.html
+index 40ed218..58e9e63 100644
+--- a/src/main/resources/templates/blocks/header.html
++++ b/src/main/resources/templates/blocks/header.html
+@@ -1,20 +1,28 @@
+-<html xmlns:th="http://www.thymeleaf.org">
+-
+-<-- Header -->
++<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+ <div th:fragment="header">
+-
+-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+-
++    <nav class="navbar navbar-expand-lg navbar-light bg-light">
++        <div class="container">
+             <div class="one-line-elements-symbol-gap-no-bottom-margin">
+-
+                 <h2><a class="navbar-brand" href="/">GOLF Club</a></h2>
+                 <a href="/player"><h5>Players</h5></a>
+                 <a href="/round-score"><h5>Round scores</h5></a>
+                 <a href="/competition"><h5>Competitions</h5></a>
+                 <a href="/course"><h5>Courses</h5></a>
+-
+             </div>
+ 
+-        </nav>
++            <!-- account menu -->
++            <div class="ms-auto" sec:authorize="isAuthenticated()">
++                <div class="dropdown">
++                    <button class="btn btn-secondary dropdown-toggle" type="button" id="accountDropdown" data-bs-toggle="dropdown" aria-expanded="false">
++                        <span sec:authentication="name">Username</span>
++                    </button>
++                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
++                        <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
++                    </ul>
++                </div>
++            </div>
++        </div>
++    </nav>
++    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+ </div>
+-
++</html>
+\ No newline at end of file
+-- 
+2.45.1
+
