@@ -1,0 +1,32 @@
+metadata:
+  scenario_id: 0015
+  scenario_name: Zipkin-backed_Tracing
+  category: solution-or-component-generation
+  experiment_date: 2025-01-31
+  model: q
+  input_tokens: -1
+  output_tokens: -1
+  experiment_duration: -1
+  repository: golf-application
+evaluation_steps:
+  completeness:
+    - Ensure that org.springframework.boot:spring-boot-starter-actuator dependency has been added added to pom.xml
+    - Ensure that io.micrometer:micrometer-tracing-bridge-brave dependency has been added added to pom.xml
+    - Ensure that io.zipkin.reporter2:zipkin-reporter-brave dependency has been added added to pom.xml
+    - Ensure that management.tracing.sampling.probability=1.0 property has been configured in src/main/resources/application.properties
+    - Ensure that management.zipkin.tracing.endpoint=http://localhost:9411/api/v2/spans property has been configured in src/main/resources/application.properties
+    - Make sure that the application is built without errors
+    - Make sure that the application is launched without errors
+    - Make sure that the application is opened at http://localhost:8082/
+    - Make sure that an user has logged in in the application
+    - Verify that traces have beed appeared in the Zipkin UI at http://localhost:9411/zipkin
+  accuracy:
+    - Make sure there is not unrequested code changes, unused imports or code.
+    - Ensure that the code is syntactically correct, compiles without errors, and accomplishes the intended functionality.
+    - Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized.
+    - Ensure that the code is well-documented, with clear and concise documentation for each part of the code.
+    - Ensure that the code is clean, readable, adheres to best practices and naming conventions.
+    - Ensure that the code is easily maintainable, with proper structure and separation of concerns.
+    - Make sure the code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.
+    - Ensure that application is secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.
+    - Ensure that application configuration is flexible and externalized to efficiently manage different environments.
