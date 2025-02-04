@@ -25,7 +25,7 @@ A developer is trying to fix a bug in the method that calculates the most popula
 - Type after the calculateMostPopularProduct method:
 
 ```java
-// Rewrite the calculateMostPopularProduct method to fix the bug
+// calculateMostPopularProduct method with bug fix
 ```
 
 - Press ENTER

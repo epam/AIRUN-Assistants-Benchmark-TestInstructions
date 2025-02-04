@@ -24,7 +24,7 @@ A developer is trying to fix a bug related to the password validation
 - Type after the PASSWORD_REGEX variable:
 
 ```TypeScript
-// Rewrite the PASSWORD_REGEX regular expression variable to fix the bug
+// PASSWORD_REGEX variable with bug fix
 ```
 
 - Press ENTER

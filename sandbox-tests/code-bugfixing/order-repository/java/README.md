@@ -25,7 +25,7 @@ A developer is trying to fix a bug related to the method for retrieving orders f
 - Type after the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method:
 
 ```java
-// Rewrite the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method to fix the bug
+// findOrdersByStatusAndCustomerAndCostRangeAndDateRange with bug fix
 ```
 
 - Press ENTER
