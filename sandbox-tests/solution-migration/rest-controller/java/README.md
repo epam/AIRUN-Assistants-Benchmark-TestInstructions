@@ -26,7 +26,7 @@ A developer is trying to migrate a controller to a REST controller for handling 
 - Type at the end of the class:
 
 ```java
-// Rewrite the PlayerController class as a REST controller that responds with JSON data using Spring Web. Apply ResponseEntity where required
+// refactored PlayerController as a REST controller using Spring Web and responding JSON
 ```
 
 - Press ENTER

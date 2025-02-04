@@ -23,8 +23,8 @@ A developer is trying to refactor the POM file to move library versions into the
 - Open the pom file
 - Type at the end of the file:
 
-```java
-// Refactored POM file by moving library versions into the properties section
+```
+// moved library versions into the properties section
 ```
 
 - Press ENTER

@@ -40,8 +40,11 @@ A developer is trying to fix a bug related to the password validation
 - Open the PasswordValidator class
 - Type in the chat window:
 
-> Rewrite the PASSWORD_REGEX regular expression variable to fix the bug
+```C#
+// PASSWORD_REGEX variable with bug fix
+```
 
+- Press ENTER
 - Change the PASSWORD_REGEX variable to the suggested variable
 
 </details>

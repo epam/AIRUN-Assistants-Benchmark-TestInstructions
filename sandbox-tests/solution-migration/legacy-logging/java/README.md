@@ -25,7 +25,7 @@ A developer is trying to refactor a class to use SLF4J instead of the older Java
 - Type at the end of the class:
 
 ```java
-// Migrate the logging implementation to SLF4J 
+// refactored OrderService class using SLF4J 
 ```
 
 - Press ENTER
