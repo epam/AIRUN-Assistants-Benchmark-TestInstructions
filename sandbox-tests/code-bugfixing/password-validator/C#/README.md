@@ -1,57 +1,53 @@
-**Password validation test**
+**Password Validation Test**
 
-*Test Description*
-A developer is trying to fix a bug related to the password validation
+*Test Description:*
+
+A developer is trying to fix a bug related to password validation.
 
 *Act:*
 
-<details>
-<summary>Bare LLM testing instructions:</summary>
+<details> 
+<summary>Bare LLM Testing Instructions:</summary>
 
-- Open the prompt.txt file
-- Copy a question located in the prompt.txt file to the chat window
-- Submit the question
-- Open the project code-bugfixing/password-validator/C#
-- Open the PasswordValidator class
-- Change the PASSWORD_REGEX variable to the suggested variable
-
-</details>
-<details>
-<summary>Code Completion instructions:</summary>
-
-- Open the project code-bugfixing/password-validator/C#
-- Open the PasswordValidator class
-- Type after the PASSWORD_REGEX variable:
-
-```C#
-// PASSWORD_REGEX variable with bug fix
-```
-
-- Press ENTER
-- Accept a sequence of suggestions using the TAB and ENTER keys
-- Change the PASSWORD_REGEX variable to the suggested variable
-
+- Open the `prompt.txt` file.
+- Copy a question located in the `prompt.txt` file to the chat window.
+- Submit the question.
+- Open the project `code-bugfixing/password-validator/C#`.
+- Open the `PasswordValidator` class.
+- Change the `PASSWORD_REGEX` variable to the suggested variable.
 </details>
 
-<details>
+<details> 
+<summary>Code Completion Instructions:</summary>
+
+- Open the project `code-bugfixing/password-validator/C#`.
+- Open the `PasswordValidator` class.
+- Remove the `PASSWORD_REGEX` variable.
+- At the beginning of the `PasswordValidator` class, type the following:
+
+    ```csharp
+    private static readonly string PASSWORD_REGEX = 
+    ```
+
+- Wait for the suggestion.
+- Accept a sequence of suggestions using the TAB and ENTER keys.
+</details>
+
+<details> 
 <summary>Chat IDE:</summary>
 
-- Open the project code-bugfixing/password-validator/C#
-- Open the PasswordValidator class
-- Type in the chat window:
+- Open the project `code-bugfixing/password-validator/C#`.
+- Open the `PasswordValidator` class.
+- Type the following in the chat window:
 
-> Rewrite the PASSWORD_REGEX regular expression variable to fix the bug
+    > Rewrite the PASSWORD_REGEX regular expression variable to fix the bug.
 
-- Change the PASSWORD_REGEX variable to the suggested variable
-
+- Change the `PASSWORD_REGEX` variable to the suggested variable.
 </details>
 
-*Assert conditions*
+*Assert Conditions:*
+- The code must compile.
+- Copy the `PasswordValidatorTest.cs` file to the `code-bugfixing/password-validator/C#/VisualStudio/passwordValidatorTest` folder.
+- Run tests in the `PasswordValidatorTest` class. All tests must pass successfully.
 
-- Code must compile
-- Copy the PasswordValidatorTest.cs file to the code-bugfixing/password-validator/C#/VisualStudio/passwordValidatorTest folder
-- Run tests in the PasswordValidatorTest class. Tests must pass successfully
-
-*Additional note*
-
-The correct solutions is in the correctResponse.txt file
+*Additional Note:* The correct solution is in the `correctResponse.txt` file.
