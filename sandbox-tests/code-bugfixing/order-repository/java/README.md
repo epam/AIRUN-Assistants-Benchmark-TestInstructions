@@ -2,7 +2,7 @@
 
 *Test Description:*
 
-A developer is attempting to fix a bug related to the method for retrieving orders from the database using specific parameters.
+A developer is trying to fix a bug related to the method for retrieving orders from the database using specific parameters.
 
 *Act:*
 
@@ -32,7 +32,6 @@ A developer is attempting to fix a bug related to the method for retrieving orde
 
 - Wait for the suggestion.
 - Accept a sequence of suggestions using the TAB and ENTER keys.
-- Change the `findOrdersByStatusAndCustomerAndCostRangeAndDateRange` method to the suggested method.
 </details>
 
 <details> 

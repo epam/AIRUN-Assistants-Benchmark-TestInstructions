@@ -2,7 +2,7 @@
 
 *Test Description:*
 
-A developer is attempting to fix a bug in the method that calculates the most popular products in orders.
+A developer is trying to fix a bug in the method that calculates the most popular products in orders.
 
 *Act:*
 
