@@ -1,55 +1,51 @@
-**Refactoring the POM file test**
+**Refactoring the POM File Test**
 
-*Test Description*
-A developer is trying to refactor the POM file to move library versions into the properties section
+*Test Description:*
 
-*Act*
+A developer is trying to refactor the POM file to move library versions into the properties section.
 
-<details>
-<summary>Bare LLM testing instructions:</summary>
+*Act:*
 
-- Open the prompt.txt file
-- Copy a question located in the prompt.txt file to the chat window
-- Submit the question
-- Open the project code-refactoring/pom-file/java
-- Open the pom file
-- Change the file implementation to the suggested implementation
+<details> 
+<summary>Bare LLM Testing Instructions:</summary>
 
-</details>
-<details>
-<summary>Code Completion instructions:</summary>
-
-- Open the project code-refactoring/pom-file/java
-- Open the pom file
-- Type after the <build> tag:
-
-```
-// moved library versions into properties section
-```
-
-- Press ENTER
-- Accept a sequence of suggestions using the TAB and ENTER keys
-- Change the file implementation to the suggested implementation
-
+- Open the `prompt.txt` file.
+- Copy a question located in the `prompt.txt` file to the chat window.
+- Submit the question.
+- Open the project `code-refactoring/pom-file/java`.
+- Open the `pom.xml` file.
+- Change the file implementation to the suggested implementation.
 </details>
 
-<details>
+<details> 
+<summary>Code Completion Instructions:</summary>
+
+- Open the project `code-refactoring/pom-file/java`.
+- Open the `pom.xml` file.
+- Type after the `<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>` tag:
+
+    ```xml
+    <spring.boot.version>
+    ```
+
+- Wait for the suggestion.
+- Accept a sequence of suggestions using the TAB and ENTER keys.
+- Remove `<version>` tags from the `pom.xml` file.
+</details>
+
+<details> 
 <summary>Chat IDE:</summary>
+- Open the project `code-refactoring/pom-file/java`.
+- Open the `pom.xml` file.
+- Type the following in the chat window:
 
-- Open the project code-refactoring/pom-file/java
-  Open the pom file
-- Type in the chat window:
+    > Refactor the POM file to move library versions into the properties section.
 
-> Refactor the POM file to move library versions into the properties section
-
-- Change the file implementation to the suggested implementation
-
+- Change the file implementation to the suggested implementation.
 </details>
 
-*Assert conditions*
+*Assert Conditions:*
+- The code must compile.
+- All dependency versions must be defined in the `<properties>` tag.
 
-- Code must compile
-
-*Additional note*
-
-The correct solutions is in the correctResponse.txt file
+*Additional Note:* The correct solution is in the `correctResponse.txt` file.
