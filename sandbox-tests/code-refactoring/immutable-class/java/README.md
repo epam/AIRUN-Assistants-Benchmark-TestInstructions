@@ -1,57 +1,57 @@
-**Immutable class test**
+**Immutable Class Test**
 
-*Test Description*
-A developer is trying to refactor a class to make it immutable
+*Test Description:*
 
-*Act*
+A developer is attempting to refactor a class to make it immutable.
 
-<details>
-<summary>Bare LLM testing instructions:</summary>
+*Act:*
 
-- Open the prompt.txt file
-- Copy a question located in the prompt.txt file to the chat window
-- Submit the question
-- Open the project code-refactoring/immutable-class/java
-- Open the Player class
-- Change the class implementation to the suggested implementation
-- Add all necessary imports
+<details> 
+<summary>Bare LLM Testing Instructions:</summary>
 
-</details>
-<details>
-<summary>Code Completion instructions:</summary>
-
-- Open the project code-refactoring/immutable-class/java
-- Open the Player class
-- Type at the end of the class:
-
-```java
-// immutable Player class with Lombok annotations
-```
-
-- Press ENTER
-- Accept a sequence of suggestions using the TAB and ENTER keys
-- Change the class implementation to the suggested implementation
-
+- Open the `prompt.txt` file.
+- Copy a question located in the `prompt.txt` file to the chat window.
+- Submit the question.
+- Open the project `code-refactoring/immutable-class/java`.
+- Open the `Player` class.
+- Change the class implementation to the suggested implementation.
+- Add all necessary imports.
 </details>
 
-<details>
+<details> 
+<summary>Code Completion Instructions:</summary>
+
+- Open the project `code-refactoring/immutable-class/java`.
+- Open the `Player` class.
+- At the beginning of the `Player` class, start typing:
+
+    ```java
+    import lombok.Value;
+    ```
+  
+- Remove the inner implementation of the `Player` class.
+- Move the cursor to the beginning of the `Player` class.
+- Wait for the suggestion.
+- Accept a sequence of suggestions using the TAB and ENTER keys.
+- Move the cursor to the beginning of the inner implementation of the `Player` class.
+- Wait for the suggestion.
+- Accept a sequence of suggestions using the TAB and ENTER keys.
+</details>
+
+<details> 
 <summary>Chat IDE:</summary>
 
-- Open the project code-refactoring/immutable-class/java
-- Open the Player class
-- Type in the chat window:
+- Open the project `code-refactoring/immutable-class/java`.
+- Open the `Player` class.
+- Type the following in the chat window:
 
-> Rewrite the class to make it immutable using Lombok annotations. Remove unnecessary code
+    > Rewrite the class to make it immutable using Lombok annotations.
 
-- Change the class implementation to the suggested implementation
-- Add all necessary imports
-
+- Change the class implementation to the suggested implementation.
+- Add all necessary imports.
 </details>
 
-*Assert conditions*
+*Assert Conditions:*
+- The code must compile.
 
-- Code must compile
-
-*Additional note*
-
-The correct solutions is in the correctResponse.txt file
+*Additional Note:* The correct solution is in the `correctResponse.txt` file.
