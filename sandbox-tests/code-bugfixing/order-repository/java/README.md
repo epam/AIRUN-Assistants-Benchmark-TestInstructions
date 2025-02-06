@@ -11,48 +11,49 @@ A developer is trying to fix a bug related to the method for retrieving orders f
 - Open the prompt.txt file
 - Copy a question located in the prompt.txt file to the chat window
 - Submit the question
-- Open the project code-bugfixing/order-repository/java
-- Open the OrderRepository class
-- Change the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method to the suggested method
+- Open the `code-bugfixing/order-repository/java` project
+- Open the `OrderRepository` class
+- Change the `findOrdersByStatusAndCustomerAndCostRangeAndDateRange` method to the suggested method
 
 </details>
 <details>
 <summary>Code Completion instructions:</summary>
 
-- Open the project code-bugfixing/order-repository/java
-- Open the Order class
-- Open the OrderRepository class
-- Type after the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method:
+- Open the `code-bugfixing/order-repository/java` project
+- Open the `Order` class
+- Open the `OrderRepository` class
+- Remove the @Query implementation from the `findOrdersByStatusAndCustomerAndCostRangeAndDateRange` method
+- Before the `findOrdersByStatusAndCustomerAndCostRangeAndDateRange` method, type the following:
 
 ```java
-// findOrdersByStatusAndCustomerAndCostRangeAndDateRange with bug fix
+@Query("SELECT
 ```
 
-- Press ENTER
+- Wait for the suggestion
 - Accept a sequence of suggestions using the TAB and ENTER keys
-- Change the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method to the suggested method
+- Change the `findOrdersByStatusAndCustomerAndCostRangeAndDateRange` method to the suggested method
 
 </details>
 
 <details>
 <summary>Chat IDE:</summary>
 
-- Open the project code-bugfixing/order-repository/java
-- Open the Order class
-- Open the OrderRepository class
+- Open the `code-bugfixing/order-repository/java` project
+- Open the `Order` class
+- Open the `OrderRepository` class
 - Type in the chat window:
 
 > Rewrite the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method to fix the bug
 
-- Change the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method to the suggested method
+- Change the `findOrdersByStatusAndCustomerAndCostRangeAndDateRange` method to the suggested method
 
 </details>
 
 *Assert conditions*
 
 - Code must compile
-- Copy the OrderRepositoryTest.java file to the code-bugfixing/order-repository/java/src/test/java/com/aicode/java folder
-- Run tests in the OrderRepositoryTest class. Tests must pass successfully
+- Copy the `OrderRepositoryTest.java` file to the code-bugfixing/order-repository/java/src/test/java/com/aicode/java folder
+- Run tests in the `OrderRepositoryTest` class. Tests must pass successfully
 
 *Additional note*
 

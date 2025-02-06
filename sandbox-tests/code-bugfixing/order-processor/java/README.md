@@ -25,12 +25,12 @@ A developer is trying to fix a bug in the method that calculates the most popula
 - Type after the calculateMostPopularProduct method:
 
 ```java
-// calculateMostPopularProduct method with bug fix
+public String calculateMostPopularProductWithBugFix(List<Order> orders) {
 ```
 
 - Press ENTER
 - Accept a sequence of suggestions using the TAB and ENTER keys
-- Change the calculateMostPopularProduct method to the suggested method
+- Change the calculateMostPopularProduct method implementation to the suggested implementation
 
 </details>
 
