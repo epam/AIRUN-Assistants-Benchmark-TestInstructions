@@ -8,6 +8,7 @@ A developer is attempting to fix a bug related to the method for retrieving orde
 
 <details> 
 <summary>Bare LLM Testing Instructions:</summary>
+
 - Open the `prompt.txt` file.
 - Copy a question located in the `prompt.txt` file to the chat window.
 - Submit the question.
@@ -18,6 +19,7 @@ A developer is attempting to fix a bug related to the method for retrieving orde
 
 <details> 
 <summary>Code Completion Instructions:</summary>
+
 - Open the `code-bugfixing/order-repository/java` project.
 - Open the `Order` class.
 - Open the `OrderRepository` class.
@@ -35,6 +37,7 @@ A developer is attempting to fix a bug related to the method for retrieving orde
 
 <details> 
 <summary>Chat IDE:</summary>
+
 - Open the `code-bugfixing/order-repository/java` project.
 - Open the `Order` class.
 - Open the `OrderRepository` class.
