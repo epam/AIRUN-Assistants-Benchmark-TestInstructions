@@ -1,0 +1,41 @@
+package com.epam.aicode.java;
+
+import org.slf4j.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class OrderService {
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+
+    public List<String> processOrder(Order order) {
+        String orderId = order.getOrderId();
+        if (orderId == null || orderId.isEmpty()) {
+            logger.error("Order ID is null or empty");
+            return null;
+        }
+
+        logger.info("Processing order: {}", orderId);
+        List<String> productNames = new ArrayList<>();
+
+        try {
+            List<Product> products = order.getProducts();
+            if (products == null || products.isEmpty()) {
+                logger.warn("No products found in order: {}", orderId);
+                return null;
+            }
+
+            for (Product product : products) {
+                productNames.add(product.getProductName());
+                logger.info("Processed product: {}", product.getProductId());
+            }
+
+            logger.info("Order {} processed successfully", orderId);
+        } catch (Exception e) {
+            logger.error("Error processing order: {}", orderId, e);
+        }
+
+        return productNames;
+    }
+}
