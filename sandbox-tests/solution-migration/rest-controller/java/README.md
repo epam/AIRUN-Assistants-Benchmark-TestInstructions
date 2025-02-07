@@ -49,9 +49,8 @@ A developer is trying to migrate a controller to a REST controller for handling 
     ```
 
 - Remove the inner implementation of the `PlayerController` class.
-- Move the cursor to the beginning of the `PlayerController` class.
+- Move the cursor to the beginning of the inner implementation of the `PlayerController` class.
 - Accept a sequence of suggestions using the TAB and ENTER keys.
-- Change the `PlayerController` implementation to the suggested implementation.
 </details>
 
 <details>
@@ -61,7 +60,7 @@ A developer is trying to migrate a controller to a REST controller for handling 
 - Open the `PlayerController` class.
 - Type the following in the chat window:
 
-    > Rewrite the PlayerController as a REST controller that responds with JSON data using Spring Web. Apply ResponseEntity where required.
+    > Rewrite the PlayerController as a REST controller that responds with JSON data using Spring Web. Apply ResponseEntity where required
 
 - Change the `PlayerController` implementation to the suggested implementation.
 - Add all necessary imports.

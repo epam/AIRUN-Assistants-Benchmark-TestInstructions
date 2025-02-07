@@ -30,14 +30,14 @@ A developer is trying to refactor a class to use SLF4J instead of the older Java
     import java.util.logging.Logger;
     ```
 
-- At the beginning of the `OrderService` class, start typing:
+- Before the `OrderService` class definition, start typing:
 
     ```java
     import org.slf4j.*;
     ```
 
 - Remove the inner implementation of the `OrderService` class.
-- Move the cursor to the beginning of the `OrderService` class.
+- Move the cursor to the beginning of the inner implementation of the `OrderService` class.
 - Wait for the suggestion.
 - Accept a sequence of suggestions using the TAB and ENTER keys.
 - Change the class implementation to the suggested implementation.
@@ -50,7 +50,7 @@ A developer is trying to refactor a class to use SLF4J instead of the older Java
 - Open the `OrderService` class.
 - Type the following in the chat window:
 
-    > Migrate the logging implementation to SLF4J.
+    > Migrate the logging implementation to SLF4J
 
 - Change the class implementation to the suggested implementation.
 - Add all necessary imports.

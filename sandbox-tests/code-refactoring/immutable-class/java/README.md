@@ -23,14 +23,14 @@ A developer is attempting to refactor a class to make it immutable.
 
 - Open the project `code-refactoring/immutable-class/java`.
 - Open the `Player` class.
-- At the beginning of the `Player` class, start typing:
+- Before the `Player` class definition, start typing:
 
     ```java
     import lombok.Value;
     ```
   
 - Remove the inner implementation of the `Player` class.
-- Move the cursor to the beginning of the `Player` class.
+- Move the cursor to before the `Player` class definition.
 - Wait for the suggestion.
 - Accept a sequence of suggestions using the TAB and ENTER keys.
 - Move the cursor to the beginning of the inner implementation of the `Player` class.
@@ -45,7 +45,7 @@ A developer is attempting to refactor a class to make it immutable.
 - Open the `Player` class.
 - Type the following in the chat window:
 
-    > Rewrite the class to make it immutable using Lombok annotations.
+    > Rewrite the class to make it immutable using Lombok annotations
 
 - Change the class implementation to the suggested implementation.
 - Add all necessary imports.

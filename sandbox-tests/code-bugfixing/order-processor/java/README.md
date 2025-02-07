@@ -31,7 +31,8 @@ A developer is trying to fix a bug in the method that calculates the most popula
 
 - Press ENTER.
 - Accept a sequence of suggestions using the TAB and ENTER keys.
-- Change the `calculateMostPopularProduct` method implementation to the suggested implementation.
+- Remove the `calculateMostPopularProduct` method.
+- Rename the `calculateMostPopularProductWithBugFix` method to `calculateMostPopularProduct`.
 </details>
 
 <details> 
@@ -42,7 +43,7 @@ A developer is trying to fix a bug in the method that calculates the most popula
 - Open the `OrderProcessor` class.
 - Type the following in the chat window:
 
-    > Rewrite the calculateMostPopularProduct method to fix the bug.
+    > Rewrite the calculateMostPopularProduct method to fix the bug
 
 - Change the `calculateMostPopularProduct` method to the suggested method.
 </details>

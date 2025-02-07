@@ -22,8 +22,8 @@ A developer is trying to fix a bug related to password validation.
 
 - Open the project `code-bugfixing/password-validator/TypeScript`.
 - Open the `PasswordValidator.ts` file.
-- Remove the `PASSWORD_REGEX` variable.
-- At the beginning of the `PasswordValidator.ts` file, type the following:
+- Remove the value of the `PASSWORD_REGEX` variable.
+- Move the cursor to the end of the following line:
 
     ```typescript
     private static readonly PASSWORD_REGEX: RegExp = new RegExp(
@@ -36,11 +36,11 @@ A developer is trying to fix a bug related to password validation.
 <details> 
 <summary>Chat IDE:</summary>
 
-- Open the project `code-bugfixing/password-validator/TypeScript`.
+- Open the project `code-bugfixing/password-validator/TypeScript`
 - Open the `PasswordValidator.ts` file.
 - Type the following in the chat window:
 
-    > Rewrite the PASSWORD_REGEX regular expression variable to fix the bug.
+    > Rewrite the PASSWORD_REGEX regular expression variable to fix the bug
 
 - Change the `PASSWORD_REGEX` variable to the suggested variable.
 </details>

@@ -39,7 +39,7 @@ A developer is trying to refactor the POM file to move library versions into the
 - Open the `pom.xml` file.
 - Type the following in the chat window:
 
-    > Refactor the POM file to move library versions into the properties section.
+    > Refactor the POM file to move library versions into the properties section
 
 - Change the file implementation to the suggested implementation.
 </details>

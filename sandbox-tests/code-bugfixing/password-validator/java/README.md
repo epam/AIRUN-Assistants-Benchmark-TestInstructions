@@ -22,8 +22,8 @@ A developer is trying to fix a bug related to password validation.
 
 - Open the project `code-bugfixing/password-validator/java`.
 - Open the `PasswordValidator` class.
-- Remove the `PASSWORD_REGEX` variable.
-- At the beginning of the `PasswordValidator` class, type the following:
+- Remove the value of the `PASSWORD_REGEX` variable.
+- Move the cursor to the end of the following line:
 
     ```java
     private static final String PASSWORD_REGEX = 
@@ -40,7 +40,7 @@ A developer is trying to fix a bug related to password validation.
 - Open the `PasswordValidator` class.
 - Type the following in the chat window:
 
-    > Rewrite the PASSWORD_REGEX regular expression variable to fix the bug.
+    > Rewrite the PASSWORD_REGEX regular expression variable to fix the bug
 
 - Change the `PASSWORD_REGEX` variable to the suggested variable.
 </details>
