@@ -28,6 +28,7 @@ A developer is trying to refactor a class to implement the new Date and Time API
 
     ```java
     import java.time.*;
+    import java.time.format.DateTimeFormatter;
     ```
 
 - Remove the inner implementation of the `DateHandler` class.
