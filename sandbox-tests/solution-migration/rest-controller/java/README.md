@@ -30,7 +30,7 @@ A developer is trying to migrate a controller to a REST controller for handling 
     import org.springframework.ui.Model;
     ```
 
-- Add the following code before the `PlayerController` class definition:
+- Add the following import statement to the `PlayerController` class:
 
     ```java
     import org.springframework.http.*;

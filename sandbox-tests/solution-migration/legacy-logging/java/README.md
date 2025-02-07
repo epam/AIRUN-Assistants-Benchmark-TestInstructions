@@ -30,7 +30,7 @@ A developer is trying to refactor a class to use SLF4J instead of the older Java
     import java.util.logging.Logger;
     ```
 
-- Before the `OrderService` class definition, start typing:
+- Add the following import statement to the `OrderService` class:
 
     ```java
     import org.slf4j.*;

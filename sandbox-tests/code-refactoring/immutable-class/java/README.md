@@ -23,7 +23,7 @@ A developer is attempting to refactor a class to make it immutable.
 
 - Open the project `code-refactoring/immutable-class/java`.
 - Open the `Player` class.
-- Before the `Player` class definition, start typing:
+- Add the following import statement to the `Player` class:
 
     ```java
     import lombok.Value;

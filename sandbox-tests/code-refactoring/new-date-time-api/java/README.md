@@ -24,7 +24,7 @@ A developer is trying to refactor a class to implement the new Date and Time API
 - Open the project `code-refactoring/new-date-time-api/java`.
 - Open the `DateHandler` class.
 - Remove all imports in the `DateHandler` class.
-- Before the class definition, type the following:
+- Add the following import statement to the `DateHandler` class:
 
     ```java
     import java.time.*;
