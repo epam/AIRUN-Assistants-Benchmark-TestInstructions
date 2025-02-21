@@ -17,10 +17,12 @@ https://github.com/PolinaTolkachova/golf-application
     - src/main/java/com/golf/app/repo/CompetitionRepository.java
 - Enter task description:
 
-> The application allows to manage golf competitions.
+```
+The application allows to manage golf competitions.
 Add publishing competition change events to Kafka topic.
 A change event should include change type and the following competition attributes: Id,
 competition name, start date, end date, course name.
+```
 
 - Submit the task description and wait implementation plan is generated
 - Go to the implementation plan
@@ -48,40 +50,33 @@ spring.kafka.consumer.group-id=golf-application
 - assert that Kafka publishing is configured in application.properties. Sample:
 
 ```properties
-golf.kafka.topicName=golf
+golf.kafka.topicName=golf-competitions
 golf.kafka.publish.batchSize=10
 golf.kafka.publish.delay=10000
 ```
 
 - assert Java code changes are generated
-- set KAFKA_FROM_HOST variable to point actual Kafka host in (.env)[.env] docker compose configuration file file
+- set KAFKA_FROM_HOST variable to point actual Kafka host in [.env](.env) docker compose configuration file file
 - start Mysql container and Kafka containers with the command:
 
 ```bash
 docker-compose up
 ```
 
-- set env variables to specify actual Mysql and Kafka hosts:
-
-```bash
-export MYSQL_HOST=host1
-export KAFKA_HOST=host1
-```
-
-- start the application with the following command with actual DB url and password:
-
-```bash
-mvn spring-boot:run
-```
-
+- update database configuration in application.properties to match it with your local environment.
+- update Kafka configuration in application.properties to match it with your local environment.
+- build the application with the command: `mvn clean install`.
+- make sure the application has been built without errors.
+- start the application with the command: `mvn spring-boot:run`.
+- make sure the application has started, no errors are reported in log.
 - open the application UI at http://localhost:8082/
 - click  *Competitions*  link and edit competitions:
     - create a competition
     - update a competition
     - delete a competition
-- open Kafka UI at http://host1:8080/
+- open Kafka UI at http://localhost:8080/
 - click  *Topics* on sidebar and Golf topic then.
-- click topic  *Messages*  link and make sure that all competition edits have corresponding Kafka messages.
+- click the topic  *Messages*  link and make sure that all competition edits have corresponding Kafka messages.
 - assert that messages have change type and the requested competition attributes. Message sample:
 
 ```json
