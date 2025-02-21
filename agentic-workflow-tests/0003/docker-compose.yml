@@ -1,5 +1,3 @@
-version: "3"
-
 networks:
   agentic-0003-net:
     driver: bridge

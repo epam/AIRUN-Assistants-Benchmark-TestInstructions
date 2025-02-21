@@ -26,10 +26,12 @@ https://github.com/PolinaTolkachova/golf-application
     - src/test/java/com/golf/app/security/AppSecurityConfigTest.java
 - Enter task description:
 
-> Refactor Golf application access-control layer, replace Basic Authentication with OAuth2 authorization.
+```
+Refactor Golf application access-control layer, replace Basic Authentication with OAuth2 authorization.
 /admin endpoint should be accessed only by a client granted with GOLF:ADMIN scope.
 A client granted with GOLF:COACH scope should access all endpoints except /admin endpoint.
 A client granted with GOLF:USER scope should access all read only endpoints except /admin endpoint.
+```
 
 - Submit the task description and wait implementation plan is generated
 - Go to the implementation plan
@@ -49,7 +51,7 @@ A client granted with GOLF:USER scope should access all read only endpoints exce
 - assert that jwk-set-uri parameters is added to application.properties. For instance:
 
 ```properties
-spring.security.oauth2.resourceserver.jwt.issuer-uri=http://${OAUTH2_HOST:localhost}:50080
+spring.security.oauth2.resourceserver.jwt.issuer-uri=${GOLF_OAUTH2_SERVER_URI:http://localhost:50080}
 ```
 
 - assert that AppSecurityConfig is updated:
@@ -78,6 +80,10 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri=http://${OAUTH2_HOST:localh
 ```
 
 - assert that AppSecurityConfigTest is updated to check access with scopes instead of roles.
+- update database configuration in application.properties to match it with your local environment.
+- update OAUTH2 server URI configuration in application.properties to match it with your local environment.
+- build the application with the command: `mvn clean install`.
+- make sure the application has been built without errors.
 - download WireMock JWT Standalone extension with the command:
 
 ```bash
@@ -89,12 +95,6 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri=http://${OAUTH2_HOST:localh
 ```bash
 docker-compose up
 ```
-- set env variables to specify Mysql and Oauth2 authorization hosts:
-
-```bash
-export MYSQL_HOST=host1
-export OAUTH2_HOST=host1
-```
 
 - start the application with the following command with actual DB url and password:
 
@@ -104,7 +104,7 @@ mvn spring-boot:run
 - assert /admin request is accessible with GOLF:ADMIN scope by running the commands:
 
 ```bash
-ACCESSTOKEN=`curl -s --request POST --url  http://${OAUTH2_HOST}:50080/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:ADMIN" | jq -r .access_token`
+ACCESSTOKEN=`curl -s --request POST --url  ${GOLF_OAUTH2_SERVER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:ADMIN" | jq -r .access_token`
 
 curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admin
 ```
@@ -116,7 +116,7 @@ curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admi
 - assert /admin request is not accessible with scope other than GOLF:ADMIN by running the commands:
 
 ```bash
-ACCESSTOKEN=`curl -s --request POST --url  http://${OAUTH2_HOST}:50080/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:WHATEVER" | jq -r .access_token`
+ACCESSTOKEN=`curl -s --request POST --url  ${GOLF_OAUTH2_SERVER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:WHATEVER" | jq -r .access_token`
 
 curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admin
 ```
@@ -127,7 +127,7 @@ curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admi
 -assert /player/add GET request is accessible with GOLF:USER scope by running the commands:
 
 ```bash
-ACCESSTOKEN=`curl -s --request POST --url  http://${OAUTH2_HOST}:50080/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:USER" | jq -r .access_token`
+ACCESSTOKEN=`curl -s --request POST --url  ${GOLF_OAUTH2_SERVER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:USER" | jq -r .access_token`
 
 curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/player/add
 ```
@@ -139,7 +139,7 @@ curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/play
 -assert /player/add POST request is accessible with GOLF:COACH scope by running the commands:
 
 ```bash
-ACCESSTOKEN=`curl -s --request POST --url  http://${OAUTH2_HOST}:50080/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:COACH" | jq -r .access_token`
+ACCESSTOKEN=`curl -s --request POST --url  ${GOLF_OAUTH2_SERVER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:COACH" | jq -r .access_token`
 
 curl -v --header "Authorization: Bearer $ACCESSTOKEN" --header "Content-Type: application/x-www-form-urlencoded" --request POST --data 'name=Naomi&surname=OsaAF' http://localhost:8082/player/add
 ```
