@@ -13,16 +13,39 @@ https://github.com/PolinaTolkachova/golf-application
     - src/main/resources/application.properties
 - Enter task description:
 
-> Add Flyway support to continuously remodel the database schema and also add MySQL container for development and testing.
+```
+Add Flyway support to continuously remodel the database schema and also add MySQL container for development and testing.
 Use given Jakarta Persistence entities classes from the package com.golf.app.model to create initial schema script.
+```
 
 - Submit the task description and wait implementation plan is generated
 - Go to the implementation plan
 - Follow the implementation plan steps and modify source code following the instructions
 
-*Assert conditions*
+*Testing*
 
-- assert that DB initialization script is created. Sample script name: src/main/resources/db/migration/V1__Initial_Schema.sql
+- Update database configuration in flyway.conf and application.properties to make it compatible with your local environment
+- Set property in application.properties: `spring.jpa.hibernate.ddl-auto=validate`
+- start Mysql container with the command: `docker-compose up`
+- migrate the database with the command: `flyway -configFiles=src/main/resources/flyway.conf migrate`
+- build the application with the command: `mvn clean install`
+- start the application with the command: `mvn spring-boot:run`
+- send test requests to the application:
+
+```bash
+curl -v -u 1:1 http://localhost:8082/competition/data/1/round
+
+curl -v -u 1:1 http://localhost:8082/player
+
+curl -v -u 1:1 http://localhost:8082/round
+```
+
+*Assertion*
+
+<details>
+<summary>Manual Assertion:</summary>
+
+- assert that DB initialization migration script is created. Sample script name: src/main/resources/db/migration/V1__Initial_Schema.sql
 - assert that DB initialization script contains correct table definitions for all entities.
 - assert that src/main/resources/flyway.conf is created. Sample:
 
@@ -57,21 +80,23 @@ volumes:
   mysql_data:
 ```
 
-- start Mysql container with the command: docker-compose up
-- migrate the database with the command: flyway -configFiles=src/main/resources/flyway.conf migrate
-- start the application with the following command with actual DB url and password:
-
-```bash
-mvn spring-boot:run -Dspring-boot.run.arguments="--spring.datasource.url=jdbc:mysql://localhost:3306/golf_db?allowPublicKeyRetrieval=true --spring.datasource.username=root --spring.datasource.password=rootpassword --spring.jpa.hibernate.ddl-auto=none"
-```
-
+- make sure the Mysql container has started without errors
+- make sure the application has been built without errors
 - make sure the application has started, no errors are reported in log
-- test the application respond to requests without 500 error:
+- make sure the application responds to the test requests without server error (500–599)
 
-```bash
-curl -v -u 1:1 http://localhost:8082/competition/data/1/round
+</details>
 
-curl -v -u 1:1 http://localhost:8082/player/1
+<details>
+<summary>Automated LLM Assertion:</summary>
 
-curl -v -u 1:1 http://localhost:8082/round/1
-```
+Make evaluation following steps described in [auto-llm-eval README](../auto-llm-eval/README.md).
+
+The following manual steps are required before running the evaluation (see [template](../auto-llm-eval/manual-output-include-template.md) ):
+- Add output of `docker-compose up` to output.md.
+- Add output of Flyway migration to output.md.
+- Add output of `mvn clean install` to output.md.
+- Add output of `mvn spring-boot:run` to output.md.
+- Add output of the test requests to output.md.
+
+</details>
