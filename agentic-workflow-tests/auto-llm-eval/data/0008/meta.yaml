@@ -1,6 +1,6 @@
 metadata:
   scenario_id: 03
-  scenario_name: Migrate_logback_to_log4j2
+  scenario_name: Refactor Golf application, replace logback logging with Log4j 2.x logging framework and SLF4J as logging facade
   category: solution-migration
   experiment_date: 2024-09-12
   model: q
@@ -40,7 +40,7 @@ evaluation_steps:
     - Ensure Slf4j annotation is added to CustomLogoutSuccessHandler class.
     - Make sure that a call of System.out.println(...) is replaced with log.info(...) in CustomLogoutSuccessHandler class.
     - Ensure that the command `mvn clean install` output is given and contains evidence of the application successfully build.
-    - Ensure that the command `mvn spring-boot:run` output is given and contains evidence of the application successfully run.
+    - Ensure that the command `mvn spring-boot:run` output is given and contains evidence of the application successful run.
     - Verify that the application console output is given and contains the application logs.
     - Verify that content of logs/golf-app.log file is given and contains the application logs.
   accuracy:

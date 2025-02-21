@@ -28,6 +28,7 @@ Create an account menu for the application pages. Add the following items to the
 
 <details>
 <summary>Manual Assertion:</summary>
+
 - Ensure that dependency org.thymeleaf.extras:thymeleaf-extras-springsecurity6 is added to pom.xml
 - Ensure that following changes are added to src/main/resources/templates/blocks/header.html:
     - the attribute xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" is added to html element
@@ -45,6 +46,7 @@ Create an account menu for the application pages. Add the following items to the
 
 <details>
 <summary>Automated LLM Assertion:</summary>
+
 Make evaluation following steps described in [auto-llm-eval README](../auto-llm-eval/README.md) and extra steps described below.
 
 Extra steps:

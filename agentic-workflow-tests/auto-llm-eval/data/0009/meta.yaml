@@ -1,6 +1,6 @@
 metadata:
   scenario_id: 0009
-  scenario_name: create_functional_tests_with_selenium
+  scenario_name: Create Functional Tests for Golf application, with Selenium
   category: test-creation
   experiment_date: 2024-12-25
   model: q
