@@ -497,7 +497,7 @@ index 4fea5c9..c3dcbce 100644
 +spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
 +spring.kafka.consumer.group-id=golf-application
 +
-+golf.kafka.topicName=golf
++golf.kafka.topicName=golf-competitions
 +golf.kafka.publish.batchSize=10
 +golf.kafka.publish.delay=10000
 -- 
