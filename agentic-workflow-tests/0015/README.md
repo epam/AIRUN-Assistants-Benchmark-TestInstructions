@@ -39,6 +39,7 @@ docker run -d -p 9411:9411 openzipkin/zipkin
 
 <details>
 <summary>Manual Assertion:</summary>
+
 - Make sure that the following dependencies added to pom.xml:
     - org.springframework.boot:spring-boot-starter-actuator
     - io.micrometer:micrometer-tracing-bridge-brave
@@ -55,12 +56,13 @@ docker run -d -p 9411:9411 openzipkin/zipkin
 
 <details>
 <summary>Automated LLM Assertion:</summary>
+
 Make evaluation following steps described in [auto-llm-eval README](../auto-llm-eval/README.md) and extra steps described below.
 
 - Launch the application
 - Login to the application
 - Verify that traces appeared in the Zipkin UI at http://localhost:9411/zipkin
-- Add results of the manual tests to output.md. See (manual-testing-template.md)[manual-testing-template.md].
+- Add results of the manual tests to output.md. See [manual-testing-template.md](manual-testing-template.md).
 
 </details>
 

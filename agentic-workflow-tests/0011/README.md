@@ -28,6 +28,7 @@ Create a SQL script to import existing in-memory users and roles to database.
 
 <details>
 <summary>Manual Assertion:</summary>
+
 - Make sure, the following changes suggested in src/main/java/com/golf/app/security/AppSecurityConfig.java:
     - the method declaring InMemoryUserDetailsManager bean has been removed
     - added a method declaring UserDetailsService bean and creating JdbcUserDetailsManager as the bean implementation:
@@ -82,6 +83,7 @@ INSERT INTO authorities (username, authority) VALUES
 
 <details>
 <summary>Automated LLM Assertion:</summary>
+
 Make evaluation following steps described in [auto-llm-eval README](../auto-llm-eval/README.md).
 
 </details>

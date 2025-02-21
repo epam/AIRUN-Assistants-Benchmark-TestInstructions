@@ -41,6 +41,7 @@ Cleanup unused or legacy logging configuration.
 
 <details>
 <summary>Manual Assertion:</summary>
+
 - Make sure, the following changes suggested in pom.xml:
     - `spring-boot-starter-logging` excluded from `org.springframework.boot` dependencies:
 
@@ -109,6 +110,7 @@ Cleanup unused or legacy logging configuration.
 
 <details>
 <summary>Automated LLM Assertion:</summary>
+
 Make evaluation following steps described in [auto-llm-eval README](../auto-llm-eval/README.md).
 
 The following manual steps are required before running the evaluation (see [template](../auto-llm-eval/manual-output-include-template.md) ):

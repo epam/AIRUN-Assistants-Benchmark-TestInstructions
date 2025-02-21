@@ -1,7 +1,7 @@
 metadata:
-  scenario_id: 0010
-  scenario_name: Missing_player_photo_fix
-  category: code-bugfixing
+  scenario_id: 0011
+  scenario_name: Migrate in-memory user and role definitions to database in Golf application
+  category: code-refactoring
   experiment_date: 2025-01-09
   model: q
   input_tokens: -1
