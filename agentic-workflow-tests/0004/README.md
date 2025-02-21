@@ -18,8 +18,10 @@ https://github.com/PolinaTolkachova/golf-application
     - src/main/resources/templates/round-score/round-score-main.html
 - Enter task description:
 
-> The application returns RoundScore page in HTML format in response to /round-score request.
+```
+The application returns RoundScore page in HTML format in response to /round-score request.
 Modify the application to return response in CSV format if a client makes /round-score request with Accept HTTP header indicating that it expects text/csv content. CSV response should contain the same fields as scorecardsTable in the given round-score-main.html.
+```
 
 - Submit the task description and wait implementation plan is generated
 - Go to the implementation plan
@@ -27,6 +29,9 @@ Modify the application to return response in CSV format if a client makes /round
 
 *Assert conditions*
 
+- update database configuration in application.properties to match it with your local environment.
+- build the application with the command: `mvn clean install`.
+- make sure the application has been built without errors.
 - start the application:
 
 ```bash
