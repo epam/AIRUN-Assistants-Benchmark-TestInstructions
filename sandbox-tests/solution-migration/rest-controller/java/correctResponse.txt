@@ -1,0 +1,63 @@
+package com.epam.aicode.java;
+
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/players")
+public class PlayerController {
+
+    private static final Logger LOGGER = Logger.getLogger(PlayerController.class.getName());
+
+    private final PlayerService playerService;
+
+    @Autowired
+    public PlayerController(PlayerService playerService) {
+        this.playerService = playerService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Player>> getPlayers() {
+        List<Player> players = playerService.getAllPlayers();
+        return new ResponseEntity<>(players, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<Player> addPlayer(@RequestBody Player player) {
+        Player savedPlayer = playerService.savePlayer(player);
+        LOGGER.log(Level.INFO, "Player " + savedPlayer.getSurname() + " " + savedPlayer.getName() + " with ID " +
+            savedPlayer.getId() + " has been saved in the DB");
+        return new ResponseEntity<>(savedPlayer, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Player> getPlayerById(@PathVariable("id") Long id) {
+        Player player = playerService.getPlayerById(id)
+            .orElseThrow(() -> new PlayerNotFoundException("Player by ID not found"));
+        return new ResponseEntity<>(player, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Player> updatePlayer(@PathVariable("id") Long id, @RequestBody Player player) {
+        player.setId(id);
+        Player updatedPlayer = playerService.savePlayer(player);
+        LOGGER.log(Level.INFO, "Player " + updatedPlayer.getSurname() + " " + updatedPlayer.getName() + " with ID " +
+            updatedPlayer.getId() + " has been updated in the DB");
+        return new ResponseEntity<>(updatedPlayer, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePlayer(@PathVariable("id") Long id) {
+        Player player = playerService.getPlayerById(id)
+            .orElseThrow(() -> new PlayerNotFoundException("Player by ID not found"));
+        playerService.deletePlayer(id);
+        LOGGER.log(Level.INFO, "Player " + player.getSurname() + " " + player.getName() + " with ID " + player.getId() +
+            " was REMOVED from DB");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+}
