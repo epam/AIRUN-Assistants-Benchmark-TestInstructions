@@ -1,6 +1,7 @@
 **Mapstruct migration test**
 
 *Test Description*
+
 A developer is trying to apply Mapstruct mapper processor to map one Java object to another
 
 *Act*
@@ -12,8 +13,21 @@ A developer is trying to apply Mapstruct mapper processor to map one Java object
 - Copy a question located in the prompt.txt file to the chat window
 - Submit the question
 - Open the project solution-migration/mapstruct-migration/java
-- Open the EmployeeMapperMapstruct class
-- Add the suggested method to the EmployeeMapperMapstruct class
+- Open the EmployeeMapperMapstruct interface
+- Add the suggested method to the EmployeeMapperMapstruct interface
+- Add all necessary imports
+
+</details>
+
+<details>
+<summary>Code Completion instructions:</summary>
+
+- Open the project solution-migration/mapstruct-migration/java in IDE
+- Open the Employee class and scroll through the code
+- Open the EmployeeDTO class and scroll through the code
+- Open the EmployeeMapperMapstruct interface
+- Press ENTER in the interface body
+- Accept one from the suggestions using the TAB and ENTER keys
 - Add all necessary imports
 
 </details>
@@ -21,13 +35,15 @@ A developer is trying to apply Mapstruct mapper processor to map one Java object
 <details>
 <summary>Chat IDE:</summary>
 
-- Open the project solution-migration/mapstruct-migration/java
-- Open the EmployeeMapperMapstruct class
+- Open the project solution-migration/mapstruct-migration/java in IDE
+- Open the Employee class and scroll through the code
+- Open the EmployeeDTO class and scroll through the code
+- Open the EmployeeMapperMapstruct interface
 - Type in the chat window:
 
-> Implement the employeeDTOToEmployee method in the EmployeeMapperMapstruct class using MapStruct library and Mapping annotation
+> Declare method converting Employee object to EmployeeDTO object in the EmployeeMapperMapstruct interface using MapStruct library
 
-- Add the suggested method to the EmployeeMapperMapstruct class
+- Add the suggested method to the EmployeeMapperMapstruct interface
 - Add all necessary imports
 
 </details>
@@ -40,4 +56,4 @@ A developer is trying to apply Mapstruct mapper processor to map one Java object
 
 *Additional note*
 
-The correct solutions is in the correctResponse.txt file
+The correct solution is in the correctResponse.txt file. The code must declare explicit mapping from email to eMail as the field names are different in the classes and MapStruct cannot automatically do the mapping. On the contrary MapStruct automatically maps id and name fields and explicit mappings are not required since the fields have identical names in both classes.
