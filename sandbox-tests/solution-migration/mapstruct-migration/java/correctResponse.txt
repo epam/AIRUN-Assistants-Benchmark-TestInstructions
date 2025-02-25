@@ -1,26 +1,14 @@
-import com.epam.aicode.java.Employee;
-import com.epam.aicode.java.EmployeeDTO;
-import com.epam.aicode.java.EmployeeMapperMapstruct;
-import org.junit.jupiter.api.Test;
+package com.epam.aicode.java;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-public class EmployeeMapperMapstructTest {
+@Mapper
+public interface EmployeeMapperMapstruct {
 
-    private static final String NAME = "name";
-    private static final String EMAIL = "email";
+    EmployeeMapperMapstruct INSTANCE = Mappers.getMapper(EmployeeMapperMapstruct.class);
 
-    @Test
-    public void testEmployeeToEmployeeDTO() {
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setId(1L);
-        employeeDTO.setName(NAME);
-        employeeDTO.setEmail(EMAIL);
-
-        Employee employee = EmployeeMapperMapstruct.INSTANCE.employeeDTOToEmployee(employeeDTO);
-
-        assertEquals(1L, employee.getId().longValue());
-        assertEquals(NAME, employee.getName());
-        assertEquals(EMAIL, employee.getEmail());
-    }
+    @Mapping(source = "email", target = "eMail")
+    EmployeeDTO employeeToEmployeeDTO(Employee employee);
 }

@@ -7,21 +7,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EmployeeMapperMapstructTest {
 
-    private static final String NAME = "name";
-    private static final String EMAIL = "email";
+    private static final Long ID = 123789L;
+    private static final String NAME = "John Wickerman";
+    private static final String EMAIL = "john.wickerman@mail.test";
 
 
     @Test
     public void testEmployeeToEmployeeDTO() {
         Employee employee = new Employee();
-        employee.setId(1L);
+        employee.setId(ID);
         employee.setName(NAME);
         employee.setEmail(EMAIL);
 
         EmployeeDTO employeeDTO = EmployeeMapperMapstruct.INSTANCE.employeeToEmployeeDTO(employee);
 
-        assertEquals(1L, employeeDTO.getId().longValue());
+        assertEquals(ID, employeeDTO.getId());
         assertEquals(NAME, employeeDTO.getName());
-        assertEquals(EMAIL, employeeDTO.getEmail());
+        assertEquals(EMAIL, employeeDTO.geteMail());
     }
 }
