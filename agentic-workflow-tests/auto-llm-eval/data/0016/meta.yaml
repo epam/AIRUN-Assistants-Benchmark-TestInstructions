@@ -1,0 +1,33 @@
+metadata:
+  scenario_id: 0016
+  scenario_name: Fix an issue with competition removing in Golf application
+  category: code-bugfixing
+  experiment_date: 2025-03-07
+  model: q
+  input_tokens: -1
+  output_tokens: -1
+  experiment_duration: -1
+  repository: golf-application
+evaluation_steps:
+  completeness:
+    - Ensure that delete competition method has been added to CompetitionController class.
+    - Ensure that the CompetitionController delete competition method is annotated with @DeleteMapping("/{id}").
+    - Ensure that the CompetitionController delete competition method call competitionService deleteCompetition method .
+    - Ensure that the CompetitionController delete competition method returns REDIRECT_COMPETITION.
+    - Ensure that the competition deletion form action has been changed to "'/competition/' + ${competition.id}" in competition-details.html.
+    - Ensure that a hidden input field with attributes name="_method" value="DELETE" has been added to competition deletion form in competition-details.html.
+    - Make sure that the property `spring.mvc.hiddenmethod.filter.enabled=true` has been added to application.properties.
+    - Make sure that the application is built without errors.
+    - Make sure that the application is launched without errors.
+    - Ensure that competition deletion test reported as passed in test report.
+  accuracy:
+    - Make sure there is not unrequested code changes, unused imports or code.
+    - Ensure that the code is syntactically correct, compiles without errors, and accomplishes the intended functionality.
+    - Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized.
+    - Ensure that the code is well-documented, with clear and concise documentation for each part of the code.
+    - Ensure that the code is clean, readable, adheres to best practices and naming conventions.
+    - Ensure that the code is easily maintainable, with proper structure and separation of concerns.
+    - Make sure the code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.
+    - Ensure that application is secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.
+    - Ensure that application configuration is flexible and externalized to efficiently manage different environments.
+
