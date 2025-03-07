@@ -1,0 +1,59 @@
+From 548ea66a04d73b63b63a37bebdbc3846dd6e0cb3 Mon Sep 17 00:00:00 2001
+From: siarhei-z1 <148881157+siarhei-z1@users.noreply.github.com>
+Date: Fri, 7 Mar 2025 13:23:55 +0300
+Subject: [PATCH] Fix issue with competition deletion
+
+Exemplar impementation for agentic workflow test 0016.
+---
+ .../java/com/golf/app/controller/CompetitionController.java | 6 ++++++
+ src/main/resources/application.properties                   | 2 ++
+ .../templates/competition/competition-details.html          | 3 ++-
+ 3 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/src/main/java/com/golf/app/controller/CompetitionController.java b/src/main/java/com/golf/app/controller/CompetitionController.java
+index 6362e0e..aedebd3 100644
+--- a/src/main/java/com/golf/app/controller/CompetitionController.java
++++ b/src/main/java/com/golf/app/controller/CompetitionController.java
+@@ -154,6 +154,12 @@ public class CompetitionController {
+         return COMPETITION_DETAILS_PAGE;
+     }
+ 
++    @DeleteMapping("/{id}")
++    public String deleteCompetition(@PathVariable Long id) {
++        competitionService.deleteCompetition(id);
++        return REDIRECT_COMPETITION;
++    }
++
+     @GetMapping("/{id}/add-round")
+     public String getCompetitionRoundAddPageForCompetitionById(@PathVariable("id") Long id, Model model) {
+         Competition competition = competitionService.getCompetitionById(id)
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+index 497c7d8..d2c2d72 100644
+--- a/src/main/resources/application.properties
++++ b/src/main/resources/application.properties
+@@ -4,6 +4,8 @@ spring.datasource.url=${GOLF_APP_DB_JDBC_URL:jdbc:mysql://localhost:3306/golf04}
+ spring.datasource.username=${GOLF_APP_DB_USERNAME:root}
+ spring.datasource.password=${GOLF_APP_DB_USERPASS:1234}
+ 
++spring.mvc.hiddenmethod.filter.enabled=true
++
+ # Logging Configuration
+ logging.level.org.springframework=INFO
+ logging.level.com.myapp=DEBUG
+diff --git a/src/main/resources/templates/competition/competition-details.html b/src/main/resources/templates/competition/competition-details.html
+index 8e1c895..5ef79e6 100644
+--- a/src/main/resources/templates/competition/competition-details.html
++++ b/src/main/resources/templates/competition/competition-details.html
+@@ -149,7 +149,8 @@
+     <div class="one-line-elements">
+ 
+     <!-- Delete competition button -->
+-        <form th:action="'/competition/' + ${competition.id} + '/remove'" method="post" class="form-inline">
++        <form th:action="'/competition/' + ${competition.id}" method="post" class="form-inline">
++            <input type="hidden" name="_method" value="DELETE">
+             <button class="btn btn-danger btn-lg active" type="submit" onclick="return confirmDelete()">
+                 <h5>Delete competition</h5></button>
+         </form>
+-- 
+2.45.1
+
