@@ -1,0 +1,489 @@
+From 8e5b247be833151b1aa94db7d1f217564da4c35e Mon Sep 17 00:00:00 2001
+From: siarhei-z1 <148881157+siarhei-z1@users.noreply.github.com>
+Date: Wed, 12 Mar 2025 16:57:42 +0300
+Subject: [PATCH] Verify User e-mail upon Registration
+
+Exemplar impementation for agentic workflow test 0013.
+---
+ pom.xml                                       |  4 ++
+ .../java/com/golf/app/AppConfiguration.java   |  2 +
+ .../golf/app/controller/UserController.java   | 39 +++++++++++--
+ .../golf/app/event/UserVerificationEvent.java | 21 +++++++
+ .../listener/UserRegisteredEventListener.java | 37 +++++++++++++
+ .../golf/app/model/UserVerificationToken.java | 42 ++++++++++++++
+ .../com/golf/app/repo/UserRepository.java     |  5 +-
+ .../repo/UserVerificationTokenRepository.java | 12 ++++
+ .../com/golf/app/service/EmailService.java    |  6 ++
+ .../golf/app/service/EmailServiceImpl.java    | 25 +++++++++
+ .../com/golf/app/service/UserService.java     |  4 +-
+ .../com/golf/app/service/UserServiceImpl.java | 55 ++++++++++++++++++-
+ src/main/resources/application.properties     |  9 +++
+ .../templates/registration/confirmation.html  | 12 ++++
+ .../templates/registration/verification.html  | 12 ++++
+ 15 files changed, 275 insertions(+), 10 deletions(-)
+ create mode 100644 src/main/java/com/golf/app/event/UserVerificationEvent.java
+ create mode 100644 src/main/java/com/golf/app/listener/UserRegisteredEventListener.java
+ create mode 100644 src/main/java/com/golf/app/model/UserVerificationToken.java
+ create mode 100644 src/main/java/com/golf/app/repo/UserVerificationTokenRepository.java
+ create mode 100644 src/main/java/com/golf/app/service/EmailService.java
+ create mode 100644 src/main/java/com/golf/app/service/EmailServiceImpl.java
+ create mode 100644 src/main/resources/templates/registration/confirmation.html
+ create mode 100644 src/main/resources/templates/registration/verification.html
+
+diff --git a/pom.xml b/pom.xml
+index 7d465cc..9a93db5 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -112,6 +112,10 @@
+             <artifactId>modelmapper</artifactId>
+             <version>3.2.0</version>
+         </dependency>
++        <dependency>
++            <groupId>org.springframework.boot</groupId>
++            <artifactId>spring-boot-starter-mail</artifactId>
++        </dependency>
+     </dependencies>
+ 
+     <build>
+diff --git a/src/main/java/com/golf/app/AppConfiguration.java b/src/main/java/com/golf/app/AppConfiguration.java
+index c7cb3ef..e70c31e 100644
+--- a/src/main/java/com/golf/app/AppConfiguration.java
++++ b/src/main/java/com/golf/app/AppConfiguration.java
+@@ -3,8 +3,10 @@ package com.golf.app;
+ import org.modelmapper.ModelMapper;
+ import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.Configuration;
++import org.springframework.scheduling.annotation.EnableAsync;
+ 
+ @Configuration
++@EnableAsync
+ public class AppConfiguration {
+ 
+     @Bean
+diff --git a/src/main/java/com/golf/app/controller/UserController.java b/src/main/java/com/golf/app/controller/UserController.java
+index cee47fe..898206b 100644
+--- a/src/main/java/com/golf/app/controller/UserController.java
++++ b/src/main/java/com/golf/app/controller/UserController.java
+@@ -2,18 +2,28 @@ package com.golf.app.controller;
+ 
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Controller;
++import org.springframework.ui.Model;
+ import org.springframework.web.bind.annotation.GetMapping;
+ import org.springframework.web.bind.annotation.PostMapping;
+ import org.springframework.web.bind.annotation.RequestMapping;
++import org.springframework.web.bind.annotation.RequestParam;
++import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+ 
+ import com.golf.app.model.User;
+ import com.golf.app.service.UserService;
+ 
++import jakarta.servlet.http.HttpServletRequest;
++
+ @Controller
+-@RequestMapping("/register")
++@RequestMapping(UserController.CONTROLLER_PATH)
+ public class UserController {
+ 
++    public static final String CONTROLLER_PATH = "/register";
++    public static final String VERIFICATION_PATH = "/verify";
++
+     private static final String REGISTRATION_PAGE = "registration/registration";
++    private static final String CONFIRMATION_PAGE = "registration/confirmation";
++    private static final String VERIFICATION_PAGE = "registration/verification";
+ 
+     @Autowired
+     private final UserService userService;
+@@ -28,8 +38,29 @@ public class UserController {
+     }
+ 
+     @PostMapping
+-    public String registerUser(User user) {
+-        userService.registerUser(user);
+-        return "redirect:/login";
++    public String registerUser(User user, Model model, HttpServletRequest request) {
++        String verifyEmailURL = verifyEmailURL(request);
++        userService.registerUser(user, verifyEmailURL);
++        model.addAttribute("message", "Registration successful! Please check your email to verify your account.");
++        return CONFIRMATION_PAGE;
++    }
++
++    @GetMapping(VERIFICATION_PATH)
++    public String verifyEmail(@RequestParam String token, Model model) {
++        boolean verified = userService.verifyEmail(token);
++
++        if (verified) {
++            model.addAttribute("message", "Email verified successfully! You can now login.");
++        } else {
++            model.addAttribute("error", "Invalid or expired verification link.");
++        }
++
++        return VERIFICATION_PAGE;
++    }
++
++    private String verifyEmailURL(HttpServletRequest request) {
++        return ServletUriComponentsBuilder.fromRequestUri(request).replacePath(CONTROLLER_PATH + VERIFICATION_PATH)
++                .replaceQuery(null).build()
++                .toUriString();
+     }
+ }
+diff --git a/src/main/java/com/golf/app/event/UserVerificationEvent.java b/src/main/java/com/golf/app/event/UserVerificationEvent.java
+new file mode 100644
+index 0000000..2a7e94d
+--- /dev/null
++++ b/src/main/java/com/golf/app/event/UserVerificationEvent.java
+@@ -0,0 +1,21 @@
++package com.golf.app.event;
++
++import org.springframework.context.ApplicationEvent;
++
++import com.golf.app.model.UserVerificationToken;
++
++public class UserVerificationEvent extends ApplicationEvent {
++
++    private static final long serialVersionUID = -1879291819638982553L;
++
++    public UserVerificationEvent(Object source) {
++        super(source);
++        if (!(source instanceof UserVerificationToken)) {
++            throw new IllegalArgumentException("source should be instance of " + UserVerificationToken.class.getName());
++        }
++    }
++
++    public UserVerificationToken getUserVerificationToken() {
++        return (UserVerificationToken) getSource();
++    }
++}
+diff --git a/src/main/java/com/golf/app/listener/UserRegisteredEventListener.java b/src/main/java/com/golf/app/listener/UserRegisteredEventListener.java
+new file mode 100644
+index 0000000..e1a7321
+--- /dev/null
++++ b/src/main/java/com/golf/app/listener/UserRegisteredEventListener.java
+@@ -0,0 +1,37 @@
++package com.golf.app.listener;
++
++import org.springframework.lang.NonNull;
++import org.springframework.scheduling.annotation.Async;
++import org.springframework.stereotype.Component;
++import org.springframework.transaction.annotation.Propagation;
++import org.springframework.transaction.annotation.Transactional;
++import org.springframework.transaction.event.TransactionalEventListener;
++import org.springframework.web.util.UriComponentsBuilder;
++
++import com.golf.app.event.UserVerificationEvent;
++import com.golf.app.model.UserVerificationToken;
++import com.golf.app.repo.UserVerificationTokenRepository;
++import com.golf.app.service.EmailService;
++
++import lombok.AllArgsConstructor;
++
++@AllArgsConstructor
++@Component
++public class UserRegisteredEventListener {
++
++    private final UserVerificationTokenRepository userVerificationTokenRepository;
++    private final EmailService emailService;
++
++    @Async
++    @Transactional(propagation = Propagation.REQUIRES_NEW)
++    @TransactionalEventListener
++    public void onApplicationEvent(@NonNull UserVerificationEvent event) {
++        Long id = event.getUserVerificationToken().getId();
++        UserVerificationToken token = userVerificationTokenRepository.findById(id)
++                .orElseThrow(() -> new IllegalArgumentException("UserVerificationToken not found - " + id));
++        UriComponentsBuilder verificationLinkBuilder = UriComponentsBuilder.fromUriString(token.getVerifyEmailURL());
++        verificationLinkBuilder.queryParam("token", token.getToken());
++        emailService.sendVerificationEmail(token.getUser().getEmail(), verificationLinkBuilder.toUriString());
++    }
++
++}
+diff --git a/src/main/java/com/golf/app/model/UserVerificationToken.java b/src/main/java/com/golf/app/model/UserVerificationToken.java
+new file mode 100644
+index 0000000..384fb66
+--- /dev/null
++++ b/src/main/java/com/golf/app/model/UserVerificationToken.java
+@@ -0,0 +1,42 @@
++package com.golf.app.model;
++
++import java.time.LocalDateTime;
++
++import jakarta.persistence.Column;
++import jakarta.persistence.Entity;
++import jakarta.persistence.FetchType;
++import jakarta.persistence.GeneratedValue;
++import jakarta.persistence.GenerationType;
++import jakarta.persistence.Id;
++import jakarta.persistence.JoinColumn;
++import jakarta.persistence.OneToOne;
++import lombok.Getter;
++import lombok.Setter;
++
++@Entity
++@Setter
++@Getter
++public class UserVerificationToken {
++
++    @Id
++    @GeneratedValue(strategy = GenerationType.IDENTITY)
++    private Long id;
++
++    @Column(unique = true, nullable = false)
++    private String token;
++
++    @Column(nullable = false)
++    String verifyEmailURL;
++
++    @Column(nullable = false)
++    private LocalDateTime expiryDate;
++
++    @OneToOne(fetch = FetchType.EAGER)
++    @JoinColumn(name = "username")
++    private User user;
++
++    public boolean isExpired() {
++        return LocalDateTime.now().isAfter(this.expiryDate);
++    }
++
++}
+diff --git a/src/main/java/com/golf/app/repo/UserRepository.java b/src/main/java/com/golf/app/repo/UserRepository.java
+index 2ee98e5..8fbbc12 100644
+--- a/src/main/java/com/golf/app/repo/UserRepository.java
++++ b/src/main/java/com/golf/app/repo/UserRepository.java
+@@ -1,7 +1,8 @@
+ package com.golf.app.repo;
+ 
+-import com.golf.app.model.User;
+ import org.springframework.data.repository.CrudRepository;
+ 
+-public interface UserRepository extends CrudRepository<User, Long> {
++import com.golf.app.model.User;
++
++public interface UserRepository extends CrudRepository<User, String> {
+ }
+diff --git a/src/main/java/com/golf/app/repo/UserVerificationTokenRepository.java b/src/main/java/com/golf/app/repo/UserVerificationTokenRepository.java
+new file mode 100644
+index 0000000..6fb6026
+--- /dev/null
++++ b/src/main/java/com/golf/app/repo/UserVerificationTokenRepository.java
+@@ -0,0 +1,12 @@
++package com.golf.app.repo;
++
++import java.util.Optional;
++
++import org.springframework.data.repository.CrudRepository;
++
++import com.golf.app.model.UserVerificationToken;
++
++public interface UserVerificationTokenRepository extends CrudRepository<UserVerificationToken, Long> {
++
++    Optional<UserVerificationToken> findByToken(String token);
++}
+diff --git a/src/main/java/com/golf/app/service/EmailService.java b/src/main/java/com/golf/app/service/EmailService.java
+new file mode 100644
+index 0000000..63ccc1b
+--- /dev/null
++++ b/src/main/java/com/golf/app/service/EmailService.java
+@@ -0,0 +1,6 @@
++package com.golf.app.service;
++
++public interface EmailService {
++
++    void sendVerificationEmail(String to, String verificationLink);
++}
+diff --git a/src/main/java/com/golf/app/service/EmailServiceImpl.java b/src/main/java/com/golf/app/service/EmailServiceImpl.java
+new file mode 100644
+index 0000000..4c6ef5c
+--- /dev/null
++++ b/src/main/java/com/golf/app/service/EmailServiceImpl.java
+@@ -0,0 +1,25 @@
++package com.golf.app.service;
++
++import org.springframework.mail.SimpleMailMessage;
++import org.springframework.mail.javamail.JavaMailSender;
++import org.springframework.stereotype.Service;
++
++import lombok.AllArgsConstructor;
++
++@AllArgsConstructor
++@Service
++public class EmailServiceImpl implements EmailService {
++
++    private final JavaMailSender mailSender;
++
++    @Override
++    public void sendVerificationEmail(String to, String verificationLink) {
++        SimpleMailMessage message = new SimpleMailMessage();
++        message.setTo(to);
++        message.setSubject("Complete Registration");
++        message.setText("To confirm your account, please click here: " + verificationLink);
++
++        mailSender.send(message);
++    }
++
++}
+diff --git a/src/main/java/com/golf/app/service/UserService.java b/src/main/java/com/golf/app/service/UserService.java
+index b61e3ea..7a62958 100644
+--- a/src/main/java/com/golf/app/service/UserService.java
++++ b/src/main/java/com/golf/app/service/UserService.java
+@@ -4,5 +4,7 @@ import com.golf.app.model.User;
+ 
+ public interface UserService {
+ 
+-    User registerUser(User user);
++    User registerUser(User user, String verifyEmailURL);
++
++    boolean verifyEmail(String token);
+ }
+diff --git a/src/main/java/com/golf/app/service/UserServiceImpl.java b/src/main/java/com/golf/app/service/UserServiceImpl.java
+index 39bfa93..a2aafb1 100644
+--- a/src/main/java/com/golf/app/service/UserServiceImpl.java
++++ b/src/main/java/com/golf/app/service/UserServiceImpl.java
+@@ -1,14 +1,22 @@
+ package com.golf.app.service;
+ 
++import java.time.LocalDateTime;
+ import java.util.HashSet;
++import java.util.Optional;
+ import java.util.Set;
++import java.util.UUID;
+ 
++import org.springframework.beans.factory.annotation.Value;
++import org.springframework.context.ApplicationEventPublisher;
+ import org.springframework.security.crypto.password.PasswordEncoder;
+ import org.springframework.stereotype.Service;
+ 
++import com.golf.app.event.UserVerificationEvent;
+ import com.golf.app.model.Role;
+ import com.golf.app.model.User;
++import com.golf.app.model.UserVerificationToken;
+ import com.golf.app.repo.UserRepository;
++import com.golf.app.repo.UserVerificationTokenRepository;
+ 
+ import jakarta.transaction.Transactional;
+ 
+@@ -17,18 +25,27 @@ public class UserServiceImpl implements UserService {
+ 
+     private final UserRepository userRepository;
+     private final PasswordEncoder passwordEncoder;
++    private final UserVerificationTokenRepository userVerificationTokenRepository;
++    private final long tokenValiditySeconds;
++    private final ApplicationEventPublisher applicationEventPublisher;
+ 
+-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
++    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,
++            UserVerificationTokenRepository userVerificationTokenRepository,
++            @Value("${app.verification.token.validity:300}") long tokenValiditySeconds,
++            ApplicationEventPublisher applicationEventPublisher) {
+         this.userRepository = userRepository;
+         this.passwordEncoder = passwordEncoder;
++        this.userVerificationTokenRepository = userVerificationTokenRepository;
++        this.tokenValiditySeconds = tokenValiditySeconds;
++        this.applicationEventPublisher = applicationEventPublisher;
+     }
+ 
+     @Override
+     @Transactional
+-    public User registerUser(User user) {
++    public User registerUser(User user, String verifyEmailURL) {
+         user.setPassword(passwordEncoder.encode(user.getPassword()));
+ 
+-        user.setEnabled(true);
++        user.setEnabled(false);
+ 
+         Role userRole = new Role();
+         userRole.setUsername(user.getUsername());
+@@ -39,6 +56,38 @@ public class UserServiceImpl implements UserService {
+         user.setAuthorities(authorities);
+ 
+         User saved = userRepository.save(user);
++
++        UserVerificationToken userVerificationToken = createVerificationToken(user, verifyEmailURL);
++
++        UserVerificationEvent event = new UserVerificationEvent(userVerificationToken);
++        applicationEventPublisher.publishEvent(event);
++
+         return saved;
+     }
++
++    @Override
++    @Transactional
++    public boolean verifyEmail(String token) {
++        Optional<UserVerificationToken> verificationToken = userVerificationTokenRepository.findByToken(token);
++
++        if (verificationToken.isPresent() && !verificationToken.get().isExpired()) {
++            User user = verificationToken.get().getUser();
++            user.setEnabled(true);
++            userRepository.save(user);
++            userVerificationTokenRepository.delete(verificationToken.get());
++            return true;
++        }
++        return false;
++    }
++
++    private UserVerificationToken createVerificationToken(User user, String verifyEmailURL) {
++        UserVerificationToken verificationToken = new UserVerificationToken();
++        verificationToken.setToken(UUID.randomUUID().toString());
++        verificationToken.setUser(user);
++        verificationToken.setVerifyEmailURL(verifyEmailURL);
++        verificationToken.setExpiryDate(LocalDateTime.now().plusSeconds(tokenValiditySeconds));
++        verificationToken = userVerificationTokenRepository.save(verificationToken);
++        return verificationToken;
++    }
++
+ }
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+index 497c7d8..7705896 100644
+--- a/src/main/resources/application.properties
++++ b/src/main/resources/application.properties
+@@ -19,3 +19,12 @@ swagger.api.version=1.0
+ security.jwt.header=Authorization
+ security.jwt.prefix=Bearer
+ security.jwt.expiration=86400000
++
++# Email Configuration
++spring.mail.host=${GOLF_APP_MAIL_HOST:smtp.gmail.com}
++spring.mail.port=${GOLF_APP_MAIL_PORT:587}
++spring.mail.username=${GOLF_APP_MAIL_USERNAME}
++spring.mail.password=${GOLF_APP_MAIL_PASSWORD}
++spring.mail.properties.mail.smtp.auth=true
++spring.mail.properties.mail.smtp.starttls.enable=true
++
+diff --git a/src/main/resources/templates/registration/confirmation.html b/src/main/resources/templates/registration/confirmation.html
+new file mode 100644
+index 0000000..33282c3
+--- /dev/null
++++ b/src/main/resources/templates/registration/confirmation.html
+@@ -0,0 +1,12 @@
++<!DOCTYPE HTML>
++<html xmlns:th="http://www.thymeleaf.org">
++<head>
++    <title>Registration Confirmation</title>
++    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
++</head>
++<body>
++    <h1>Registration Confirmation</h1>
++    <div th:if="${message}" th:text="${message}"></div>
++    <a href="/login">Back to Login</a>
++</body>
++</html>
+diff --git a/src/main/resources/templates/registration/verification.html b/src/main/resources/templates/registration/verification.html
+new file mode 100644
+index 0000000..a4a6a1b
+--- /dev/null
++++ b/src/main/resources/templates/registration/verification.html
+@@ -0,0 +1,12 @@
++<!DOCTYPE HTML>
++<html xmlns:th="http://www.thymeleaf.org">
++<head>
++    <title>Email Verification</title>
++</head>
++<body>
++    <h1>Email Verification</h1>
++    <div th:if="${message}" th:text="${message}" style="color: green;"></div>
++    <div th:if="${error}" th:text="${error}" style="color: red;"></div>
++    <a href="/login">Go to Login</a>
++</body>
++</html>
+-- 
+2.45.1
+
