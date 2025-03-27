@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<TestSpec>
+    <Id>0000</Id>
+    <Title>Sample bug fixing task</Title>
+    <Objectives>
+The test is targeted to evaluate a coding agent performance with fixing a bug described following bug writing best practices.
+    </Objectives>
+    <Category>code-bugfixing</Category>
+    <Complexity>medium</Complexity>
+    <CodeRepository>https://github.com/PolinaTolkachova/golf-application</CodeRepository>
+    <!-- Technology stack -->
+    <Stack>
+        <Languages>
+            <Language primary="true">Java</Language>
+            <Language>HTML</Language>
+            <Language>JavaScript</Language>
+        </Languages>
+        <Technologies>
+            <Technology>Web UI</Technology>
+        </Technologies>
+    </Stack>
+    <Task>
+<![CDATA[
+Fix the issue described below.
+
+## Description
+Competition removing fails with error and the following error page is displayed:
+
+<page>
+Whitelabel Error Page
+
+This application has no explicit mapping for /error, so you are seeing this as a fallback.
+Mon Feb 24 15:01:23 EET 2025
+There was an unexpected error (type=Not Found, status=404).
+No static resource competition/1/remove.
+org.springframework.web.servlet.resource.NoResourceFoundException: No static resource competition/1/remove.
+    at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
+    at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
+    at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+</page>
+
+## Steps to reproduce
+
+1. Open Competitions page.
+2. Open an existing competition page. For instance, http://localhost:8082/competition/1 .
+3. Remove the competition by clicking the button "Delete competition".
+4. Confirm the competition deletion.
+
+## Actual results
+- The error page given above is displayed.
+
+## Expected results
+- The competition is deleted.
+- An user is returned to the Competitions page.
+]]>
+    </Task>
+    <Context>
+        <Files>
+            <File>src/main/java/com/golf/app/controller/CompetitionController.java</File>
+            <File>src/main/java/com/golf/app/service/CompetitionService.java</File>
+            <File>src/main/java/com/golf/app/service/CompetitionServiceImpl.java</File>
+            <File>src/main/resources/templates/competition/competition-details.html</File>
+            <File>src/main/resources/templates/competition/competition-main.html</File>
+            <File>src/main/resources/application.properties</File>
+        </Files>
+    </Context>
+    <Arrangement>
+        <Arrange>Copy logback-spring.xml to golf-application/src/main/resources/logback-spring.xml</Arrange>
+        <Arrange>Add the file to git index with the command: `git add src/main/resources/logback-spring.xml`</Arrange>
+        <Arrange>Record the changes to the repository with the command: `git commit -m "arrange codebase for test"`</Arrange>
+    </Arrangement>
+    <Act>
+        <ActStep>Submit the task and wait implementation plan is generated</ActStep>
+        <ActStep>Go to the implementation plan</ActStep>
+        <ActStep>Follow the implementation plan steps and modify source code following the instructions</ActStep>
+    </Act>
+    <TestPlan>
+        <TestStep>Update database configuration in application.properties to make it compatible with your local environment</TestStep>
+        <TestStep>Build the application with the command: `mvn clean install`</TestStep>
+        <TestStep>Launch the application with the command: `mvn spring-boot:run`</TestStep>
+        <TestStep>Open application UI at http://localhost:8082/competition</TestStep>
+        <TestStep>Click on competition id link to visit competition details page</TestStep>
+        <TestStep>Click 'Delete competition' button and confirm deletion</TestStep>
+        <TestStep>Add results of the manual tests to output.md. See (testing-template.md)[testing-template.md]</TestStep>
+    </TestPlan>
+    <Criteria>
+        <Criterion type="completeness" weight="high">
+            <Assert weight="high">Ensure the application change fixes the issue with competition deletion</Assert>
+            <Assert weight="medium">Make sure that the solution uses DELETE HTTP method for competition deletion</Assert>
+            <Assert weight="medium">Ensure the application shows competition main page after competition deletion</Assert>
+            <Assert weight="high">Ensure that competition deletion test reported as passed in test report</Assert>
+        </Criterion>
+        <Criterion type="completeness" weight="medium">
+            <Assert>Make sure that the application is built without errors</Assert>
+            <Assert>Make sure that the application is launched without errors</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="functionality">
+            <Assert>Ensure that the CHANGED code accomplishes the intended functionality.</Assert>
+            <Assert>Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="adherence to task requirements">
+            <Assert>Make sure that the CHANGES are primarily made to achieve the intended functionality.</Assert>
+            <Assert>Make sure that the CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="code quality">
+            <Assert>Ensure that the CHANGED code is syntactically correct, compiles without errors.</Assert>
+            <Assert>Ensure that the CHANGED code follows project style guides and maintain consistency with the existing codebase.</Assert>
+            <Assert>Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+            <Assert>Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+            <Assert>Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="documentation">
+            <Assert>Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="security">
+            <Assert>Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques.</Assert>
+            <Assert>Ensure that CHANGED code avoids exposing sensitive data.</Assert>
+            <Assert>Ensure that CHANGED code protects the application from common security vulnerabilities.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="configuration">
+            <Assert>Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+        </Criterion>
+    </Criteria>
+    <!-- Additional information -->
+    <MetaInfo>
+        <Meta>See samples of correct solution in the [exemplar directory](exemplar).</Meta>
+        <Meta>The sample and the assertion conditions are written for a solution using DELETE HTTP method, that is the semantically correct for resource deletion. However, an alternate solution using POST may be a more practical choice for resource deletion in a traditional web application.</Meta>
+    </MetaInfo>
+</TestSpec>

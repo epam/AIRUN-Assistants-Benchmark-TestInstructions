@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<TestSpec>
+    <Id>0014</Id>
+    <Title>User Account Menu in Golf application</Title>
+    <Category>solution-or-component-generation</Category>
+    <Complexity>low</Complexity>
+    <CodeRepository>https://github.com/PolinaTolkachova/golf-application</CodeRepository>
+    <Stack>
+        <Languages>
+            <Language primary="true">Java</Language>
+            <Language>HTML</Language>
+            <Language>JavaScript</Language>
+        </Languages>
+    </Stack>
+    <Task>
+<![CDATA[
+Create an account menu for the Golf application pages. Add the following items to the account menu:
+- logged user information including user name
+- logout link
+]]>
+    </Task>
+    <Context>
+        <Files>
+            <File>pom.xml</File>
+            <File>src/main/resources/templates/home.html</File>
+            <File>src/main/resources/templates/blocks/header.html</File>
+            <File>src/main/resources/static/styles/main.css</File>
+            <File>src/main/java/com/golf/app/controller/MainController.java</File>
+            <File>src/main/java/com/golf/app/model/User.java</File>
+            <File>src/main/java/com/golf/app/security/AppSecurityConfig.java</File>
+        </Files>
+    </Context>
+    <Arrangement>
+    </Arrangement>
+    <Act>
+        <ActStep>Submit the task and wait implementation plan is generated</ActStep>
+        <ActStep>Go to the implementation plan</ActStep>
+        <ActStep>Follow the implementation plan steps and modify source code following the instructions</ActStep>
+    </Act>
+    <TestPlan>
+        <TestStep>Build the application with the command: `mvn clean install`</TestStep>
+        <TestStep>Launch the application with the command: `mvn spring-boot:run`</TestStep>
+        <TestStep>Login to the application</TestStep>
+        <TestStep>Verify that an account menu is added to navigation bar on Main page, Players page, Round scores page, Competitions page, Courses page</TestStep>
+        <TestStep>Verify that the account menu is  dropdown menu and it expands downwards</TestStep>
+        <TestStep>Verify that an username is displayed in the account menu</TestStep>
+        <TestStep>Verify that a logout link is added to the account menu</TestStep>
+        <TestStep>Verify that an user is signed out after a click on the logout link</TestStep>
+        <TestStep>Add results of the manual tests to output.md. See (testing-template.md)[testing-template.md].</TestStep>
+    </TestPlan>
+    <Criteria>
+        <Criterion type="completeness" weight="high">
+            <Assert>Ensure that dependency org.thymeleaf.extras:thymeleaf-extras-springsecurity6 is added to pom.xml</Assert>
+        </Criterion>
+        <Criterion type="completeness" weight="high">
+            <Assert>Ensure that the HTML element of template containing the account menu includes the attribute defining the Thymeleaf security namespace</Assert>
+            <Assert>Ensure that script bootstrap.bundle.min.js is imported on pages with account menu</Assert>
+            <Assert>Ensure that div element with the attribute sec:authorize="isAuthenticated()" is added into nav element in the file containing the account menu</Assert>
+            <Assert>Ensure that an element with the attribute sec:authentication="name" is added into authentication guarded element in the file containing the account menu</Assert>
+            <Assert>Ensure that /logout link is added into authentication guarded element in the file containing the account menu</Assert>
+        </Criterion>
+        <Criterion type="completeness" weight="high">
+            <Assert>Make sure that an account menu is added to navigation bar</Assert>
+            <Assert>Make sure that the account menu expands downwards</Assert>
+            <Assert>Make sure that an username is displayed in the account menu</Assert>
+            <Assert>Make sure that a logout link is added to the account menu</Assert>
+            <Assert>Make sure that an user is signed out after a click on the logout link</Assert>
+        </Criterion>
+        <Criterion type="completeness" weight="medium">
+            <Assert>Make sure that the application is built without errors</Assert>
+            <Assert>Make sure that the application is launched without errors</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="functionality">
+            <Assert>Ensure that the CHANGED code accomplishes the intended functionality.</Assert>
+            <Assert>Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="adherence to task requirements">
+            <Assert>Make sure that the CHANGES are primarily made to achieve the intended functionality.</Assert>
+            <Assert>Make sure that the CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="code quality">
+            <Assert>Ensure that the CHANGED code is syntactically correct, compiles without errors.</Assert>
+            <Assert>Ensure that the CHANGED code follows project style guides and maintain consistency with the existing codebase.</Assert>
+            <Assert>Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+            <Assert>Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+            <Assert>Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="documentation">
+            <Assert>Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="security">
+            <Assert>Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques.</Assert>
+            <Assert>Ensure that CHANGED code avoids exposing sensitive data.</Assert>
+            <Assert>Ensure that CHANGED code protects the application from common security vulnerabilities.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="configuration">
+            <Assert>Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+        </Criterion>
+    </Criteria>
+    <MetaInfo>
+        <Meta>See samples of correct solution in the [exemplar directory](exemplar).</Meta>
+    </MetaInfo>
+</TestSpec>

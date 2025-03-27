@@ -15,12 +15,12 @@ evaluation_steps:
     - Ensure that the code to show player photo in player-details.html is changed to show placeholder image when no photo is available.
     - Ensure that a player photo placeholder image is created.
   accuracy:
-    - Make sure there is not unrequested code changes, unused imports or code.
-    - Ensure that the code is syntactically correct, compiles without errors, and accomplishes the intended functionality.
-    - Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized.
-    - Ensure that the code is well-documented, with clear and concise documentation for each part of the code.
-    - Ensure that the code is clean, readable, adheres to best practices and naming conventions.
-    - Ensure that the code is easily maintainable, with proper structure and separation of concerns.
-    - Make sure the code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.
-    - Ensure that application is secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.
-    - Ensure that application configuration is flexible and externalized to efficiently manage different environments.
+    - Make sure that CHANGES do not contain unrequested code modifications, unused imports or code.
+    - Ensure that the CHANGED code is syntactically correct, compiles without errors, and accomplishes the intended functionality.
+    - Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.
+    - Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.
+    - Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.
+    - Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.
+    - Make sure the CHANGED code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.
+    - Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.
+    - Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.
