@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<TestSpec>
+    <Id>0013</Id>
+    <Title>Add Zipkin-backed Tracing to Golf application</Title>
+    <Category>solution-or-component-generation</Category>
+    <Complexity>low</Complexity>
+    <CodeRepository>https://github.com/PolinaTolkachova/golf-application</CodeRepository>
+    <Stack>
+        <Languages>
+            <Language primary="true">Java</Language>
+        </Languages>
+    </Stack>
+    <Task>
+<![CDATA[
+Add tracing support to to Golf application.
+
+Use Zipkin as tracer implementation.
+
+Configure tracing to sample 100% of requests.
+]]>
+    </Task>
+    <Context>
+        <Files>
+            <File>pom.xml</File>
+            <File>src/main/resources/application.properties</File>
+        </Files>
+    </Context>
+    <TestPlan>
+        <TestStep><![CDATA[
+Start Zipkin either as Java jar:
+
+```bash
+java -jar zipkin.jar
+```
+
+or via Docker:
+
+```bash
+docker run -d -p 9411:9411 openzipkin/zipkin
+```
+]]>
+        </TestStep>
+        <TestStep></TestStep>
+        <TestStep>build the application with the command: `mvn clean install`</TestStep>
+        <TestStep>start the application with the command: `mvn spring-boot:run`</TestStep>
+        <TestStep>Open the application at http://localhost:8082/ and login</TestStep>
+        <TestStep>Verify that traces appeared in the Zipkin UI at http://localhost:9411/zipkin</TestStep>
+        <TestStep>Add results of the manual tests to output.md. See (testing-template.md)[testing-template.md]</TestStep>
+    </TestPlan>
+    <Assertion>
+        <Assert type="completeness">Ensure that org.springframework.boot:spring-boot-starter-actuator dependency has been added added to pom.xml</Assert>
+        <Assert type="completeness">Ensure that io.micrometer:micrometer-tracing-bridge-brave dependency has been added added to pom.xml</Assert>
+        <Assert type="completeness">Ensure that io.zipkin.reporter2:zipkin-reporter-brave dependency has been added added to pom.xml</Assert>
+        <Assert type="completeness">Ensure that management.tracing.sampling.probability=1.0 property has been configured in src/main/resources/application.properties</Assert>
+        <Assert type="completeness">Ensure that management.zipkin.tracing.endpoint=http://localhost:9411/api/v2/spans property has been configured in src/main/resources/application.properties</Assert>
+        <Assert type="completeness">Make sure that the application is built without errors</Assert>
+        <Assert type="completeness">Make sure that the application is launched without errors</Assert>
+        <Assert type="completeness">Make sure that the application is opened at http://localhost:8082/</Assert>
+        <Assert type="completeness">Make sure that an user has logged in in the application</Assert>
+        <Assert type="completeness">Verify that traces have beed appeared in the Zipkin UI at http://localhost:9411/zipkin</Assert>
+        <Assert type="accuracy">Make sure that CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is syntactically correct, compiles without errors, and accomplishes the intended functionality.</Assert>
+        <Assert type="accuracy">Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+        <Assert type="accuracy">Make sure the CHANGED code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.</Assert>
+        <Assert type="accuracy">Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.</Assert>
+        <Assert type="accuracy">Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+    </Assertion>
+    <MetaInfo>
+    </MetaInfo>
+</TestSpec>

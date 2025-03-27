@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<TestSpec>
+    <Id>0001</Id>
+    <Title>Make reverse engineering of DB schema and make it manageable with Flyway</Title>
+    <Category>code-refactoring</Category>
+    <Complexity>medium</Complexity>
+    <CodeRepository>https://github.com/PolinaTolkachova/golf-application</CodeRepository>
+    <Stack>
+        <Languages>
+            <Language primary="true">Java</Language>
+            <Language>SQL</Language>
+        </Languages>
+        <Technologies>
+            <Technology>Docker</Technology>
+            <Technology>MySQL</Technology>
+        </Technologies>
+    </Stack>
+    <Task>
+<![CDATA[
+The directory src/main/java/com/golf/app/model contains Java entities classes used by Jakarta Persistence.
+
+Create DML script to create Mysql database schema with tables corresponding to the given entities.
+
+The script should be used by Flyway to continuously remodel the database schema.
+
+Create Flyway configuration file in CONF format to manage database externally.
+
+Create a Docker Compose file to manage the MySQL container to be used for development and testing.
+]]>
+    </Task>
+    <Context>
+        <Files>
+            <File>src/main/java/com/golf/app/model/Competition.java</File>
+            <File>src/main/java/com/golf/app/model/Course.java</File>
+            <File>src/main/java/com/golf/app/model/Hole.java</File>
+            <File>src/main/java/com/golf/app/model/Judge.java</File>
+            <File>src/main/java/com/golf/app/model/Marker.java</File>
+            <File>src/main/java/com/golf/app/model/Par.java</File>
+            <File>src/main/java/com/golf/app/model/Player.java</File>
+            <File>src/main/java/com/golf/app/model/PlayerPhoto.java</File>
+            <File>src/main/java/com/golf/app/model/Round.java</File>
+            <File>src/main/java/com/golf/app/model/RoundScore.java</File>
+            <File>src/main/java/com/golf/app/model/Score.java</File>
+            <File>src/main/java/com/golf/app/model/ScoreCard.java</File>
+            <File>src/main/java/com/golf/app/model/ScoreCardImage.java</File>
+            <File>src/main/java/com/golf/app/model/StrokeIndex.java</File>
+            <File>src/main/java/com/golf/app/model/Team.java</File>
+            <File>src/main/java/com/golf/app/model/Tee.java</File>
+            <File>src/main/java/com/golf/app/model/User.java</File>
+            <File>src/main/resources/application.properties</File>
+        </Files>
+    </Context>
+    <TestPlan>
+        <TestStep>Update database configuration in application.properties to match it with your local environment</TestStep>
+        <TestStep>Set property in application.properties: `spring.jpa.hibernate.ddl-auto=validate`</TestStep>
+        <TestStep>Update database configuration in flyway.conf to match it with your local environment</TestStep>
+        <TestStep>Start Mysql container with the command: `docker-compose up`</TestStep>
+        <TestStep>Migrate the database with the command: `flyway -configFiles=flyway.conf migrate`</TestStep>
+        <TestStep>Build the application with the command: `mvn clean install`</TestStep>
+        <TestStep>Launch the application with the command: `mvn spring-boot:run`</TestStep>
+        <TestStep>
+<![CDATA[
+Send test requests to the application:
+
+```bash
+curl -v -u 1:1 http://localhost:8082/competition/data/1/round
+
+curl -v -u 1:1 http://localhost:8082/player
+
+curl -v -u 1:1 http://localhost:8082/round
+```
+]]>
+        </TestStep>
+    </TestPlan>
+    <Assertion>
+        <Assert type="completeness">Ensure that DB initialization migration script is created in src/main/resources/db/migration/ directory.</Assert>
+        <Assert type="completeness">Ensure that flyway.conf is created.</Assert>
+        <Assert type="completeness">Ensure that docker-compose.yml file is created.</Assert>
+        <Assert type="completeness">Ensure that docker-compose.yml contains definitions of mysql service.</Assert>
+        <Assert type="completeness">Ensure that docker-compose.yml contains definitions of mysql data volume.</Assert>
+        <Assert type="completeness">Ensure that Mysql container started without error with the command `docker-compose up`.</Assert>
+        <Assert type="completeness">Ensure that Flyway migration has been completed without errors.</Assert>
+        <Assert type="completeness">Ensure that Hibernate configuration is changed from updating database schema to validating database schema.</Assert>
+        <Assert type="completeness">Make sure that the application is built without errors</Assert>
+        <Assert type="completeness">Make sure that the application is launched without errors</Assert>
+        <Assert type="completeness">Make sure the application responds to GET request http://localhost:8082/competition/data/1/round without server error (500-599).</Assert>
+        <Assert type="completeness">Make sure the application responds to GET request http://localhost:8082/player without server error (500-599).</Assert>
+        <Assert type="completeness">Make sure the application responds to GET request http://localhost:8082/round without server error (500-599).</Assert>
+        <Assert type="accuracy">Make sure that CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is syntactically correct, compiles without errors, and accomplishes the intended functionality.</Assert>
+        <Assert type="accuracy">Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+        <Assert type="accuracy">Make sure the CHANGED code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.</Assert>
+        <Assert type="accuracy">Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.</Assert>
+        <Assert type="accuracy">Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+    </Assertion>
+    <MetaInfo>
+        <Meta>See [testing-template.md](testing-template.md)</Meta>
+    </MetaInfo>
+</TestSpec>

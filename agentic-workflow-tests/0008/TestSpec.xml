@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<TestSpec>
+    <Id>3</Id>
+    <Title>Refactor Golf application, replace logback logging with Log4j 2.x logging framework and SLF4J as logging facade</Title>
+    <Category>solution-migration</Category>
+    <Complexity>medium</Complexity>
+    <CodeRepository>https://github.com/PolinaTolkachova/golf-application</CodeRepository>
+    <Stack>
+        <Languages>
+            <Language primary="true">Java</Language>
+            <Language>XML</Language>
+        </Languages>
+    </Stack>
+    <Task>
+<![CDATA[
+Refactor Golf application, replace logback logging with log4j2.
+
+# migration
+
+Migrate logback configuration to log4j2 configuration.
+Configure log4j2 for performance.
+
+# logging
+Unify the application logging by using SLF4J logging facade:
+- replace all other loggers with SLF4J loggers everywhere in the application.
+- use Lombok annotation to declare logger whether it is used in class.
+- replace printing to system standard output with SLF4J logging in all classes.
+
+# cleanup
+Cleanup unused or legacy logging configuration.
+]]>
+    </Task>
+    <Context>
+        <Files>
+            <File>src/main/resources/application.properties</File>
+            <File>src/main/resources/logback-spring.xml</File>
+            <File>src/main/resources/logging.properties</File>
+            <File>pom.xml</File>
+            <File>src/main/java/com/golf/app/controller/PlayerController.java</File>
+            <File>src/main/java/com/golf/app/controller/RoundController.java</File>
+            <File>src/main/java/com/golf/app/security/CustomAccessDeniedHandler.java</File>
+            <File>src/main/java/com/golf/app/security/CustomLogoutSuccessHandler.java</File>
+        </Files>
+    </Context>
+    <Arrangement>
+        <Arrange>Copy logback-spring.xml to golf-application/src/main/resources/logback-spring.xml</Arrange>
+        <Arrange>Add the file to git index with the command: `git add src/main/resources/logback-spring.xml`</Arrange>
+        <Arrange>Record the changes to the repository with the command: `git commit -m "arrange codebase for test"`</Arrange>
+    </Arrangement>
+    <TestPlan>
+        <TestStep>Build the application with the command: `mvn clean install`</TestStep>
+        <TestStep>Make sure there is not logback dependency by running the command: `mvn dependency:tree -Dincludes=ch.qos.logback:*`</TestStep>
+        <TestStep>Start the application with the command: `mvn spring-boot:run`</TestStep>
+        <TestStep>Examine content of logs/golf-app.log</TestStep>
+    </TestPlan>
+    <Assertion>
+        <Assert type="completeness">Ensure spring-boot-starter-logging is excluded from spring-boot-starter dependency in pom.xml.</Assert>
+        <Assert type="completeness">Ensure spring-boot-starter-log4j2 dependency is added in pom.xml.</Assert>
+        <Assert type="completeness">Ensure com.lmax:disruptor dependency is added in pom.xml.</Assert>
+        <Assert type="completeness">Ensure logback-spring.xml is deleted from resources folder.</Assert>
+        <Assert type="completeness">Make sure there is not logback dependency by running the command `mvn dependency:tree -Dincludes=ch.qos.logback:*`.</Assert>
+        <Assert type="completeness">Ensure logging.properties is deleted from resources folder.</Assert>
+        <Assert type="completeness">Ensure logging properties prefixed logging.level. are removed from src/main/resources/application.properties.</Assert>
+        <Assert type="completeness">Ensure log4j2 configuration file is added in resources folder.</Assert>
+        <Assert type="completeness">Ensure Console appender is added in log4j2 configuration.</Assert>
+        <Assert type="completeness">Ensure RollingRandomAccessFile appender is added in log4j2 configuration.</Assert>
+        <Assert type="completeness">Ensure logger for "com.golf.app" is configured in log4j2 configuration.</Assert>
+        <Assert type="completeness">Ensure logger for "org.springframework.web" is configured in log4j2 configuration.</Assert>
+        <Assert type="completeness">Ensure ALL log4j2 loggers are configured as asynchronous.</Assert>
+        <Assert type="completeness">Ensure Slf4j annotation is added to PlayerController class.</Assert>
+        <Assert type="completeness">Ensure LOGGER field declaration is removed from PlayerController class.</Assert>
+        <Assert type="completeness">Ensure PlayerController addPlayer method logging is changed to log.info(...).</Assert>
+        <Assert type="completeness">Ensure PlayerController updatePlayer method logging is changed to log.info(...).</Assert>
+        <Assert type="completeness">Ensure PlayerController deletePlayer method logging is changed to log.info(...).</Assert>
+        <Assert type="completeness">Ensure Slf4j annotation is added to CustomAccessDeniedHandler class.</Assert>
+        <Assert type="completeness">Ensure CustomAccessDeniedHandler handle method logging is changed to log.info(...).</Assert>
+        <Assert type="completeness">Ensure Slf4j annotation is added to CompetitionController class.</Assert>
+        <Assert type="completeness">Make sure that all calls of System.out.println(...) are replaced with log.info(...) or log.warn(...) or log.debug(...) in CompetitionController class.</Assert>
+        <Assert type="completeness">Ensure Slf4j annotation is added to RoundController class.</Assert>
+        <Assert type="completeness">Make sure that all calls of System.out.println(...) are replaced with log.info(...) or log.warn(...) or log.debug(...) in RoundController class.</Assert>
+        <Assert type="completeness">Ensure Slf4j annotation is added to CustomLogoutSuccessHandler class.</Assert>
+        <Assert type="completeness">Make sure that a call of System.out.println(...) is replaced with log.info(...) or log.warn(...) or log.debug(...) in CustomLogoutSuccessHandler class.</Assert>
+        <Assert type="completeness">Ensure that the command `mvn clean install` output is given and contains evidence of the application successfully build.</Assert>
+        <Assert type="completeness">Ensure that the command `mvn spring-boot:run` output is given and contains evidence of the application successful run.</Assert>
+        <Assert type="completeness">Verify that the application console output is given and contains the application logs.</Assert>
+        <Assert type="completeness">Verify that logs/golf-app.log file is created AND contains the application log events.</Assert>
+        <Assert type="accuracy">Make sure that CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is syntactically correct, compiles without errors, and accomplishes the intended functionality.</Assert>
+        <Assert type="accuracy">Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+        <Assert type="accuracy">Make sure the CHANGED code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.</Assert>
+        <Assert type="accuracy">Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.</Assert>
+        <Assert type="accuracy">Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+        <Assert type="accuracy">Make sure that Log4j2 is configured for performance.</Assert>
+        <Assert type="accuracy">Make sure that parameterized messages are used everywhere in SLF4J logging calls to boost logging performance for disabled logging statements.</Assert>
+    </Assertion>
+    <MetaInfo>
+        <Meta>See [testing-template.md](testing-template.md) for example of extra report sections.</Meta>
+        <Meta>See samples of correct solution in the [exemplar directory](exemplar).</Meta>
+    </MetaInfo>
+</TestSpec>

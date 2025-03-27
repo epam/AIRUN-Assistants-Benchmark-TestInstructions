@@ -18,7 +18,7 @@ Create DML script to create Mysql database schema with tables corresponding to t
 
 The script should be used by Flyway to continuously remodel the database schema.
 
-Create Flyway configuration file in CONF format.
+Create Flyway configuration file in CONF format to manage database externally.
 
 Create a Docker Compose file to manage the MySQL container to be used for development and testing.
 ```
