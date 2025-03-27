@@ -17,7 +17,7 @@ Configure Spring Security to retrieve user information from the database.
 Consider that default Spring Security schema should be used to store users and roles.
 Ignore current user registration related model and functionality.
 
-Create a SQL script to import existing in-memory users and roles to database.
+Create a migration SQL script to import existing in-memory users and roles to database.
 ```
 
 - Submit the task description and wait implementation plan is generated
