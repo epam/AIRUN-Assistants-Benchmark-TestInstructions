@@ -25,7 +25,9 @@ A developer is trying to fix a bug related to the largest even number
 - Highlight the findLargestEvenNumber method
 - Type in the chat window:
 
-> Fix a bug the in the findLargestEvenNumber(List numbers) method to not throw exception
+```java
+Fix a bug the in the findLargestEvenNumber(List numbers) method to not throw exception
+```
 
 - Change the findLargestEvenNumber method to the suggested method
 

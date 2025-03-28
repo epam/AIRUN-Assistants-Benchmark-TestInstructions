@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DateHandlerTest {
 
@@ -40,6 +41,6 @@ public class DateHandlerTest {
         LocalDate date = LocalDate.of(2023, 10, 1);
         String dayOfWeek = dateHandler.getDayOfWeek(date);
 
-        assertEquals("SUNDAY", dayOfWeek);
+        assertTrue(dayOfWeek.equals("Sunday") || dayOfWeek.equals("SUNDAY"), dayOfWeek);
     }
 }

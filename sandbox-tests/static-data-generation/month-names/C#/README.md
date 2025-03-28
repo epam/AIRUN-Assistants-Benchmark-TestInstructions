@@ -38,7 +38,9 @@ string[] englishMonthNames = new string[] {
 - Open the Program class
 - Type in the chat window:
 
-> Create an array with the names of the months in English
+```
+Create an array with the names of the months in English
+```
 
 </details>
 

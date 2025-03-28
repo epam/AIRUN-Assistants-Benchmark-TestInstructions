@@ -26,9 +26,9 @@ A developer is trying to fix a bug related to the method for retrieving orders f
 - Remove the current value of the `@Query` annotation.
 - Type the following immediately after the `@Query` annotation:
 
-    ```java
-    ("SELECT
-    ```
+```java
+("SELECT
+```
 
 - Wait for the suggestion.
 - Accept a sequence of suggestions using the TAB and ENTER keys.
@@ -42,7 +42,9 @@ A developer is trying to fix a bug related to the method for retrieving orders f
 - Open the `OrderRepository` class.
 - Type in the chat window: 
 
-    > Rewrite the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method to fix the bug
+```
+Rewrite the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method to fix the bug
+```
 
 - Change the `findOrdersByStatusAndCustomerAndCostRangeAndDateRange` method to the suggested method.
 </details>

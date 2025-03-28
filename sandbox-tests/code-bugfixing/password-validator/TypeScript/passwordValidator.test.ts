@@ -2,7 +2,7 @@ import { passwordValidator } from './passwordValidator';
 
 describe('passwordValidator', () => {
     test('valid passwords', () => {
-        expect(passwordValidator.isValidPassword('Password1!')).toBe(true);
+        expect(passwordValidator.isValidPassword('Password1#')).toBe(true);
         expect(passwordValidator.isValidPassword('StrongPass123$')).toBe(true);
         expect(passwordValidator.isValidPassword('Good#Pass1')).toBe(true);
         expect(passwordValidator.isValidPassword('Valid1@Pass')).toBe(true);

@@ -25,7 +25,9 @@ A developer is trying to create comments for the Dockerfile file
 - Highlight the Dockerfile file
 - Type in the chat window:
 
-> Add detailed comments to the Dockerfile file definition
+```
+Add detailed comments to the Dockerfile file definition
+```
 
 - Change the Dockerfile implementation to the suggested implementation
 

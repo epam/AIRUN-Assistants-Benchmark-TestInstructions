@@ -43,7 +43,9 @@ A developer is trying to create a new method based on an existing one, using Pre
 - Highlight the insertUsersIntoUserTable method
 - Type in the chat window:
 
-> Optimize the insertUsersIntoUserTable method to use PreparedStatement
+```
+Optimize the insertUsersIntoUserTable method to use PreparedStatement
+```
 
 - Change the insertUsersIntoUserTable method to the suggested method
 

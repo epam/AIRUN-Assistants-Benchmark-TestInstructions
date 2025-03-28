@@ -25,7 +25,9 @@ A developer is trying to generate Swagger API documentation
 - Highlight the UserController class
 - Type in the chat window:
 
-> Implement the API documentation by applying Swagger annotations to the UsersController class
+```
+Implement the API documentation by applying Swagger annotations to the UsersController class
+```
 
 - Change the UserController implementation to the suggested implementation
 

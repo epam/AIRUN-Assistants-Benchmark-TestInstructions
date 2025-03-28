@@ -26,7 +26,9 @@ A developer is trying to generate unit test using PowerMock library
 - Highlight the buildInvoice method in the InvoiceService class
 - Type in the chat window:
 
-> Implement tests applying Mockito and JUnit Jupiter libraries for the buildInvoice method of the InvoiceService class
+```
+Implement tests applying Mockito and JUnit Jupiter libraries for the buildInvoice method of the InvoiceService class
+```
 
 - Add suggested tests to the InvoiceServiceTest class
 - Add all necessary imports

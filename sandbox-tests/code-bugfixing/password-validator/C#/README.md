@@ -25,9 +25,9 @@ A developer is trying to fix a bug related to password validation.
 - Remove the value of the `PASSWORD_REGEX` variable.
 - Move the cursor to the end of the following line:
 
-    ```C#
-    private static readonly string PASSWORD_REGEX = 
-    ```
+```C#
+private static readonly string PASSWORD_REGEX = 
+```
 
 - Wait for the suggestion.
 - Accept a sequence of suggestions using the TAB and ENTER keys.
@@ -40,7 +40,9 @@ A developer is trying to fix a bug related to password validation.
 - Open the `PasswordValidator` class.
 - Type the following in the chat window:
 
-    > Rewrite the PASSWORD_REGEX regular expression variable to fix the bug
+```
+Rewrite the PASSWORD_REGEX regular expression variable to fix the bug
+```
 
 - Change the `PASSWORD_REGEX` variable to the suggested variable.
 </details>

@@ -40,7 +40,9 @@ public static int CalculateFactorialOfNumber(int n) {
 - Open the Lib class 
 - Type in the chat window:
 
-> Implement the following method: public static int CalculateFactorialOfNumber(int n)
+```C#
+Implement the following method: public static int CalculateFactorialOfNumber(int n)
+```
 
 - Add the suggested method implementation to the Lib class
 

@@ -40,7 +40,9 @@ public static int Fibonacci(int n) {
 - Open the Lib class
 - Type in the chat window:
 
-> Implement public static int Fibonacci(int n) method that takes integer and produces a Fibonacci value for this number
+```C#
+Implement public static int Fibonacci(int n) method that takes integer and produces a Fibonacci value for this number
+```
 
 - Add the suggested method to the Lib class
 

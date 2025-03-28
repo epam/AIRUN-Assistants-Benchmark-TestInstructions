@@ -24,9 +24,9 @@ A developer is trying to refactor the POM file to move library versions into the
 - Open the `pom.xml` file.
 - Type after the `<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>` tag:
 
-    ```xml
-    <spring.boot.version>
-    ```
+```xml
+<spring.boot.version>
+```
 
 - Wait for the suggestion.
 - Accept a sequence of suggestions using the TAB and ENTER keys.
@@ -39,7 +39,9 @@ A developer is trying to refactor the POM file to move library versions into the
 - Open the `pom.xml` file.
 - Type the following in the chat window:
 
-    > Refactor the POM file to move library versions into the properties section
+```
+Refactor the POM file to move library versions into the properties section
+```
 
 - Change the file implementation to the suggested implementation.
 </details>

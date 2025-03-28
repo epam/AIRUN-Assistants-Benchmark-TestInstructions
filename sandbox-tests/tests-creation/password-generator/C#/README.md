@@ -77,7 +77,9 @@ public void GenerateRandomPassword_OnlySpecialCharacters()
 - Highlight the PwdTools class
 - Type in the chat window:
 
-> Implement unit tests for the GenerateRandomPassword method using nUnit
+```
+Implement unit tests for the GenerateRandomPassword method using nUnit
+```
 
 - Add suggested tests to the PwdToolsTests class
 - Add all necessary imports

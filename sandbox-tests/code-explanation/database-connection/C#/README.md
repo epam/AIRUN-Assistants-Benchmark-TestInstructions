@@ -23,7 +23,9 @@ A developer is trying to create a comment for the database connection
 - Highlight the DBUtils class
 - Type in the chat window:
 
-> Add comments to the DBUtils class that reflect the responsibilities of methods and the class itself
+```
+Add comments to the DBUtils class that reflect the responsibilities of methods and the class itself
+```
 
 </details>
 
