@@ -40,7 +40,9 @@ export function checkIfNumberIsPalindrome(num: number): boolean
 - Open the lib.ts file
 - Type in the chat window:
 
-> Implement export function checkIfNumberIsPalindrome(num: number): boolean
+```TypeScript
+Implement export function checkIfNumberIsPalindrome(num: number): boolean
+```
 
 - Add the suggested function to the lib.ts file
 

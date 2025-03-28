@@ -25,10 +25,10 @@ A developer is attempting to refactor a class to make it immutable.
 - Open the `Player` class.
 - Add the following import statement to the `Player` class:
 
-    ```java
-    import lombok.Value;
-    ```
-  
+```java
+import lombok.Value;
+```
+
 - Remove the inner implementation of the `Player` class.
 - Move the cursor to before the `Player` class definition.
 - Wait for the suggestion.
@@ -45,7 +45,9 @@ A developer is attempting to refactor a class to make it immutable.
 - Open the `Player` class.
 - Type the following in the chat window:
 
-    > Rewrite the class to make it immutable using Lombok annotations
+```
+Rewrite the class to make it immutable using Lombok annotations
+```
 
 - Change the class implementation to the suggested implementation.
 - Add all necessary imports.

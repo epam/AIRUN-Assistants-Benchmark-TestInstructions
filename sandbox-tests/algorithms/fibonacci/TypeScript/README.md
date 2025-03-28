@@ -40,7 +40,9 @@ export function fibonacci(n: number): number {
 - Open the lib.ts file
 - Type in the chat window:
 
-> Implement export function fibonacci(n: number): number
+```TypeScript
+Implement export function fibonacci(n: number): number
+```
 
 - Add the suggested function to the lib.ts file
 

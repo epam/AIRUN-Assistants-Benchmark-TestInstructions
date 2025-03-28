@@ -26,10 +26,10 @@ A developer is trying to refactor a class to implement the new Date and Time API
 - Remove all imports in the `DateHandler` class.
 - Add the following import statement to the `DateHandler` class:
 
-    ```java
-    import java.time.*;
-    import java.time.format.DateTimeFormatter;
-    ```
+```java
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+```
 
 - Remove the inner implementation of the `DateHandler` class.
 - Move the cursor to the beginning of the inner implementation of the `DateHandler` class.
@@ -44,7 +44,9 @@ A developer is trying to refactor a class to implement the new Date and Time API
 - Open the `DateHandler` class.
 - Type the following in the chat window:
 
-    > Refactor the code to use the java.time package
+```
+Refactor the code to use the java.time package
+```
 
 - Change the class implementation to the suggested implementation.
 - Add all necessary imports.

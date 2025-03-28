@@ -26,7 +26,9 @@ A developer is trying to refactor a long method by extracting a private method
 - Highlight the HandleResponse method
 - Type in the chat window:
 
-> Extract a private ValidateAccountResponse method and refactor the HandleResponse method using the ValidateAccountResponse
+```
+Extract a private ValidateAccountResponse method and refactor the HandleResponse method using the ValidateAccountResponse
+```
 
 - Change the handleResponse method to the suggested method
 - Add the ValidateAccountResponse method to the AccountService

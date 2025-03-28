@@ -26,7 +26,9 @@ A developer is trying to generate tests for a data transformer class
 - Highlight the DataTransformer class
 - Type in the chat window:
 
-> Create tests for all public methods of the DataTransformer class and cover both positive and negative scenarios
+```
+Create tests for all public methods of the DataTransformer class and cover both positive and negative scenarios
+```
 
 - Add suggested tests to the DataTransformerTest class
 - Add all necessary imports

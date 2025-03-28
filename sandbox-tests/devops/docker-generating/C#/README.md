@@ -35,7 +35,9 @@ A developer tries to generate a Dockerfile for a console application
 - Open the Dockerfile file
 - Type in the chat window:
 
-> Implement a Dockerfile for a console application using SDK and runtime dotnet 6.0
+```
+Implement a Dockerfile for a console application using SDK and runtime dotnet 6.0
+```
 
 </details>
 

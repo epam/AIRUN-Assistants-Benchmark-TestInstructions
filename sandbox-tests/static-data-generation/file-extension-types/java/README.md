@@ -40,7 +40,9 @@ public final String[] top10FileExtensionTypesWithDot =
 - Open the FileTypeRegistry class
 - Type in the chat window:
 
-> Create public top10FileExtensionTypesWithDot array with the top 10 file extension types
+```
+Create public top10FileExtensionTypesWithDot array with the top 10 file extension types
+```
 
 - Add the suggested implementation to the FileTypeRegistry class
 

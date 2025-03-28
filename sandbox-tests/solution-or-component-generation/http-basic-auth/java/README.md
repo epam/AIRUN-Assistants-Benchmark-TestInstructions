@@ -42,7 +42,9 @@ public String createHttpBasicAuthenticationHeader(String username, String passwo
 - Open the HttpBasicAuthentication class
 - Type in the chat window:
 
-> Implement the createHttpBasicAuthenticationHeader method that creates an HttpBasic Authentication header
+```
+Implement the createHttpBasicAuthenticationHeader method that creates an HttpBasic Authentication header
+```
 
 - Add the suggested method to the HttpBasicAuthentication class
 - Add all necessary imports

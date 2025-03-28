@@ -39,7 +39,9 @@ List<string> top10IsoCurrencyCodes = new List<string>() {
 - Open the Program class
 - Type in the chat window:
 
-> Create a list of 10 popular world currencies in ISO 4217 format without comments
+```
+Create a list of 10 popular world currencies in ISO 4217 format without comments
+```
 
 </details>
 

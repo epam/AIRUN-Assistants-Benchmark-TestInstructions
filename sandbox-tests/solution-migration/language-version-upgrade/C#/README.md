@@ -43,7 +43,9 @@ public string GreetNew(string name)
 - Highlight the Greet method
 - Type in the chat window:
 
-> Implement the Greet method using features of the C# 8.0 language version
+```
+Implement the Greet method using features of the C# 8.0 language version
+```
 
 - Change the Greet method to the suggested method
 

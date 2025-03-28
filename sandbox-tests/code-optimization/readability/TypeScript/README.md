@@ -25,7 +25,9 @@ A developer is trying to optimize code readability
 - Highlight the calculateDiscount method
 - Type in the chat window:
 
-> Optimize the calculateDiscount method to apply a switch statement instead of an if
+```
+Optimize the calculateDiscount method to apply a switch statement instead of an if
+```
 
 - Change the calculateDiscount method to the suggested method
 

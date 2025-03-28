@@ -25,7 +25,9 @@ A developer is trying to fix a bug related to ETL processing
 - Highlight the testExecute method
 - Type in the chat window:
 
-> Look into the CsvEtlCommand, CsvEtlCommandTest classes and fix the testExecute test to not throw FileNotFoundException exception
+```java
+Look into the CsvEtlCommand, CsvEtlCommandTest classes and fix the testExecute test to not throw FileNotFoundException exception
+```
 
 - Change the testExecute method to the suggested method
 

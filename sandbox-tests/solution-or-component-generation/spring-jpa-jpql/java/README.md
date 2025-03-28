@@ -34,11 +34,11 @@ A developer is trying to Query database using JPQL in Spring Boot project
 - Copy and paste the following method in the class
 
 ```java
-    @PostMapping
-    public ResponseEntity<ItemDTO> createItem(@RequestBody @Valid final ItemDTO itemDTO) {
-        Item item = itemService.create(convertToEntity(itemDTO));
-        return new ResponseEntity<>(convertToDto(item), HttpStatus.CREATED);
-    }
+@PostMapping
+public ResponseEntity<ItemDTO> createItem(@RequestBody @Valid final ItemDTO itemDTO) {
+    Item item = itemService.create(convertToEntity(itemDTO));
+    return new ResponseEntity<>(convertToDto(item), HttpStatus.CREATED);
+}
 ```
 
 *Assert conditions*

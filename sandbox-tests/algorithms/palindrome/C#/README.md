@@ -43,7 +43,9 @@ public static bool CheckIfNumberIsPalindrome(int n) {
 - Open the Lib class
 - Type in the chat window:
 
-> Implement public static bool CheckIfNumberIsPalindrome(int n) method to check whether a number is a palindrome
+```C#
+Implement public static bool CheckIfNumberIsPalindrome(int n) method to check whether a number is a palindrome
+```
 
 - Add the suggested method to the Lib class
 - Add all necessary imports

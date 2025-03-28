@@ -43,7 +43,9 @@ A developer is trying to update the Java version to 8
 - Highlight the getNormalizedNames method
 - Type in the chat window:
 
-> Implement the getNormalizedNames method using Stream API and Java 8 features
+```
+Implement the getNormalizedNames method using Stream API and Java 8 features
+```
 
 - Change the getNormalizedNames method to the suggested method
 
