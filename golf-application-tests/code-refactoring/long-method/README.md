@@ -12,7 +12,9 @@ https://github.com/PolinaTolkachova/golf-application
 - Highlight 91-102 lines of code
 - Open the chat AI interface and enter:
 
-> Extract a protected static setStableford method and refactor it to use a switch block instead of an if
+```
+Extract a protected static setStableford(score, netScorePar) method and refactor it to use a switch block instead of an if
+```
 
 - Submit the question
 - Add the suggested code to the ScoreUtils class

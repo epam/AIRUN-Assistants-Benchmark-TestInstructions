@@ -12,7 +12,9 @@ https://github.com/PolinaTolkachova/golf-application
 - Highlight the displayScoreCardInputPage method
 - Open the chat AI interface and enter:
 
-> Set all the data from the model attributes in the displayScoreCardInputPage method to a RoundScoreDto object and pass only that object as a single attribute named "roundScoreDto"
+```
+Set all the data from the model attributes in the displayScoreCardInputPage method to a RoundScoreDto object and pass only that object as a single attribute named "roundScoreDto"
+```
 
 - Submit the question
 - Replace the displayScoreCardInputPage method code with the suggested code

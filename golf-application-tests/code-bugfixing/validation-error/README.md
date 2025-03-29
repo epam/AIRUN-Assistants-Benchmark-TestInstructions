@@ -12,8 +12,10 @@ https://github.com/PolinaTolkachova/golf-application
 - Highlight the  _ getFieldErrors _  method
 - Open the chat AI interface and enter:
 
-> Resolve the error in the getFieldErrors method during validation of the player object:
+```
+Resolve the error in the getFieldErrors method during validation of the player object:
 java.lang.IllegalStateException: Duplicate key surname (attempted merging values Surname should not be empty and Surname should be between 3 and 50 characters)
+``` 
 
 - Submit the question 
 - Replace the method code with the suggested code

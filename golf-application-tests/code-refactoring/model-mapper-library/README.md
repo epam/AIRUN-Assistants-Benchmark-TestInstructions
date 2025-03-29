@@ -12,7 +12,9 @@ https://github.com/PolinaTolkachova/golf-application
 - Highlight  _ getCompetitionRounds(@PathVariable("id") Long id) _  and  _ convertToRoundDto _  methods
 - Open the chat AI interface and enter:
 
-> Refactor getCompetitionRounds method to apply ModelMapper
+```
+Refactor getCompetitionRounds method to apply ModelMapper
+```
 
 - Submit the question
 - Replace the methods code with the suggested one
