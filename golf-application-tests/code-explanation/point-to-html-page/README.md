@@ -10,7 +10,9 @@ https://github.com/PolinaTolkachova/golf-application
 
 - Open the chat AI interface and enter:
 
-> Provide the path to any html page implemented in this project
+```
+Provide the path to any html page implemented in this project
+```
 
 - Submit the question
 

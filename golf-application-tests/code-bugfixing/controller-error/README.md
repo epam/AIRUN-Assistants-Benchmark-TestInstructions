@@ -23,31 +23,6 @@ Content-Type 'application/x-www-form-urlencoded;charset=UTF-8' is not supported.
 
 </details>
 
-<details>
-<summary>Developer Agent:</summary>
-
-- Open the developer agent interface
-- Add files to context:
-    - src/main/java/com/golf/app/controller/UserController.java
-        - + fragment: registerUser method
-    - src/main/java/com/golf/app/model/User.java
-- Enter task description:
-
-```
-UserController class is src/main/java/com/golf/app/controller/UserController.java.
-User class is src/main/java/com/golf/app/model/User.java.
-
-The class method registerUser method throws error: "Content-Type 'application/x-www-form-urlencoded;charset=UTF-8' is not supported. org.springframework.web.HttpMediaTypeNotSupportedException: Content-Type 'application/x-www-form-urlencoded;charset=UTF-8' is not supported Fix the error. Add unit test for UserController.serController class is src\main\java\com\golf\app\controller\UserController.java. The class method registerUser method throws error: Content-Type 'application/x-www-form-urlencoded;charset=UTF-8' is not supported. org.springframework.web.HttpMediaTypeNotSupportedException: Content-Type 'application/x-www-form-urlencoded;charset=UTF-8' is not supported."
-
-Fix the error.
-```
-
-- Submit the task description and wait implementation plan is generated
-- Go to the implementation plan
-- Follow the implementation plan steps and modify source code following the instructions
-
-</details>
-
 *Assert conditions*
 
 - Copy the UserControllerTest.java file to the src/test/java/com/golf/app/controller Golf application project folder

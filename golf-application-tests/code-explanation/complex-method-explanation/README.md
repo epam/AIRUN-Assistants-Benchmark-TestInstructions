@@ -12,7 +12,9 @@ https://github.com/PolinaTolkachova/golf-application
 - Highlight the  _ displayScoreCardPage _  method
 - Open the chat AI interface and enter:
 
-> Add comments explaining the logic of the code to the displayScoreCardPage method for each block of code
+```
+Add comments explaining the logic of the code to the displayScoreCardPage method for each block of code
+```
 
 - Submit the question
 
