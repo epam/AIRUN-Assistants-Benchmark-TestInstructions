@@ -25,7 +25,7 @@ A developer is trying to refactor the POM file to move library versions into the
 - Type after the `<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>` tag:
 
 ```xml
-<spring.boot.version>
+<spring.boot.version>3.4.1</spring.boot.version>
 ```
 
 - Wait for the suggestion.

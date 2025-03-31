@@ -23,11 +23,11 @@ A developer is trying to fix a bug related to the method for retrieving orders f
 - Open the `code-bugfixing/order-repository/java` project.
 - Open the `Order` class.
 - Open the `OrderRepository` class.
-- Remove the current value of the `@Query` annotation.
-- Type the following immediately after the `@Query` annotation:
+- Comment out the `@Query` annotation implementation.
+- Type the following after the commented out code:
 
 ```java
-("SELECT
+@Query(
 ```
 
 - Wait for the suggestion.

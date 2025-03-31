@@ -22,8 +22,8 @@ A developer is trying to fix a bug related to password validation.
 
 - Open the project `code-bugfixing/password-validator/C#`.
 - Open the `PasswordValidator` class.
-- Remove the value of the `PASSWORD_REGEX` variable.
-- Move the cursor to the end of the following line:
+- Comment out the `PASSWORD_REGEX` variable implementation.
+- Type after the commented out code:
 
 ```C#
 private static readonly string PASSWORD_REGEX = 
