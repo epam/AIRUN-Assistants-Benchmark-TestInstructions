@@ -35,6 +35,7 @@ A developer is trying to refactor the POM file to move library versions into the
 
 <details> 
 <summary>Chat IDE:</summary>
+
 - Open the project `code-refactoring/pom-file/java`.
 - Open the `pom.xml` file.
 - Type the following in the chat window:

@@ -48,7 +48,18 @@ import org.springframework.http.*;
 @RestController
 ```
 
-- Comment out the inner implementation of the `PlayerController` class.
+- Remove the following code:
+
+```java
+private static final String PLAYER_MAIN_PAGE = "player/player-main";
+private static final String PLAYER_ADD_PAGE = "player/player-add";
+private static final String PLAYER_DETAILS_PAGE = "player/player-details";
+private static final String PLAYER_ATTRIBUTE = "player";
+private static final String PLAYERS_ATTRIBUTE = "players";
+private static final String REDIRECT_TO_PLAYER = "redirect:/player";
+```
+
+- Comment out the method implementation in the `PlayerController` class.
 - Move the cursor to the end of the `PlayerController` class.
 - Accept a sequence of suggestions using the TAB and ENTER keys.
 </details>
