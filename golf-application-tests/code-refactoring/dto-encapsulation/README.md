@@ -8,6 +8,7 @@ https://github.com/PolinaTolkachova/golf-application
 <details>
 <summary>Chat IDE:</summary>
 
+- Open the RoundScoreDto class
 - Go to class src/main/java/com/golf/app/controller/RoundScoreController.java
 - Highlight the displayScoreCardInputPage method
 - Open the chat AI interface and enter:

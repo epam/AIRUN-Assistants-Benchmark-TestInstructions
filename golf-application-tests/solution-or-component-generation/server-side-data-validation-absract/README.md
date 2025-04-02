@@ -8,6 +8,7 @@ https://github.com/PolinaTolkachova/golf-application
 <details>
 <summary>Chat IDE:</summary>
 
+- Open the class src/main/java/com/golf/app/dto/CourseDto.java
 - Go to class src/main/java/com/golf/app/controller/CourseController.java
 - Highlight the addCourse method
 - Open the chat AI interface and enter:
