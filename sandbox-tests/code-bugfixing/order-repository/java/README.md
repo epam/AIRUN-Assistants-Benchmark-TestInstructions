@@ -52,6 +52,10 @@ Rewrite the findOrdersByStatusAndCustomerAndCostRangeAndDateRange method to fix 
 *Assert Conditions:*
 - The code must compile.
 - Copy the `OrderRepositoryTest.java` file to the `code-bugfixing/order-repository/java/src/test/java/com/aicode/java` folder.
+- Run the following command:
+```
+mvn clean
+```
 - Run tests in the `OrderRepositoryTest` class. All tests must pass successfully.
 
 *Additional Note:* The correct solution is in the `correctResponse.txt` file.
