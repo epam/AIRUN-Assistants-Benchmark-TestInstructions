@@ -5,7 +5,8 @@ The repository contains instructions to run tests evaluating AI Code Assistants 
 
 There are the following kinds of tests:
 - [sandbox-tests](sandbox-tests) - common development tasks tests divided in several categories like algorithms, code-bugfixing, code-refactoring, etc. They are targeted to run in isolated code projects containing a few source files.
-- [golf-application-tests](golf-application-tests) - tests for the small golf application project containing about a hundred of source files. They are targeted to run in a rather big application context consisting of dozens source artifacts.
+- [eshop-application-tests](eshop-application-tests) - tests for the eShop reference .NET application.
+- [golf-application-tests](golf-application-tests) - tests for the small golf application Java project containing about a hundred of source files. They are targeted to run in a rather big application context consisting of dozens source artifacts.
 - [agentic-workflow-tests](agentic-workflow-tests) - tests to evaluate performance of AI Coding agents.
 
 ## Contributing
