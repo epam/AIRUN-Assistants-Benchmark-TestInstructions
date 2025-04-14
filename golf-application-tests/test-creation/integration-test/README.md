@@ -8,7 +8,7 @@ https://github.com/PolinaTolkachova/golf-application
 <details>
 <summary>Chat IDE:</summary>
 
-- Open the src/main/java/com/golf/app/dto/RoundDto.java
+- Open the src/main/java/com/golf/app/dto/RoundDto.java class
 - Go to class src/main/java/com/golf/app/api/CompetitionRestController.java
 - Highlight the CompetitionRestController class
 - Open the chat AI interface and enter:
