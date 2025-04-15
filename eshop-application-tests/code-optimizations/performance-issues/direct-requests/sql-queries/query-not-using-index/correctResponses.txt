@@ -1,0 +1,4 @@
+SELECT "Id" FROM ordering.orders WHERE "OrderDate" <= CURRENT_TIMESTAMP - @GracePeriodTime AND "OrderStatus" = 'Submitted'
+SELECT "Id" FROM ordering.orders WHERE "OrderDate" <= (CURRENT_TIMESTAMP - @GracePeriodTime) AND "OrderStatus" = 'Submitted'
+SELECT "Id" FROM ordering.orders WHERE "OrderStatus" = 'Submitted' AND "OrderDate" <= CURRENT_TIMESTAMP - @GracePeriodTime
+SELECT "Id" FROM ordering.orders WHERE "OrderStatus" = 'Submitted' AND "OrderDate" <= (CURRENT_TIMESTAMP - @GracePeriodTime)
