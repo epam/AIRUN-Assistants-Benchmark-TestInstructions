@@ -27,7 +27,7 @@ def validate(code: str) -> bool:
         validator_utils.clean_extra_whitespace(getConfirmedGracePeriodOrders_method)
         lines = getConfirmedGracePeriodOrders_method.splitlines()
         for line in lines:
-            if phrase_present('using') and not phrase_present('await using'):
+            if phrase_present(line, 'using') and not phrase_present(line, 'await using'):
                 print(f'{RED}using not changed to await using on the following line:{RESET}')
                 print(f'{RED}  {line}{RESET}')
                 validation_failed = True

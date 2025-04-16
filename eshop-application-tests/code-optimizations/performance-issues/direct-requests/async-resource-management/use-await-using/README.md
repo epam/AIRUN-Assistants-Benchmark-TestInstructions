@@ -26,4 +26,4 @@ Use `await using` in all async methods of the current file.
 - There are no compiler errors
 - Copy **validator.py** and **validator_utils.py** to **src/OrderProcessor/Services/**, open that folder in PowerShell and execute **validator.py**. Observe that the validator returns **Validation passed**.
 
-The **\*.cs** files with the expected implementation of the two functions that should be added or modified by AI are included here for reference.
+See **GetConfirmedGracePeriodOrders_correct.cs** for the expected implementation of the only function that should be changed by the AI.
