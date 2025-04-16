@@ -8,33 +8,18 @@ https://github.com/PolinaTolkachova/golf-application
 <details>
 <summary>Chat IDE:</summary>
 
+- Open the class src/main/java/com/golf/app/dto/CourseDto.java
 - Go to class src/main/java/com/golf/app/controller/CourseController.java
 - Highlight the addCourse method
 - Open the chat AI interface and enter:
 
-> Check for validation errors in the addCourse method for CourseDto parameter and return the error page ("error/error-page") with validation errors
+```
+Check for validation errors in the addCourse method for CourseDto parameter and return the error page ("error/error-page") with validation errors
+```
 
 - Submit the question
 - Update the addCourse method using the suggested code
 - Add all required imports
-
-</details>
-
-<details>
-<summary>Developer Agent:</summary>
-
-- Open the developer agent interface
-- Add files to context:
-    - src/main/java/com/golf/app/controller/CourseController.java
-        - + fragment: addCourse method
-    - src/main/java/com/golf/app/dto/CourseDto.java
-- Enter task description:
-
-> Check for validation errors in the addCourse method for CourseDto parameter and return the error page ("error/error-page") with validation errors
-
-- Submit the task description and wait implementation plan is generated
-- Go to the implementation plan
-- Follow the implementation plan steps and modify source code following the instructions
 
 </details>
 

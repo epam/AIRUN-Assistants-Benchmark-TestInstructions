@@ -12,28 +12,13 @@ https://github.com/PolinaTolkachova/golf-application
 - Highlight the filterChain method
 - Open the chat AI interface and enter:
 
-> Refactor the filterChain method to allow anonymous access on /login and restrict /admin to ADMIN roles
+```
+Refactor the filterChain method to allow anonymous access on /login and restrict /admin to ADMIN roles
+```
 
 - Submit the question
 - Replace the filterChain method with the suggested method
 - Add all required imports
-
-</details>
-
-<details>
-<summary>Developer Agent:</summary>
-
-- Open the developer agent interface
-- Add files to context:
-    - src/main/java/com/golf/app/security/AppSecurityConfig.java
-        - + fragment: filterChain method
-- Enter task description:
-
-> Refactor the filterChain method to allow anonymous access on /login and restrict /admin to ADMIN roles
-
-- Submit the task description and wait implementation plan is generated
-- Go to the implementation plan
-- Follow the implementation plan steps and modify source code following the instructions
 
 </details>
 

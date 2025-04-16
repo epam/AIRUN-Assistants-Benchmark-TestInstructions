@@ -12,7 +12,9 @@ https://github.com/PolinaTolkachova/golf-application
 - Highlight the CourseUtils class
 - Open the chat AI interface and enter:
 
-> Create unit tests for the buildHoles method. To do this, create an object of the CourseDto class with all the necessary fields
+```
+Create unit tests for the buildHoles method. To do this, create an object of the CourseDto class with all the necessary fields
+```
 
 - Submit the question
 - Add the suggested code to the src/test/java/com/golf/app/utils/CourseUtilsTest.java class

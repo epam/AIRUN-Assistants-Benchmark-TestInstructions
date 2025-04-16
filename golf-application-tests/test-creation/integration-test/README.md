@@ -8,11 +8,14 @@ https://github.com/PolinaTolkachova/golf-application
 <details>
 <summary>Chat IDE:</summary>
 
+- Open the src/main/java/com/golf/app/dto/RoundDto.java class
 - Go to class src/main/java/com/golf/app/api/CompetitionRestController.java
 - Highlight the CompetitionRestController class
 - Open the chat AI interface and enter:
 
-> Write a set of integration tests for this controller class using Spring MockMvc framework (@WebMvcTest annotation) and Spring Security @WithMockUser annotation to simulate authenticated user. Validate the data from response and HTTP status code using MockMvcResultMatchers. Try to test as much as possible of positive and negative scenarios
+```
+Write a set of integration tests for this controller class using Spring MockMvc framework (@WebMvcTest annotation) and Spring Security @WithMockUser annotation to simulate authenticated user. Validate the data from response and HTTP status code using MockMvcResultMatchers. Try to test as much as possible of positive and negative scenarios
+```
 
 - Submit the question
 - Add the suggested code to class src/test/java/com/golf/app/api/CompetitionRestControllerIntegrationTest.java

@@ -8,11 +8,14 @@ https://github.com/PolinaTolkachova/golf-application
 <details>
 <summary>Chat IDE:</summary>
 
+- Open the RoundScoreDto class
 - Go to class src/main/java/com/golf/app/controller/RoundScoreController.java
 - Highlight the displayScoreCardInputPage method
 - Open the chat AI interface and enter:
 
-> Set all the data from the model attributes in the displayScoreCardInputPage method to a RoundScoreDto object and pass only that object as a single attribute named "roundScoreDto"
+```
+Set all the data from the model attributes in the displayScoreCardInputPage method to a RoundScoreDto object and pass only that object as a single attribute named "roundScoreDto"
+```
 
 - Submit the question
 - Replace the displayScoreCardInputPage method code with the suggested code
