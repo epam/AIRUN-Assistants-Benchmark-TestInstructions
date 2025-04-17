@@ -26,7 +26,9 @@ A developer is trying to generate unit test with mocks
 - Highlight the Calculator class
 - Type in the chat window:
 
-> Create unit tests for the Calculator class using Mockito library
+```
+Create unit tests for the Calculator class using Mockito library
+```
 
 - Add suggested tests to the CalculatorTest class
 - Add all necessary imports

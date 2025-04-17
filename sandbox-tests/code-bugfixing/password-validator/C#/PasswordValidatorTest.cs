@@ -9,7 +9,7 @@ namespace Tests
         [Test]
         public void TestValidPasswords()
         {
-            Assert.IsTrue(PasswordValidator.IsValidPassword("Password1!"));
+            Assert.IsTrue(PasswordValidator.IsValidPassword("Password1#"));
             Assert.IsTrue(PasswordValidator.IsValidPassword("StrongPass123$"));
             Assert.IsTrue(PasswordValidator.IsValidPassword("Good#Pass1"));
             Assert.IsTrue(PasswordValidator.IsValidPassword("Valid1@Pass"));

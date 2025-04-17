@@ -42,7 +42,9 @@ public static double[] toGaussKruger(double latitude, double longitude) {
 - Open the GaussKrugerEvaluator class
 - Type in the chat window:
 
-> Implement public static double[] toGaussKruger(double latitude, double longitude) method that applies the Gauss Kruger algorithm
+```java
+Implement public static double[] toGaussKruger(double latitude, double longitude) method that applies the Gauss Kruger algorithm
+```
 
 - Add the toGaussKruger method to the GaussKrugerEvaluator class
 - Add all necessary imports

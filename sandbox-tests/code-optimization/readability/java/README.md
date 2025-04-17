@@ -25,7 +25,9 @@ A developer is trying to optimize code readability
 - Highlight the calculateDiscount method
 - Type in the chat window:
 
-> Optimize the calculateDiscount method by applying a switch statement and extracting the method to build Discount
+```
+Optimize the calculateDiscount method by applying a switch statement and extracting the method to build Discount
+```
 
 - Change the calculateDiscount method to the suggested method
 

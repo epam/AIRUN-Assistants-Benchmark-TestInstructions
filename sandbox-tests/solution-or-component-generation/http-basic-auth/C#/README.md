@@ -42,7 +42,9 @@ public string CreateBasicAuthenticationHeader(string username, string password) 
 - Open the HttpAuth class
 - Type in the chat window:
 
-> Implement the CreateBasicAuthenticationHeader(string username, string password) method that returns the HTTP basic authentication header
+```
+Implement the CreateBasicAuthenticationHeader(string username, string password) method that returns the HTTP basic authentication header
+```
 
 - Add the suggested method to the HttpAuth class
 - Add all necessary imports

@@ -1,1 +1,16 @@
-return Arrays.asList(directory.list((dir, name) -> name.startsWith(filePrefix) && name.endsWith(".csv")));
+package com.epam.aicode.java;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.Arrays;
+import java.util.List;
+
+public class CsvUtils {
+
+    public static final List<String> collectCsvFiles(String filePrefix, File directory) {
+        String[] names = directory.list((dir, name) ->
+            name.startsWith(filePrefix) && name.endsWith(".csv")
+        );
+        return Arrays.asList(names);
+    }
+}

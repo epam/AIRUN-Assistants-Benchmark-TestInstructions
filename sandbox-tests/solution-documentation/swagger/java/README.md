@@ -25,7 +25,9 @@ A developer is trying to generate Swagger API documentation
 - Highlight the UserController class
 - Type in the chat window:
 
-> Implement Java API documentation by applying Swagger annotations to the UserController. In the ApiOperation annotation, apply the response value
+```
+Implement Java API documentation by applying Swagger annotations to the UserController. In the ApiOperation annotation, apply the response value
+```
 
 - Change the UserController implementation to the suggested implementation
 

@@ -25,7 +25,9 @@ A developer is trying to refactor a method by encapsulating duplicate code
 - Highlight the ProcessPayment method
 - Type in the chat window:
 
-> Refactor the ProcessPayment method by encapsulating duplicate code
+```
+Refactor the ProcessPayment method by encapsulating duplicate code
+```
 
 - Change the ProcessPayment method to the suggested method
 

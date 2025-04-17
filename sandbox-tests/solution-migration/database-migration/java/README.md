@@ -42,8 +42,10 @@ A developer is trying to migrate data from one database to another
 - Highlight the DBUtils class
 - Type in the chat window:
 
-> Implement a method for migrating user data from one database to another that has the following parameters:
+```
+Implement a method for migrating user data from one database to another that has the following parameters:
 the source database connection and target database connection
+```
 
 - Add the suggested method to the DBUtils class
 

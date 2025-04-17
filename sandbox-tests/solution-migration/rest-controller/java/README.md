@@ -25,31 +25,42 @@ A developer is trying to migrate a controller to a REST controller for handling 
 - Open the `PlayerController` class.
 - Remove the following code:
 
-    ```java
-    import org.springframework.stereotype.Controller;
-    import org.springframework.ui.Model;
-    ```
+```java
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+```
 
 - Add the following import statement to the `PlayerController` class:
 
-    ```java
-    import org.springframework.http.*;
-    ```
+```java
+import org.springframework.http.*;
+```
 
 - Remove the following annotation:
 
-    ```java
-    @Controller
-    ```
+```java
+@Controller
+```
 
 - Add the following annotation to the `PlayerController` class:
 
-    ```java
-    @RestController
-    ```
+```java
+@RestController
+```
 
-- Remove the inner implementation of the `PlayerController` class.
-- Move the cursor to the beginning of the inner implementation of the `PlayerController` class.
+- Remove the following code:
+
+```java
+private static final String PLAYER_MAIN_PAGE = "player/player-main";
+private static final String PLAYER_ADD_PAGE = "player/player-add";
+private static final String PLAYER_DETAILS_PAGE = "player/player-details";
+private static final String PLAYER_ATTRIBUTE = "player";
+private static final String PLAYERS_ATTRIBUTE = "players";
+private static final String REDIRECT_TO_PLAYER = "redirect:/player";
+```
+
+- Comment out the method implementation in the `PlayerController` class.
+- Move the cursor to the end of the `PlayerController` class.
 - Accept a sequence of suggestions using the TAB and ENTER keys.
 </details>
 
@@ -60,7 +71,9 @@ A developer is trying to migrate a controller to a REST controller for handling 
 - Open the `PlayerController` class.
 - Type the following in the chat window:
 
-    > Rewrite the PlayerController as a REST controller that responds with JSON data using Spring Web. Apply ResponseEntity where required
+```
+Rewrite the PlayerController as a REST controller that responds with JSON data using Spring Web. Apply ResponseEntity where required
+```
 
 - Change the `PlayerController` implementation to the suggested implementation.
 - Add all necessary imports.

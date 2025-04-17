@@ -3,12 +3,12 @@ export class passwordValidator {
     // The password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one number,
     // and one special character. Whitespace is not allowed
     private static readonly PASSWORD_REGEX: RegExp = new RegExp(
-        "^(?=.*[0-9])" +
-        "(?=.*[a-z])" +
-        "(?=.*[A-Z])" +
-        "(?=.*[@#$%^&+=!])" +
-        "(?=\\S+$)" +
-        ".{8,}$"
+      "^(?=.*[0-9])" +         // At least one digit
+      "(?=.*[a-z])" +          // At least one lowercase letter
+      "(?=.*[A-Z])" +          // At least one uppercase letter
+      "(?=.*[@#$%^&+=!])" +     // At least one special character
+      "(?=\\S+$)" +            // No whitespace allowed
+      ".{8,}$"                 // At least 8 characters long
     );
 
     public static isValidPassword(password: string | null): boolean {

@@ -22,7 +22,9 @@ A developer is trying to generate a docker compose file that defines a web appli
 - Open the docker-compose.yml file
 - Type in the chat window:
 
-> Generate a docker-compose.yml file that defines two services: a web application (web) and a postgres database (db)
+```
+Generate a docker-compose.yml file that defines two services: a web application (web) and a postgres database (db)
+```
 
 </details>
 

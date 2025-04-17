@@ -25,7 +25,9 @@ A developer is trying to fix a bug related to an unhandled exception
 - Highlight the BankAccount class
 - Type in the chat window:
 
-> Fix the CheckBalance method to be able to handle exceptions by printing them to the console
+```
+Fix the CheckBalance method to be able to handle exceptions by printing them to the console
+```
 
 - Change the CheckBalance method to the suggested method
 

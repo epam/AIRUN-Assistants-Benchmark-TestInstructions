@@ -23,7 +23,9 @@ A developer is trying to create comments for an algorithm
 - Highlight the GaussKrugerToWGS84 method
 - Type in the chat window:
 
-> Add comments to the GaussKrugerToWGS84 method. It should be a detailed description of the algorithm
+```
+Add comments to the GaussKrugerToWGS84 method. It should be a detailed description of the algorithm
+```
 
 </details>
 

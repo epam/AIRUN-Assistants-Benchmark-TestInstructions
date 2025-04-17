@@ -20,7 +20,7 @@ A developer is trying to rewrite code using Java 8 Date Time API and types
 - Invoke code completion
 - Accept the best suggestion using the TAB and ENTER keys
 - Add all necessary imports
-- remove the old method and rename the suggested method to `daysBetween`
+- Remove the old method and rename the suggested method to `daysBetween`
 
 </details>
 

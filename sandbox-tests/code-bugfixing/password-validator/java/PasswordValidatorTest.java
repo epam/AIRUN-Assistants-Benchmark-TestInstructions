@@ -9,7 +9,7 @@ public class PasswordValidatorTest {
 
     @Test
     public void testValidPasswords() {
-        assertTrue(PasswordValidator.isValidPassword("Password1!"));
+        assertTrue(PasswordValidator.isValidPassword("Password1#"));
         assertTrue(PasswordValidator.isValidPassword("StrongPass123$"));
         assertTrue(PasswordValidator.isValidPassword("Good#Pass1"));
         assertTrue(PasswordValidator.isValidPassword("Valid1@Pass"));

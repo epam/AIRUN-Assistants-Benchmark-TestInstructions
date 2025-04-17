@@ -45,7 +45,9 @@ public static Map<String, BigDecimal> priceSortingParallelStream(Map<String, Big
 - Highlight the priceSorting method
 - Type in the chat window:
 
-> Implement the priceSorting method using a parallel stream
+```java
+Implement the priceSorting method using a parallel stream
+```
 
 - Change the priceSorting method to the suggested method
   

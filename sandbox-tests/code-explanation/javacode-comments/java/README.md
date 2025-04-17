@@ -25,7 +25,9 @@ A developer is trying to create Javadoc for a method
 - Highlight the FileProcessor file
 - Type in the chat window:
 
-> Add Javadoc comments to the processCsvToJson method explaining each line of code what it does
+```
+Add Javadoc comments to the processCsvToJson method explaining each line of code what it does
+```
 
 - Change the processCsvToJson method implementation to the suggested implementation
 
