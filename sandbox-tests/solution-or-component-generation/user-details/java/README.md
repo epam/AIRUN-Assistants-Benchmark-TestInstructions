@@ -22,15 +22,18 @@ A developer is trying to generate a UserDetailsImpl class that implements the Us
 <summary>Chat IDE:</summary>
 
 - Open the project solution-or-component-generation/user-details/java
+- Open the User class
+- Open the EUserRole class
+- Open the User class
+- Open the UserRole class
+- Open the UserStatus class
 - Open the UserDetailsImpl class
 - Type in the chat window:
 
 ```
-Generate an UserDetailsImpl class that implements the UserDetails interface from Spring Security.
-UserDetailsImpl class wraps a User object containing roles, username, and status.
-UserRole is a class that has a UserRole title.
-UserRole is an enumeration of ROLE_ADMIN, ROLE_CLIENT, ROLE_MODERATOR.
-UserStatus is an enumeration of ACTIVE, BANNED, DELETED.
+Generate the following UserDetailsImpl class implementation:
+- UserDetailsImpl must implement the UserDetails interface from Spring Security
+- UserDetailsImpl must wrap an existing User class object
 ```
 
 - Add the suggested implementation to the UserDetailsImpl class
