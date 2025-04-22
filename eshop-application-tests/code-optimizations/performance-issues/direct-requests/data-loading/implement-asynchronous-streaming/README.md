@@ -12,7 +12,7 @@
 - Open the chat AI interface and enter:
 
 ```text
-Please create method `StreamConfirmedGracePeriodOrders` implementing asynchronous streaming instead of `GetConfirmedGracePeriodOrders`. Do not introduce cancellation tokens.
+Please create method `StreamConfirmedGracePeriodOrders` implementing asynchronous streaming instead of `GetConfirmedGracePeriodOrders`. Do not introduce cancellation tokens. Remove method `GetConfirmedGracePeriodOrders`.
 ```
 
 - Submit the request
