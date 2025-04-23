@@ -25,9 +25,9 @@ A developer is trying to fix a bug in the method that calculates the most popula
 - Open the `OrderProcessor` class.
 - Type the following after the `calculateMostPopularProduct` method:
 
-    ```java
-    public String calculateMostPopularProductWithBugFix(List<Order> orders) {
-    ```
+```java
+public String calculateMostPopularProductWithBugFix(List<Order> orders) {
+```
 
 - Press ENTER.
 - Accept a sequence of suggestions using the TAB and ENTER keys.
@@ -43,7 +43,9 @@ A developer is trying to fix a bug in the method that calculates the most popula
 - Open the `OrderProcessor` class.
 - Type the following in the chat window:
 
-    > Rewrite the calculateMostPopularProduct method to fix the bug
+```java
+Rewrite the calculateMostPopularProduct method to fix the bug
+```
 
 - Change the `calculateMostPopularProduct` method to the suggested method.
 </details>

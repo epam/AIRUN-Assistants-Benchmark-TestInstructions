@@ -26,7 +26,9 @@ A developer is trying to fix a bug related to the sum of even number
 - Highlight the SumOfEvenNumbers method
 - Type in the chat window:
 
-> Implement the SumOfEvenNumbers method with a bug fix
+```
+Implement the SumOfEvenNumbers method with a bug fix
+```
 
 - Change the SumOfEvenNumbers method to the suggested method
 - Add all necessary imports

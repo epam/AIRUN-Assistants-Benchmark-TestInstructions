@@ -25,7 +25,9 @@ A developer is trying to fix a bug related to the largest even number
 - Highlight the FindLargestEvenNumber method
 - Type in the chat window:
 
-> Fix a bug in the FindLargestEvenNumber method to not throw an exception if the list of numbers does not contain even numbers
+```C#
+Fix a bug in the FindLargestEvenNumber method to not throw an exception if the list of numbers does not contain even numbers
+```
 
 - Change the FindLargestEvenNumber method to the suggested method
 

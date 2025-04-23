@@ -41,7 +41,9 @@ A developer is trying to apply Mapstruct mapper processor to map one Java object
 - Open the EmployeeMapperMapstruct interface
 - Type in the chat window:
 
-> Declare method converting Employee object to EmployeeDTO object in the EmployeeMapperMapstruct interface using MapStruct library
+```
+Declare method converting Employee object to EmployeeDTO object in the EmployeeMapperMapstruct interface using MapStruct library
+```
 
 - Add the suggested method to the EmployeeMapperMapstruct interface
 - Add all necessary imports

@@ -26,7 +26,9 @@ A developer is trying to generate unit test using mocks
 - Highlight the CalculateReferralBonus method
 - Type in the chat window:
 
-> Cover the CalculateReferralBonus method with 5 unit tests, using C#, NUnit and NSubstitute
+```
+Cover the CalculateReferralBonus method with 5 unit tests, using C#, NUnit and NSubstitute
+```
 
 - Add suggested tests to the Tests.cs class
 - Add all necessary imports

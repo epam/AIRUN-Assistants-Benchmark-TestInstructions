@@ -47,7 +47,9 @@ public static Map<String, BigDecimal> priceSortingUsingStreams(Map<String, BigDe
 - Highlight the priceSorting method implementation
 - Type in the chat window:
 
-> Refactor the priceSorting method using the Stream API
+```java
+Refactor the priceSorting method using the Stream API
+```
 
 - Change the priceSorting method to the suggested method
 - Add all necessary imports

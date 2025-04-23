@@ -39,7 +39,9 @@ A developer is trying to create a new method based on an existing one, using a S
 - Highlight the InsertUsersIntoUserTable method
 - Type in the chat window:
 
-> Optimize the InsertUsersIntoUserTable method to use SqliteCommand with Parameters
+```
+Optimize the InsertUsersIntoUserTable method to use SqliteCommand with Parameters
+```
 
 </details>
 

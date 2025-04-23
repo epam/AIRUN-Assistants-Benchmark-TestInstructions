@@ -42,7 +42,9 @@ A developer is trying to refactor a method by using a switch statement instead o
 - Highlight the HandleMessageError method
 - Type in the chat window:
 
-> Refactor the HandleMessageError method to use a switch instead of an if
+```
+Refactor the HandleMessageError method to use a switch instead of an if
+```
 
 - Change the HandleMessageError method to the suggested method
 

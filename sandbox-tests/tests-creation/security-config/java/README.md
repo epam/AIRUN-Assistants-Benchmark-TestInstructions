@@ -26,7 +26,9 @@ A developer is trying to generate tests for a security configuration class
 - Highlight the AppSecurityConfig class
 - Type in the chat window:
 
-> Create tests for the AppSecurityConfig class using Spring web security framework for testing and cover both positive and negative scenarios
+```
+Create tests for the AppSecurityConfig class using Spring web security framework for testing and cover both positive and negative scenarios
+```
 
 - Add suggested tests to the AppSecurityConfigTest class
 - Add all necessary imports

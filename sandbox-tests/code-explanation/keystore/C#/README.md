@@ -25,7 +25,9 @@ A developer is trying to create a comment for a keystore
 - Highlight the Keystore class
 - Type in the chat window:
 
-> Add detailed comments for the Keystore class to explain the class logic
+```
+Add detailed comments for the Keystore class to explain the class logic
+```
 
 - Change the Keystore implementation to the suggested implementation
 

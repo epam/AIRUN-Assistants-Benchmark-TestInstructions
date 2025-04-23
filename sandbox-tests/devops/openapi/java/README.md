@@ -25,7 +25,9 @@ A developer is trying to generate OpenAPI documentation for a controller
 - Highlight the Controller class
 - Type in the chat window:
 
-> Implement OpenAPI v3 controller definition in JSON
+```
+Implement OpenAPI v3 controller definition in JSON
+```
 
 - Add the suggested implementation to the generatedOpenApi.json file
 

@@ -41,7 +41,9 @@ A developer is trying to improve the performance of data retrieval by filtering 
 - Highlight the GetAllNonCompletedOrdersNonOptimized method
 - Type in the chat window:
 
-> Optimize the GetAllNonCompletedOrdersNonOptimized method and named it GetAllNonCompletedOrdersOptimized 
+```
+Optimize the GetAllNonCompletedOrdersNonOptimized method and named it GetAllNonCompletedOrdersOptimized
+```
 
 - Add the suggested method implementation to the OrdersRepository class
 

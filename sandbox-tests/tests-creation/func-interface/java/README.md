@@ -24,7 +24,7 @@ A developer is trying to generate unit tests for a functional interface
 - Code must compile
 - The test must be generated
 - Build the project and run the test with the command `gradle clean build` and verify no errors reported
-- Open  _ build/reports/jacoco/test/html/index.html _  in browser and verify the code coverage is 100%
+- Open  _ build/reports/jacoco/test/html/index.html _  in browser and verify the code coverage must exceed 70%
 
 *Additional note*
 

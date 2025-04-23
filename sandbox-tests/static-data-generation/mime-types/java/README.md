@@ -38,7 +38,9 @@ private String[] MIME_TYPES = {
 - Open the HttpResponseParser class
 - Type in the chat window:
 
-> Create an array with MIME types
+```
+Create an array with MIME types
+```
 
 </details>
 

@@ -35,7 +35,9 @@ A developer tries to generate a Dockerfile for a console application
 - Open the Dockerfile file
 - Type in the chat window:
 
-> Generate a dockerfile using Java openjdk-17. The artifactId is "java", the version is "1.0.0-SNAPSHOT"
+```
+Generate a dockerfile using Java openjdk-17. The artifactId is "java", the version is "1.0.0-SNAPSHOT"
+```
 
 </details>
 

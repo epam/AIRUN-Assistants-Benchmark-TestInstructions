@@ -21,7 +21,9 @@ A developer is trying to create a property description for a README file
 - Highlight the app.properties file
 - Type in the chat window:
 
-> Generate a README.md file with properties and group them in a table using markdown syntax
+```
+Generate a README.md file with properties and group them in a table using markdown syntax
+```
 
 </details>
 

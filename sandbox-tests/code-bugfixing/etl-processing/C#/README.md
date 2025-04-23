@@ -25,7 +25,9 @@ A developer is trying to fix a bug related to ETL processing
 - Highlight the ExecuteTest method
 - Type in the chat window:
 
-> Look into the CsvEtlCommand, CsvEtlCommandTest classes and fix the ExecuteTest test to not throw IOException exception
+```C#
+Look into the CsvEtlCommand, CsvEtlCommandTest classes and fix the ExecuteTest test to not throw IOException exception
+```
 
 - Change the ExecuteTest method to the suggested method
 

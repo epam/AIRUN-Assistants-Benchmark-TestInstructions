@@ -38,7 +38,9 @@ public static void createIndex(Statement statement) throws SQLException {
 - Highlight the DBUtils class
 - Type in the chat window:
 
-> Implement the createIndex(Statement statement) method to create an index on the name column in the Employee table
+```
+Implement the createIndex(Statement statement) method to create an index on the name column in the Employee table
+```
 
 </details>
 

@@ -25,7 +25,9 @@ A developer is trying to generate Javadoc comments for a class and a method
 - Highlight the FileProcessor class
 - Type in the chat window:
 
-> Implement Javadoc comments for the FileProcessor class and the processCsvToJson method
+```
+Implement Javadoc comments for the FileProcessor class and the processCsvToJson method
+```
 
 - Add the suggested implementation to the FileProcessor class
 
