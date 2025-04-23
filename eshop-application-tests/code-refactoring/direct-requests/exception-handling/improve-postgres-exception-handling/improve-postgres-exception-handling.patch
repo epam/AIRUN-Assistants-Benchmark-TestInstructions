@@ -1,0 +1,207 @@
+diff --git a/Directory.Packages.props b/Directory.Packages.props
+index e5645c8..4a3ee28 100644
+--- a/Directory.Packages.props
++++ b/Directory.Packages.props
+@@ -43,10 +43,9 @@
+     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspnetVersion)" />
+     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="$(AspnetVersion)" />
+     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="$(AspnetVersion)" />
+-
+     <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="$(AspnetVersion)" />
+     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.2.0" />
+-
++    <PackageVersion Include="Moq" Version="4.20.72" />
+     <PackageVersion Include="MSTest.TestFramework" Version="3.8.2" />
+     <PackageVersion Include="MSTest.TestAdapter" Version="3.8.2" />
+     <!-- Version together with EF -->
+@@ -99,10 +98,11 @@
+     <PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
+     <PackageVersion Include="Polly.Core" Version="8.5.2" />
+     <PackageVersion Include="System.Reflection.TypeExtensions" Version="4.7.0" />
++    <PackageVersion Include="Testcontainers.PostgreSql" Version="4.4.0" />
+     <PackageVersion Include="xunit" Version="2.9.3" />
+     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.2" />
+     <PackageVersion Include="Yarp.ReverseProxy" Version="2.3.0" />
+     <PackageVersion Include="IdentityModel" Version="7.0.0" />
+-    <PackageVersion Include="Scalar.AspNetCore" Version="2.0.26"/>
++    <PackageVersion Include="Scalar.AspNetCore" Version="2.0.26" />
+   </ItemGroup>
+ </Project>
+\ No newline at end of file
+diff --git a/tests/Ordering.UnitTests/GracePeriodManagerServiceTests.cs b/tests/Ordering.UnitTests/GracePeriodManagerServiceTests.cs
+new file mode 100644
+index 0000000..67e3cd8
+--- /dev/null
++++ b/tests/Ordering.UnitTests/GracePeriodManagerServiceTests.cs
+@@ -0,0 +1,144 @@
++﻿using Microsoft.Extensions.Options;
++using Moq;
++using Npgsql;
++using System.Reflection;
++using eShop.OrderProcessor.Services;
++using eShop.OrderProcessor;
++using eShop.EventBus.Abstractions;
++using Testcontainers.PostgreSql;
++using Docker.DotNet;
++using Docker.DotNet.Models;
++
++namespace Ordering.UnitTests
++{
++    [TestClass]
++    [DoNotParallelize]
++    [TestCategory("GracePeriodManagerServiceTests")]
++    public class GracePeriodManagerServiceTests
++    {
++        private class MemoryLogger<T> : ILogger<T>
++        {
++            public List<string> LoggedMessages = [];
++
++            public IDisposable BeginScope<TState>(TState state) where TState : notnull
++            {
++                throw new NotImplementedException();
++            }
++
++            public bool IsEnabled(LogLevel logLevel)
++            {
++                return logLevel == LogLevel.Error;
++            }
++
++            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
++            {
++                LoggedMessages.Add(formatter(state, exception));
++            }
++        }
++
++        private static PostgreSqlContainer postgresContainer;
++
++        private Mock<IOptions<BackgroundTaskOptions>> optionsMock;
++
++        private Mock<IEventBus> eventBusMock = new();
++
++        [ClassInitialize]
++        public static async Task ClassInitializeAsync(TestContext context)
++        {
++            postgresContainer = new PostgreSqlBuilder()
++                .WithDatabase("testdb")
++                .WithUsername("testuser")
++                .WithPassword("testpassword")
++                .Build();
++            await postgresContainer.StartAsync();
++        }
++
++        [ClassCleanup(ClassCleanupBehavior.EndOfClass)]
++        public static async Task ClassCleanupAsync()
++        {
++            if (postgresContainer != null)
++            {
++                try
++                {
++                    await postgresContainer.StopAsync();
++                }
++                finally
++                {
++                    await postgresContainer.DisposeAsync();
++                }
++            }
++
++            // sometimes, testcontainers/ruyk containers are not stopped automatically => forcing them to stop
++            using var dockerClient = new DockerClientConfiguration().CreateClient();
++            var containers = await dockerClient.Containers.ListContainersAsync(new ContainersListParameters() { All = true });
++            foreach (var container in containers)
++            {
++                if (container.Image.StartsWith("testcontainers/ryuk"))
++                {
++                    await dockerClient.Containers.StopContainerAsync(container.ID, new ContainerStopParameters());
++                }
++            }
++        }
++
++        public GracePeriodManagerServiceTests()
++        {
++            // mocking options
++            optionsMock = new();
++            optionsMock.Setup(o => o.Value)
++                .Returns(new BackgroundTaskOptions { GracePeriodTime = 10, CheckUpdateTime = 5 });
++        }
++
++        [TestMethod]
++        public async Task GetConfirmedGracePeriodOrders_PostgresException_NoDetail_NoInnerException()
++        {
++            // Arranging
++            var logger = new MemoryLogger<GracePeriodManagerService>();
++            var postgresConnectionString = postgresContainer.GetConnectionString();
++            var dataSourceBuilder = new NpgsqlDataSourceBuilder(postgresConnectionString);
++            // note: the database does not contain any tables
++            var dataSource = dataSourceBuilder.Build();
++            var service = new GracePeriodManagerService(optionsMock.Object, eventBusMock.Object, logger, dataSource);
++
++            // Acting
++            var method = typeof(GracePeriodManagerService)
++                .GetMethod("GetConfirmedGracePeriodOrders", BindingFlags.NonPublic | BindingFlags.Instance);
++            var result = await(ValueTask<List<int>>)method.Invoke(service, null);
++
++            // Asserting
++            Assert.AreEqual(0, result.Count);
++            Assert.AreEqual(1, logger.LoggedMessages.Count);
++            Assert.Contains("SQL error loading confirmed grace period orders: ", logger.LoggedMessages[0]);
++            Assert.Contains(PostgresErrorCodes.UndefinedTable, logger.LoggedMessages[0]);
++            Assert.IsFalse(logger.LoggedMessages[0].Contains("Detail:"));
++            Assert.IsFalse(logger.LoggedMessages[0].Contains("Root cause:"));
++        }
++
++        [TestMethod]
++        public async Task GetConfirmedGracePeriodOrders_NpgsqlException_WithInnerException()
++        {
++            // Arranging
++            var logger = new MemoryLogger<GracePeriodManagerService>();
++            var postgresConnectionString = postgresContainer.GetConnectionString();
++            var dataSourceBuilder = new NpgsqlDataSourceBuilder(postgresConnectionString);
++            // note: the database does not contain any tables
++            var dataSource = dataSourceBuilder.Build();
++            var service = new GracePeriodManagerService(optionsMock.Object, eventBusMock.Object, logger, dataSource);
++            // shutting down the container
++            await postgresContainer.StopAsync();
++
++            // Acting
++            var method = typeof(GracePeriodManagerService)
++                .GetMethod("GetConfirmedGracePeriodOrders", BindingFlags.NonPublic | BindingFlags.Instance);
++            var result = await(ValueTask<List<int>>)method.Invoke(service, null);
++
++            // Asserting
++            Assert.AreEqual(0, result.Count);
++            Assert.AreEqual(1, logger.LoggedMessages.Count);
++            Assert.Contains("General error loading confirmed grace period orders: ", logger.LoggedMessages[0]);
++            Assert.Contains("Root cause:", logger.LoggedMessages[0]);
++
++            // Cleanup
++            await postgresContainer.StartAsync();
++        }
++    }
++}
+diff --git a/tests/Ordering.UnitTests/Ordering.UnitTests.csproj b/tests/Ordering.UnitTests/Ordering.UnitTests.csproj
+index a2bebdb..0d10e6e 100644
+--- a/tests/Ordering.UnitTests/Ordering.UnitTests.csproj
++++ b/tests/Ordering.UnitTests/Ordering.UnitTests.csproj
+@@ -9,6 +9,7 @@
+ 
+   <ItemGroup>
+     <PackageReference Include="Microsoft.NET.Test.Sdk" />
++    <PackageReference Include="Moq" />
+     <PackageReference Include="MSTest.TestAdapter" />
+     <PackageReference Include="MSTest.TestFramework" />
+     <PackageReference Include="NSubstitute" />
+@@ -16,12 +17,14 @@
+       <PrivateAssets>all</PrivateAssets>
+       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+     </PackageReference>
++    <PackageReference Include="Testcontainers.PostgreSql" />
+   </ItemGroup>
+ 
+   <ItemGroup>
+     <ProjectReference Include="..\..\src\Ordering.API\Ordering.API.csproj" />
+     <ProjectReference Include="..\..\src\Ordering.Domain\Ordering.Domain.csproj" />
+     <ProjectReference Include="..\..\src\Ordering.Infrastructure\Ordering.Infrastructure.csproj" />
++    <ProjectReference Include="..\..\src\OrderProcessor\OrderProcessor.csproj" />
+   </ItemGroup>
+ 
+ </Project>
