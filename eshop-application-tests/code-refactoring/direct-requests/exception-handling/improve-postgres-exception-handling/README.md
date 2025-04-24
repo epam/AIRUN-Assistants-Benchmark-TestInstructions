@@ -26,6 +26,6 @@ Improve exception handling in method `GetConfirmedGracePeriodOrders`. Catch both
 - There are no compiler errors
 - Copy **improve-postgres-exception-handling.patch** to project root folder and open PowerShell there. Run command **git apply ./improve-postgres-exception-handling.patch**
 - Ensure you have **docker** installed on your machine
-- Navigate to **/tests/Ordering.UnitTests** and open PowerShell there. Run command **dotnet test --filter TestCategory=GracePeriodManagerServiceTests**. Observe **Test summary: total: 2, failed: 0, succeeded: 2** in the bottom of the output.
+- Navigate to **/tests/Ordering.IntegrationTests** and open PowerShell there. Run command **dotnet test --filter TestCategory=GracePeriodManagerServiceTests**. Observe **Test summary: total: 2, failed: 0, succeeded: 2** in the bottom of the output.
 
 See **GetConfirmedGracePeriodOrders_correct.cs** for the expected implementation of the only function that should be changed by the AI.
