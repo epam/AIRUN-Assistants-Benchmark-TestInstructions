@@ -1,0 +1,211 @@
+diff --git a/tests/Ordering.UnitTests/Application/OrdersWebApiTest.cs b/tests/Ordering.UnitTests/Application/OrdersWebApiTest.cs
+index c821d18..8506efa 100644
+--- a/tests/Ordering.UnitTests/Application/OrdersWebApiTest.cs
++++ b/tests/Ordering.UnitTests/Application/OrdersWebApiTest.cs
+@@ -4,10 +4,82 @@ using Microsoft.AspNetCore.Http.HttpResults;
+ using eShop.Ordering.API.Application.Queries;
+ using Order = eShop.Ordering.API.Application.Queries.Order;
+ using NSubstitute.ExceptionExtensions;
++using System.Collections.Immutable;
+ 
+ [TestClass]
++[TestCategory("OrdersApiTests")]
+ public class OrdersWebApiTest
+ {
++    private class MemoryLogger<T> : ILogger<T>
++    {
++        private class Scope(IEnumerable<KeyValuePair<string, object>> properties, Action<MemoryLogger<T>.Scope> disposeAction) : IDisposable
++        {
++            public IEnumerable<KeyValuePair<string, object>> Properties { get; } = properties;
++
++            public void Dispose() => disposeAction?.Invoke(this);
++        }
++
++        public List<string> LoggedMessages { get; private set; } = [];
++
++        private readonly AsyncLocal<ImmutableStack<Scope>> currentScopes = new AsyncLocal<ImmutableStack<Scope>>();
++
++        private static IEnumerable<KeyValuePair<string, object>> ConvertToProperties<TState>(TState state)
++        {
++            return state switch
++            {
++                IEnumerable<KeyValuePair<string, object>> keyValuePairs => keyValuePairs,
++                string message => [new KeyValuePair<string, object>("{OriginalFormat}", message)],
++                null => [],
++                _ => [new KeyValuePair<string, object>("{OriginalFormat}", state)]
++            };
++        }
++
++        private void RemoveScope(Scope scope)
++        {
++            var currentStack = currentScopes.Value;
++            if (!currentStack.IsEmpty && currentStack.Peek() == scope)
++            {
++                currentScopes.Value = currentStack.Pop();
++            }
++        }
++
++        public IDisposable BeginScope<TState>(TState state) where TState : notnull
++        {
++            var properties = ConvertToProperties(state);
++            var scope = new Scope(properties, RemoveScope);
++
++            var currentStack = currentScopes.Value ?? [];
++            currentScopes.Value = currentStack.Push(scope);
++
++            return scope;
++        }
++
++        public bool IsEnabled(LogLevel logLevel) => true;
++
++        private string GetScopeString()
++        {
++            var currentStack = currentScopes.Value ?? [];
++            var scopes = currentStack
++                .Reverse()
++                .SelectMany(scope => scope.Properties)
++                .GroupBy(kvp => kvp.Key)
++                .Select(group => group.Last());
++
++            var scopeDict = scopes.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
++            return string.Join(", ", scopeDict.Select(kvp => $"{kvp.Key}={kvp.Value}"));
++        }
++
++        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
++        {
++            var message = formatter(state, exception);
++            var scopeString = GetScopeString();
++            
++            var logMessage = string.IsNullOrEmpty(scopeString) ? message : $"{message} [{scopeString}]";
++
++            LoggedMessages.Add(logMessage);
++        }
++    }
++
+     private readonly IMediator _mediatorMock;
+     private readonly IOrderQueries _orderQueriesMock;
+     private readonly IIdentityService _identityServiceMock;
+@@ -25,61 +97,118 @@ public class OrdersWebApiTest
+     public async Task Cancel_order_with_requestId_success()
+     {
+         // Arrange
++        MemoryLogger<OrderServices> memoryLogger = new();
+         _mediatorMock.Send(Arg.Any<IdentifiedCommand<CancelOrderCommand, bool>>(), default)
+             .Returns(Task.FromResult(true));
+ 
+         // Act
+-        var orderServices = new OrderServices(_mediatorMock, _orderQueriesMock, _identityServiceMock, _loggerMock);
++        var orderServices = new OrderServices(_mediatorMock, _orderQueriesMock, _identityServiceMock, memoryLogger);
+         var result = await OrdersApi.CancelOrderAsync(Guid.NewGuid(), new CancelOrderCommand(1), orderServices);
+ 
+         // Assert
+         Assert.IsInstanceOfType<Ok>(result.Result);
++        Assert.AreEqual(1, memoryLogger.LoggedMessages.Count);
++        Assert.AreEqual(
++            "Sending command: IdentifiedCommand<CancelOrderCommand,Boolean> - OrderNumber: 1 (eShop.Ordering.API.Application.Commands.IdentifiedCommand`2[eShop.Ordering.API.Application.Commands.CancelOrderCommand,System.Boolean])",
++            memoryLogger.LoggedMessages[0]);
+     }
+ 
+     [TestMethod]
+     public async Task Cancel_order_bad_request()
+     {
+         // Arrange
++        MemoryLogger<OrderServices> memoryLogger = new();
+         _mediatorMock.Send(Arg.Any<IdentifiedCommand<CancelOrderCommand, bool>>(), default)
+             .Returns(Task.FromResult(true));
+ 
+         // Act
+-        var orderServices = new OrderServices(_mediatorMock, _orderQueriesMock, _identityServiceMock, _loggerMock);
++        var orderServices = new OrderServices(_mediatorMock, _orderQueriesMock, _identityServiceMock, memoryLogger);
+         var result = await OrdersApi.CancelOrderAsync(Guid.Empty, new CancelOrderCommand(1), orderServices);
+ 
+         // Assert
+         Assert.IsInstanceOfType<BadRequest<string>>(result.Result);
++        Assert.AreEqual(0, memoryLogger.LoggedMessages.Count);
++    }
++
++    [TestMethod]
++    public async Task Cancel_order_problem()
++    {
++        // Arrange
++        MemoryLogger<OrderServices> memoryLogger = new();
++        _mediatorMock.Send(Arg.Any<IdentifiedCommand<CancelOrderCommand, bool>>(), default)
++            .Returns(Task.FromResult(false));
++
++        // Act
++        var orderServices = new OrderServices(_mediatorMock, _orderQueriesMock, _identityServiceMock, memoryLogger);
++        var result = await OrdersApi.CancelOrderAsync(Guid.NewGuid(), new CancelOrderCommand(1), orderServices);
++
++        // Assert
++        Assert.IsInstanceOfType<ProblemHttpResult>(result.Result);
++        var problemDetails = ((ProblemHttpResult)result.Result).ProblemDetails;
++        Assert.AreEqual("Cancel order failed to process.", problemDetails.Detail);
++        Assert.AreEqual(1, memoryLogger.LoggedMessages.Count);
++        Assert.AreEqual(
++            "Sending command: IdentifiedCommand<CancelOrderCommand,Boolean> - OrderNumber: 1 (eShop.Ordering.API.Application.Commands.IdentifiedCommand`2[eShop.Ordering.API.Application.Commands.CancelOrderCommand,System.Boolean])",
++            memoryLogger.LoggedMessages[0]);
+     }
+ 
+     [TestMethod]
+     public async Task Ship_order_with_requestId_success()
+     {
+         // Arrange
++        MemoryLogger<OrderServices> memoryLogger = new();
+         _mediatorMock.Send(Arg.Any<IdentifiedCommand<ShipOrderCommand, bool>>(), default)
+             .Returns(Task.FromResult(true));
+ 
+         // Act
+-        var orderServices = new OrderServices(_mediatorMock, _orderQueriesMock, _identityServiceMock, _loggerMock);
++        var orderServices = new OrderServices(_mediatorMock, _orderQueriesMock, _identityServiceMock, memoryLogger);
+         var result = await OrdersApi.ShipOrderAsync(Guid.NewGuid(), new ShipOrderCommand(1), orderServices);
+ 
+         // Assert
+         Assert.IsInstanceOfType<Ok>(result.Result);
+-
++        Assert.AreEqual(1, memoryLogger.LoggedMessages.Count);
++        Assert.AreEqual(
++            "Sending command: IdentifiedCommand<ShipOrderCommand,Boolean> - OrderNumber: 1 (eShop.Ordering.API.Application.Commands.IdentifiedCommand`2[eShop.Ordering.API.Application.Commands.ShipOrderCommand,System.Boolean])",
++            memoryLogger.LoggedMessages[0]);
+     }
+ 
+     [TestMethod]
+     public async Task Ship_order_bad_request()
+     {
+         // Arrange
++        MemoryLogger<OrderServices> memoryLogger = new();
+         _mediatorMock.Send(Arg.Any<IdentifiedCommand<CreateOrderCommand, bool>>(), default)
+             .Returns(Task.FromResult(true));
+ 
+         // Act
+-        var orderServices = new OrderServices(_mediatorMock, _orderQueriesMock, _identityServiceMock, _loggerMock);
++        var orderServices = new OrderServices(_mediatorMock, _orderQueriesMock, _identityServiceMock, memoryLogger);
+         var result = await OrdersApi.ShipOrderAsync(Guid.Empty, new ShipOrderCommand(1), orderServices);
+ 
+         // Assert
+         Assert.IsInstanceOfType<BadRequest<string>>(result.Result);
++        Assert.AreEqual(0, memoryLogger.LoggedMessages.Count);
++    }
++
++    [TestMethod]
++    public async Task Ship_order_problem()
++    {
++        // Arrange
++        MemoryLogger<OrderServices> memoryLogger = new();
++        _mediatorMock.Send(Arg.Any<IdentifiedCommand<CreateOrderCommand, bool>>(), default)
++            .Returns(Task.FromResult(false));
++
++        // Act
++        var orderServices = new OrderServices(_mediatorMock, _orderQueriesMock, _identityServiceMock, memoryLogger);
++        var result = await OrdersApi.ShipOrderAsync(Guid.NewGuid(), new ShipOrderCommand(1), orderServices);
++
++        // Assert
++        Assert.IsInstanceOfType<ProblemHttpResult>(result.Result);
++        var problemDetails = ((ProblemHttpResult)result.Result).ProblemDetails;
++        Assert.AreEqual("Ship order failed to process.", problemDetails.Detail);
++        Assert.AreEqual(1, memoryLogger.LoggedMessages.Count);
++        Assert.AreEqual(
++            "Sending command: IdentifiedCommand<ShipOrderCommand,Boolean> - OrderNumber: 1 (eShop.Ordering.API.Application.Commands.IdentifiedCommand`2[eShop.Ordering.API.Application.Commands.ShipOrderCommand,System.Boolean])",
++            memoryLogger.LoggedMessages[0]);
+     }
+ 
+     [TestMethod]
