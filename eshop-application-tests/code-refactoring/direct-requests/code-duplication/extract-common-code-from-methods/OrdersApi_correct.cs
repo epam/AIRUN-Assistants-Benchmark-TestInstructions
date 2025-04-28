@@ -3,11 +3,7 @@
         CancelOrderCommand command,
         [AsParameters] OrderServices services)
     {
-        return await ShipOrCancelOrderAsync(
-            requestId,
-            command,
-            services,
-            "Cancel order failed to process.");
+        return await ShipOrCancelOrderAsync(requestId, command, services, command.OrderNumber, "Cancel order failed to process.");
     }
 
     public static async Task<Results<Ok, BadRequest<string>, ProblemHttpResult>> ShipOrderAsync(
@@ -15,17 +11,14 @@
         ShipOrderCommand command,
         [AsParameters] OrderServices services)
     {
-        return await ShipOrCancelOrderAsync(
-            requestId,
-            command,
-            services,
-            "Ship order failed to process.");
+        return await ShipOrCancelOrderAsync(requestId, command, services, command.OrderNumber, "Ship order failed to process.");
     }
 
     private static async Task<Results<Ok, BadRequest<string>, ProblemHttpResult>> ShipOrCancelOrderAsync<TCommand>(
         Guid requestId,
         TCommand command, 
         OrderServices services,
+        int orderNumber,
         string failureMessage)
         where TCommand : IRequest<bool>
     {
@@ -35,10 +28,6 @@
         }
 
         var identifiedCommand = new IdentifiedCommand<TCommand, bool>(command, requestId);
-
-        // Use reflection to get the OrderNumber property from the command
-        var orderNumberProperty = command.GetType().GetProperty("OrderNumber");
-        var orderNumber = orderNumberProperty?.GetValue(command);
 
         services.Logger.LogInformation(
             "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",

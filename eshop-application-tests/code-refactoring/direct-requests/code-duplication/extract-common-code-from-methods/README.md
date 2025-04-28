@@ -26,6 +26,6 @@ Refactor `CancelOrderAsync` and `ShipOrderAsync`. Extract as much as possible of
 - There are no compiler errors
 - Copy **extract-common-code-from-methods.patch** to project root folder and open PowerShell there. Run command **git apply ./extract-common-code-from-methods.patch**
 - Ensure you have **docker** installed on your machine
-- Navigate to **/tests/Ordering.UnitTests** and open PowerShell there. Run command **dotnet test --filter TestCategory=OrdersApiTests**. Observe **Test summary: total: 10, failed: 0, succeeded: 2** in the bottom of the output.
+- Navigate to **/tests/Ordering.UnitTests** and open PowerShell there. Run command **dotnet test --filter TestCategory=OrdersApiTests**. Observe **Test summary: total: 10, failed: 0, succeeded: 10** in the bottom of the output.
 
 See **OrdersApi_correct.cs** for the expected implementation of the only functions that should be changed by the AI.
