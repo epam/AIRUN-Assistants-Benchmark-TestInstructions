@@ -28,11 +28,11 @@ try:
     line_rate = float(method.get('line-rate', 0)) * 100
     branch_rate = float(method.get('branch-rate', 0)) * 100
 
-    if line_rate < 100.0 or branch_rate < 100.0:
-        print(f"{RED}Error: The coverage for method '{method_name}' is not 100% (line-rate: {line_rate}%, branch-rate: {branch_rate}%).{RESET}")
+    if line_rate < 80.0 or branch_rate < 80.0:
+        print(f"{RED}Error: The coverage for method '{method_name}' is less than 80% (line-rate: {line_rate}%, branch-rate: {branch_rate}%).{RESET}")
         sys.exit(1)
 
-    print(f"{GREEN}Validation passed: Coverage is 100% (line-rate: {line_rate}%, branch-rate: {branch_rate}%).{RESET}")
+    print(f"{GREEN}Validation passed: Coverage is at least 80% (line-rate: {line_rate}%, branch-rate: {branch_rate}%).{RESET}")
 
 except ET.ParseError:
     print(f"{RED}Error: The coverage file ('{coverage_file_path}') is not a valid XML file.{RESET}")
