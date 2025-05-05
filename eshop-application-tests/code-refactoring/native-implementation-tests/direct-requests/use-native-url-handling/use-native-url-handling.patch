@@ -1,0 +1,216 @@
+diff --git a/Directory.Packages.props b/Directory.Packages.props
+index e5645c8..f4f7224 100644
+--- a/Directory.Packages.props
++++ b/Directory.Packages.props
+@@ -23,6 +23,8 @@
+     <PackageVersion Include="Aspire.RabbitMQ.Client" Version="$(AspireVersion)" />
+     <PackageVersion Include="Aspire.StackExchange.Redis" Version="$(AspireVersion)" />
+     <PackageVersion Include="Aspire.Azure.AI.OpenAI" Version="$(AspireUnstablePackagesVersion)" />
++    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
++    <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
+     <PackageVersion Include="Microsoft.Extensions.ApiDescription.Server" Version="$(AspnetVersion)">
+       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+       <PrivateAssets>all</PrivateAssets>
+@@ -43,10 +45,8 @@
+     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspnetVersion)" />
+     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="$(AspnetVersion)" />
+     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="$(AspnetVersion)" />
+-
+     <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="$(AspnetVersion)" />
+     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.2.0" />
+-
+     <PackageVersion Include="MSTest.TestFramework" Version="3.8.2" />
+     <PackageVersion Include="MSTest.TestAdapter" Version="3.8.2" />
+     <!-- Version together with EF -->
+diff --git a/eShop.sln b/eShop.sln
+index b32d369..5411a2f 100644
+--- a/eShop.sln
++++ b/eShop.sln
+@@ -65,6 +65,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientApp", "src\ClientApp\
+ EndProject
+ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientApp.UnitTests", "tests\ClientApp.UnitTests\ClientApp.UnitTests.csproj", "{02878FFB-F4DA-4996-B4A6-308851A837C6}"
+ EndProject
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.UnitTests", "tests\Identity.UnitTests\Identity.UnitTests.csproj", "{B95464BD-FE4D-1211-D4AC-F09E571D2349}"
++EndProject
+ Global
+ 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+ 		Debug|Any CPU = Debug|Any CPU
+@@ -175,6 +177,10 @@ Global
+ 		{02878FFB-F4DA-4996-B4A6-308851A837C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+ 		{02878FFB-F4DA-4996-B4A6-308851A837C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+ 		{02878FFB-F4DA-4996-B4A6-308851A837C6}.Release|Any CPU.Build.0 = Release|Any CPU
++		{B95464BD-FE4D-1211-D4AC-F09E571D2349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{B95464BD-FE4D-1211-D4AC-F09E571D2349}.Debug|Any CPU.Build.0 = Debug|Any CPU
++		{B95464BD-FE4D-1211-D4AC-F09E571D2349}.Release|Any CPU.ActiveCfg = Release|Any CPU
++		{B95464BD-FE4D-1211-D4AC-F09E571D2349}.Release|Any CPU.Build.0 = Release|Any CPU
+ 	EndGlobalSection
+ 	GlobalSection(SolutionProperties) = preSolution
+ 		HideSolutionNode = FALSE
+@@ -205,6 +211,7 @@ Global
+ 		{66275483-5364-42F9-B7E6-410E6A1B5ECF} = {932D8224-11F6-4D07-B109-DA28AD288A63}
+ 		{938803BB-4F6F-4108-BDD1-2AD0180BBDC1} = {932D8224-11F6-4D07-B109-DA28AD288A63}
+ 		{02878FFB-F4DA-4996-B4A6-308851A837C6} = {A857AD10-40FF-4303-BEC2-FF1C58D5735E}
++		{B95464BD-FE4D-1211-D4AC-F09E571D2349} = {A857AD10-40FF-4303-BEC2-FF1C58D5735E}
+ 	EndGlobalSection
+ 	GlobalSection(ExtensibilityGlobals) = postSolution
+ 		SolutionGuid = {25728519-5F0F-4973-8A64-0A81EB4EA8D9}
+diff --git a/tests/Identity.UnitTests/Identity.UnitTests.csproj b/tests/Identity.UnitTests/Identity.UnitTests.csproj
+new file mode 100644
+index 0000000..157f2cb
+--- /dev/null
++++ b/tests/Identity.UnitTests/Identity.UnitTests.csproj
+@@ -0,0 +1,26 @@
++<Project Sdk="MSTest.Sdk/3.6.4">
++
++  <PropertyGroup>
++    <TargetFramework>net9.0</TargetFramework>
++    <LangVersion>latest</LangVersion>
++    <ImplicitUsings>enable</ImplicitUsings>
++    <Nullable>enable</Nullable>
++    <UseVSTest>true</UseVSTest>
++  </PropertyGroup>
++
++  <ItemGroup>
++    <PackageReference Include="coverlet.collector">
++      <PrivateAssets>all</PrivateAssets>
++      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
++    </PackageReference>
++    <PackageReference Include="coverlet.msbuild">
++      <PrivateAssets>all</PrivateAssets>
++      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
++    </PackageReference>
++  </ItemGroup>
++
++  <ItemGroup>
++    <ProjectReference Include="..\..\src\Identity.API\Identity.API.csproj" />
++  </ItemGroup>
++
++</Project>
+diff --git a/tests/Identity.UnitTests/MSTestSettings.cs b/tests/Identity.UnitTests/MSTestSettings.cs
+new file mode 100644
+index 0000000..aaf278c
+--- /dev/null
++++ b/tests/Identity.UnitTests/MSTestSettings.cs
+@@ -0,0 +1 @@
++[assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]
+diff --git a/tests/Identity.UnitTests/RedirectServiceTests.cs b/tests/Identity.UnitTests/RedirectServiceTests.cs
+new file mode 100644
+index 0000000..d582267
+--- /dev/null
++++ b/tests/Identity.UnitTests/RedirectServiceTests.cs
+@@ -0,0 +1,115 @@
++using eShop.Identity.API.Services;
++
++namespace eShop.Identity.UnitTests
++{
++    [TestClass]
++    [TestCategory("RedirectServiceTests")]
++    public sealed class RedirectServiceTests
++    {
++        private readonly RedirectService redirectService = new();
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_WithSigninOidc_ReturnsCorrectUri()
++        {
++            // Arrange
++            var url = "https://example.com?redirect_uri=https%3A%2F%2Fmyapp.com%2Fsignin-oidc";
++
++            // Act
++            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
++
++            // Assert
++            Assert.AreEqual("https://myapp.com/", result);
++        }
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_WithScope_ReturnsCorrectUri()
++        {
++            // Arrange
++            var url = "https://example.com?redirect_uri=https%3A%2F%2Fmyapp.com%2Fscope";
++
++            // Act
++            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
++
++            // Assert
++            Assert.AreEqual("https://myapp.com/", result);
++        }
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_ComplexUri_ReturnsDecodedUri()
++        {
++            // Arrange
++            var url = "https://example.com?redirect_uri=https%3A%2F%2Fmyapp.com%2Fapi%2Fv1%2Fsignin-oidc";
++
++            // Act
++            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
++
++            // Assert
++            Assert.AreEqual("https://myapp.com/api/v1/", result);
++        }
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_WithAmpersandInUrl_ReturnsCleanedUri()
++        {
++            // Arrange
++            var url = "https://example.com?redirect_uri=https%3A%2F%2Fmyapp.com%2F&signin-oidc";
++
++            // Act
++            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
++
++            // Assert
++            Assert.AreEqual("https://myapp.com/", result);
++        }
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_WithoutRedirectUri_ReturnsEmptyString()
++        {
++            // Arrange
++            var url = "https://example.com?param=value";
++
++            // Act
++            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
++
++            // Assert
++            Assert.AreEqual(string.Empty, result);
++        }
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_NoParams_ReturnsEmptyString()
++        {
++            // Arrange
++            var url = "https://example.com";
++
++            // Act
++            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
++
++            // Assert
++            Assert.AreEqual(string.Empty, result);
++        }
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_WithEmptyString_ReturnsEmptyString()
++        {
++            // Arrange
++            var url = string.Empty;
++
++            // Act
++            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
++
++            // Assert
++            Assert.AreEqual(string.Empty, result);
++        }
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_WithRedirectUriButNoSplitKey_ReturnsEmptyString()
++        {
++            // Arrange
++            var url = "https://example.com?redirect_uri=https%3A%2F%2Fmyapp.com%2Fnosplitkey";
++
++            // Act
++            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
++
++            // Assert
++            Assert.AreEqual(string.Empty, result);
++        }
++    }
++}
