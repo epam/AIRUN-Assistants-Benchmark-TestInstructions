@@ -9,7 +9,7 @@
 <summary>Chat IDE:</summary>
 
 - - Copy **generate-redirect-service-unit-tests.patch** to project root folder and open PowerShell there. Run command **git apply ./generate-redirect-service-unit-tests.patch**
-- Open files **src/IdentityAPI/Services/RedirectService.cs** and **tests/Identity.UnitTests/RedirectServiceTests.cs**
+- Open files **src/Identity.API/Services/RedirectService.cs** and **tests/Identity.UnitTests/RedirectServiceTests.cs**
 - Open the chat AI interface and enter:
 
 ```text
