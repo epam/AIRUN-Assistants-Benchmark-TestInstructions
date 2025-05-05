@@ -12,7 +12,7 @@
 - Open the chat AI interface and enter:
 
 ```text
-Improve exception handling in method `GetConfirmedGracePeriodOrders`: add handling for `PostgresException` and make logged errors more detailed.
+Improve exception handling in method `GetConfirmedGracePeriodOrders`: add handling for `PostgresException` and make logged errors more detailed. Log inner exceptions if available.
 ```
 
 - Submit the request
