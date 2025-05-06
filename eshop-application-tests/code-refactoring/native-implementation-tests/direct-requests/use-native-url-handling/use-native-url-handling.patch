@@ -57,14 +57,14 @@ index 0000000..aaf278c
 --- /dev/null
 +++ b/tests/Identity.UnitTests/MSTestSettings.cs
 @@ -0,0 +1 @@
-+∩╗┐[assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]
++[assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]
 diff --git a/tests/Identity.UnitTests/RedirectServiceSecurityTests.cs b/tests/Identity.UnitTests/RedirectServiceSecurityTests.cs
 new file mode 100644
 index 0000000..6565916
 --- /dev/null
 +++ b/tests/Identity.UnitTests/RedirectServiceSecurityTests.cs
 @@ -0,0 +1,87 @@
-+∩╗┐using eShop.Identity.API.Services;
++using eShop.Identity.API.Services;
 +
 +namespace eShop.Identity.UnitTests
 +{
