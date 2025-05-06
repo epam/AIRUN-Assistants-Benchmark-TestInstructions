@@ -1,27 +1,3 @@
-diff --git a/Directory.Packages.props b/Directory.Packages.props
-index e5645c8..f4f7224 100644
---- a/Directory.Packages.props
-+++ b/Directory.Packages.props
-@@ -23,6 +23,8 @@
-     <PackageVersion Include="Aspire.RabbitMQ.Client" Version="$(AspireVersion)" />
-     <PackageVersion Include="Aspire.StackExchange.Redis" Version="$(AspireVersion)" />
-     <PackageVersion Include="Aspire.Azure.AI.OpenAI" Version="$(AspireUnstablePackagesVersion)" />
-+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
-+    <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
-     <PackageVersion Include="Microsoft.Extensions.ApiDescription.Server" Version="$(AspnetVersion)">
-       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-       <PrivateAssets>all</PrivateAssets>
-@@ -43,10 +45,8 @@
-     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspnetVersion)" />
-     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="$(AspnetVersion)" />
-     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="$(AspnetVersion)" />
--
-     <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="$(AspnetVersion)" />
-     <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="9.2.0" />
--
-     <PackageVersion Include="MSTest.TestFramework" Version="3.8.2" />
-     <PackageVersion Include="MSTest.TestAdapter" Version="3.8.2" />
-     <!-- Version together with EF -->
 diff --git a/eShop.sln b/eShop.sln
 index b32d369..5411a2f 100644
 --- a/eShop.sln
@@ -56,10 +32,10 @@ index b32d369..5411a2f 100644
  		SolutionGuid = {25728519-5F0F-4973-8A64-0A81EB4EA8D9}
 diff --git a/tests/Identity.UnitTests/Identity.UnitTests.csproj b/tests/Identity.UnitTests/Identity.UnitTests.csproj
 new file mode 100644
-index 0000000..157f2cb
+index 0000000..af697ad
 --- /dev/null
 +++ b/tests/Identity.UnitTests/Identity.UnitTests.csproj
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,15 @@
 +<Project Sdk="MSTest.Sdk/3.6.4">
 +
 +  <PropertyGroup>
@@ -69,17 +45,6 @@ index 0000000..157f2cb
 +    <Nullable>enable</Nullable>
 +    <UseVSTest>true</UseVSTest>
 +  </PropertyGroup>
-+
-+  <ItemGroup>
-+    <PackageReference Include="coverlet.collector">
-+      <PrivateAssets>all</PrivateAssets>
-+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-+    </PackageReference>
-+    <PackageReference Include="coverlet.msbuild">
-+      <PrivateAssets>all</PrivateAssets>
-+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-+    </PackageReference>
-+  </ItemGroup>
 +
 +  <ItemGroup>
 +    <ProjectReference Include="..\..\src\Identity.API\Identity.API.csproj" />
@@ -92,124 +57,96 @@ index 0000000..aaf278c
 --- /dev/null
 +++ b/tests/Identity.UnitTests/MSTestSettings.cs
 @@ -0,0 +1 @@
-+[assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]
-diff --git a/tests/Identity.UnitTests/RedirectServiceTests.cs b/tests/Identity.UnitTests/RedirectServiceTests.cs
++∩╗┐[assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]
+diff --git a/tests/Identity.UnitTests/RedirectServiceSecurityTests.cs b/tests/Identity.UnitTests/RedirectServiceSecurityTests.cs
 new file mode 100644
-index 0000000..d582267
+index 0000000..6565916
 --- /dev/null
-+++ b/tests/Identity.UnitTests/RedirectServiceTests.cs
-@@ -0,0 +1,115 @@
-+using eShop.Identity.API.Services;
++++ b/tests/Identity.UnitTests/RedirectServiceSecurityTests.cs
+@@ -0,0 +1,87 @@
++∩╗┐using eShop.Identity.API.Services;
 +
 +namespace eShop.Identity.UnitTests
 +{
 +    [TestClass]
-+    [TestCategory("RedirectServiceTests")]
-+    public sealed class RedirectServiceTests
++    [TestCategory("RedirectServiceSecurityTests")]
++    public class RedirectServiceSecurityTests
 +    {
-+        private readonly RedirectService redirectService = new();
++        private readonly RedirectService redirectService = 
++            new(
++                [
++                    new Uri("https://trusted.com/callback"),
++                    new Uri("https://secure-site.com/return")
++                ]
++            );
 +
 +        [TestMethod]
-+        public void ExtractRedirectUriFromReturnUrl_WithSigninOidc_ReturnsCorrectUri()
++        public void ExtractRedirectUriFromReturnUrl_NonWhitelistedUrl_ReturnsEmpty()
 +        {
-+            // Arrange
-+            var url = "https://example.com?redirect_uri=https%3A%2F%2Fmyapp.com%2Fsignin-oidc";
-+
-+            // Act
-+            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
-+
-+            // Assert
-+            Assert.AreEqual("https://myapp.com/", result);
-+        }
-+
-+        [TestMethod]
-+        public void ExtractRedirectUriFromReturnUrl_WithScope_ReturnsCorrectUri()
-+        {
-+            // Arrange
-+            var url = "https://example.com?redirect_uri=https%3A%2F%2Fmyapp.com%2Fscope";
-+
-+            // Act
-+            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
-+
-+            // Assert
-+            Assert.AreEqual("https://myapp.com/", result);
-+        }
-+
-+        [TestMethod]
-+        public void ExtractRedirectUriFromReturnUrl_ComplexUri_ReturnsDecodedUri()
-+        {
-+            // Arrange
-+            var url = "https://example.com?redirect_uri=https%3A%2F%2Fmyapp.com%2Fapi%2Fv1%2Fsignin-oidc";
-+
-+            // Act
-+            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
-+
-+            // Assert
-+            Assert.AreEqual("https://myapp.com/api/v1/", result);
-+        }
-+
-+        [TestMethod]
-+        public void ExtractRedirectUriFromReturnUrl_WithAmpersandInUrl_ReturnsCleanedUri()
-+        {
-+            // Arrange
-+            var url = "https://example.com?redirect_uri=https%3A%2F%2Fmyapp.com%2F&signin-oidc";
-+
-+            // Act
-+            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
-+
-+            // Assert
-+            Assert.AreEqual("https://myapp.com/", result);
-+        }
-+
-+        [TestMethod]
-+        public void ExtractRedirectUriFromReturnUrl_WithoutRedirectUri_ReturnsEmptyString()
-+        {
-+            // Arrange
-+            var url = "https://example.com?param=value";
-+
-+            // Act
-+            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
-+
-+            // Assert
++            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://malicious.com?redirect_uri=https://malicious.com/callback");
 +            Assert.AreEqual(string.Empty, result);
 +        }
 +
 +        [TestMethod]
-+        public void ExtractRedirectUriFromReturnUrl_NoParams_ReturnsEmptyString()
++        public void ExtractRedirectUriFromReturnUrl_DoubleEncodedNonWhitelistedUrl_ReturnsEmpty()
 +        {
-+            // Arrange
-+            var url = "https://example.com";
-+
-+            // Act
-+            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
-+
-+            // Assert
++            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri=https%253A%252F%252Fmalicious.com%252Fcallback");
 +            Assert.AreEqual(string.Empty, result);
 +        }
 +
 +        [TestMethod]
-+        public void ExtractRedirectUriFromReturnUrl_WithEmptyString_ReturnsEmptyString()
++        public void ExtractRedirectUriFromReturnUrl_DoubleEncodedWhitelistedUrl_ReturnsUrl()
 +        {
-+            // Arrange
-+            var url = string.Empty;
++            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri=https%253A%252F%252Ftrusted.com%252Fcallback");
++            Assert.AreEqual("https://trusted.com/callback", result);
++        }
 +
-+            // Act
-+            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
-+
-+            // Assert
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_MalformedUrl_ReturnsEmpty()
++        {
++            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri=ht!tp://malformed-url");
 +            Assert.AreEqual(string.Empty, result);
 +        }
 +
 +        [TestMethod]
-+        public void ExtractRedirectUriFromReturnUrl_WithRedirectUriButNoSplitKey_ReturnsEmptyString()
++        public void ExtractRedirectUriFromReturnUrl_ValidWhitelistedUrl_ReturnsUrl()
 +        {
-+            // Arrange
-+            var url = "https://example.com?redirect_uri=https%3A%2F%2Fmyapp.com%2Fnosplitkey";
++            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri=https://trusted.com/callback");
++            Assert.AreEqual("https://trusted.com/callback", result);
++        }
 +
-+            // Act
-+            var result = redirectService.ExtractRedirectUriFromReturnUrl(url);
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_NoRedirectUriParameter_ReturnsEmpty()
++        {
++            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com");
++            Assert.AreEqual(string.Empty, result);
++        }
 +
-+            // Assert
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_EmptyRedirectUriValue_ReturnsEmpty()
++        {
++            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri=");
++            Assert.AreEqual(string.Empty, result);
++        }
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_InvalidPercentEncoding_ReturnsEmpty()
++        {
++            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri=%2");
++            Assert.AreEqual(string.Empty, result);
++        }
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_AmpersandSeparated_WhitelistedFirst_ReturnsWhitelisted()
++        {
++            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri=https://trusted.com/callback&https://malicious.com/callback");
++            Assert.AreEqual("https://trusted.com/callback", result);
++        }
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_AmpersandSeparated_MaliciousFirst_ReturnsEmpty()
++        {
++            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri=https://malicious.com/callback&https://trusted.com/callback");
 +            Assert.AreEqual(string.Empty, result);
 +        }
 +    }

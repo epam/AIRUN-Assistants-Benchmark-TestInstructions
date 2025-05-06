@@ -12,7 +12,7 @@
 - Open the chat AI interface and enter:
 
 ```text
-
+Refactor `ExtractRedirectUriFromReturnUrl`. Use native ASP.NET Core URL handling. Inject a hash set with whitelisted URIs into the service. Return the whole redirect URI if it is a valid whitelisted URI. If multiple return URIs are supplied, consider only the first one. Handle potential errors gracefully, returning an empty string. Do not use namespace prefixes in code. Do not modify any other files.
 ```
 
 - Submit the request
@@ -28,9 +28,9 @@
 - Navigate to **/tests/Identity.UnitTests** and open PowerShell there. Run command
 
 ```pwsh
- dotnet test --filter TestCategory=RedirectServiceTests --collect:"XPlat Code Coverage"; Move-Item -Path .\TestResults\*\coverage.cobertura.xml -Destination .\coverage.cobertura.xml -Force
+ dotnet test --filter TestCategory=RedirectServiceSecurityTests
 ```
 
-- Observe **Test summary: total: 8, failed: 0, succeeded: 8** in the bottom of the output.
+- Observe **Test summary: total: 10, failed: 0, succeeded: 10** in the bottom of the output.
 
 See **RedirectService_correct.cs** for the expected implementation.
