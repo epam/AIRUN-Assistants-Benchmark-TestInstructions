@@ -40,7 +40,6 @@ app.MapGet("/api/extract-redirect", (IRedirectService redirectService, [FromQuer
 
 - Ensure the start-up project is set to **eShop.AppHost**
 - Press F5 to start the programme (the whole programme, not just the Identity.API project)
-- Remove the added line from **/src/Identity.API/Program.cs**
 - Copy **validator.py** to **/src/Identity.API/**, open that folder in PowerShell and execute **validator.py**. Observe that the validator returns **Validation passed**. *Note: the validator will run an integration test against the modified service to ensure that it actually uses the whitelisted URLs added to settings.*
 
 See the files in the **/solution** folder for the expected implementation.
