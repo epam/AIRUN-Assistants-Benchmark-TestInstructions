@@ -31,8 +31,8 @@ Follow these key requirements:
 
 ## Assert
 
-- Open the solution in Visual Studio, run solution build and ensure that there are no errors
-- Open Test Explorer, run **Ordering.FunctionalTests** and **Ordering.UnitTests** and ensure all tests run successfully
+- Open the solution in Visual Studio, run solution build and ensure that there are no errors *(if there are, score 0)*
+- Open Test Explorer, run **Ordering.FunctionalTests** and **Ordering.UnitTests** and ensure all tests run successfully *(if not, score 0)*
 - Open a new window in the same or another **(?)** agent, enter the following prompt and observe the verdict
 
 ```text
