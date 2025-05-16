@@ -31,8 +31,7 @@ Follow these key requirements:
 
 ## Assert
 
-- Open the solution in Visual Studio. Ensure that **eShop.AppHost** is the startup project. Run the solution.
-- Run solution build and ensure that there are no errors
+- Open the solution in Visual Studio, run solution build and ensure that there are no errors
 - Open Test Explorer, run **Ordering.FunctionalTests** and **Ordering.UnitTests** and ensure all tests run successfully
 - Open a new window in the same or another **(?)** agent, enter the following prompt and observe the verdict
 
