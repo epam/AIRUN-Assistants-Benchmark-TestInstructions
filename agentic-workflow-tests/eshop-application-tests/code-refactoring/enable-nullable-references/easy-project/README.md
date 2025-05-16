@@ -36,7 +36,7 @@ Follow these key requirements:
 - Open a new window in the same or another **(?)** agent, enter the following prompt and observe the verdict
 
 ```text
-Perform a comprehensive analysis of Ordering.API project. Do not consider other projects, focus on the requested project. Analyze the extent to which it follows best practices with respect to nullable reference handling. Score it on a 0-5 scale defined as follows:
+Perform a comprehensive analysis of `Ordering.API` project. Do not consider other projects, focus on the requested project. Analyze the extent to which it follows best practices with respect to nullable reference handling. Score it on a 0-5 scale defined as follows:
 
 0: Nullable context disabled (`<Nullable>disable</Nullable>`). No nullability annotations or compiler analysis.
 1: Nullable context enabled (`<Nullable>enable</Nullable>`), but warnings suppressed globally (e.g., `.editorconfig` rules, `#nullable disable`). Minimal use of `?`/`!`.
