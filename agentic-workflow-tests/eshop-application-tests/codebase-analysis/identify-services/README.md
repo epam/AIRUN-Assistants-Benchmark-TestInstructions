@@ -6,7 +6,7 @@
 <https://github.com/AlexanderTarvid/eShop-250408>
 
 - Ensure that no file is open
-- Open the chat AI interface and enter:
+- Open the agent interface and enter:
 
 ```text
 Identify all services started by the solution. Shortly describe each service. Group services into logical groups.
