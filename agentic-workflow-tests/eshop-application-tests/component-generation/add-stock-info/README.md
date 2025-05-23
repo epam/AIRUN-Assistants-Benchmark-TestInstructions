@@ -17,7 +17,7 @@ On the webpage of a specific product, the status should be more detailed. It sho
 
 Modify Adventurer GPS Watch to have 0 items in stock in the initial database setup.
 
-Add a new product with a very long (max length as allowed by the database) multi-word title starting with 'A'.
+Add a new product with a very long (max length as allowed by the database) multi-word title starting with 'Ab'.
 ```
 
 - Submit the request
@@ -33,26 +33,27 @@ Add a new product with a very long (max length as allowed by the database) multi
 - Ensure that **eShop.AppHost** is the startup project and run the solution
 - In the Resources dashboard that open, click on the HTTPS link of **WebApp** and wait for products to show up
 - Verify that:
-  - The Ordering groups exists and appears directly above Brand, it includes **Name (A-Z)** and **Price (Asc)** entries, **Name (A-Z)** is toggled on and products are ordered by name
-  - Select any specific brand and observe that **Name (A-Z)** is still on and products are still ordered by name
-  - Click on **Price (Asc)** and observe that the brand selection remains the same, but products are now ordered by price
-  - While **Price (Asc)** is on, continue to Page 2 and observe that products are still sorted by price and the lowest price is not lower than the highest price on Page 1
-  - The styling of the Ordering group is consistent with Brand and Type
+  - The long-titled item appears on the webpage with the title shown completely, split across two lines without breaking words
+  - Items having two-line titles have the whole title styled in the same way as items having one-line titles
+  - Item "Adventurer GPS Watch" shows "Out of stock" in red exactly under the price aligned right
+  - All other items show "In stock" in green exactly under the price aligned right irrespective of the length of the title
+  - Click on "Adventurer GPS Watch", observe that on the product-specific page, "Out of stock" is shown in red between the price and the "Log in to purchase" button
+  - Go back and click on any other item, observe that on the product-specific page, "In stock (100 units)" is shown in green between the price and the "Log in to purchase" button
 
 ### Notes
 
-1. It is sufficient for the agent to change the following files:
+1. The color does not necessarily have to be exactly 'red' and exactly 'green'. It is acceptable if the color appears reddish or greeenish.
 
-    - /src/Catalog.API/Apis/CatalogApi.cs
-    - /src/WebApp/Components/Pages/Catalog/Catalog.razor
-    - /src/WebAppComponents/Catalog/CatalogSearch.razor
-    - /src/WebAppComponents/Services/CatalogService.cs
-    - /src/WebAppComponents/Services/ICatalogService.cs
+2. It is sufficient for the agent to change the following files:
 
-    The following files might also need to be modified (modifying the hybrid app was not directly requested, so not modifying these should not be considered a drawback, unless it results in a build error):
+    - /src/Catalog.API/Infrastructure/CatalogContextSeed.cs
+    - /src/Catalog.API/Setup/catalog.json
+    - /src/WebApp/Components/Pages/Item/ItemPage.razor
+    - /src/WebApp/Components/Pages/Item/ItemPage.razor.css
+    - /src/WebAppComponents/Catalog/CatalogItem.cs
+    - /src/WebAppComponents/Catalog/CatalogListItem.razor
+    - /src/WebAppComponents/Catalog/CatalogListItem.razor.css
 
-    - /src/HybridApp/Services/CatalogService.cs
-    - /src/HybridApp/Components/Pages/Catalog/Catalog.razor
-    - /src/HybridApp/Components/Pages/Catalog/CatalogSearcj.razor
+3. Ideally, the agent should generate a picture for the new product:
 
-2. The agent might propose a solution without modifying the API, using an inefficient workaround. This should be considered as a violation of the direct request for an efficient solution.
+    - src/Catalog.API/Pics/102.webp
