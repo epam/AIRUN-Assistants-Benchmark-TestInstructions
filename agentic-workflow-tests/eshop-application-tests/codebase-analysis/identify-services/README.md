@@ -9,7 +9,7 @@
 - Open the agent interface and enter:
 
 ```text
-Identify all services started by the solution. Shortly describe each service. Group services into logical groups.
+Identify all application and infrastructure services started by the solution, such as API or background services, which expose an HTTP or TCP endpoint. Shortly describe each service. Group services into logical groups.
 ```
 
 - Submit the request
