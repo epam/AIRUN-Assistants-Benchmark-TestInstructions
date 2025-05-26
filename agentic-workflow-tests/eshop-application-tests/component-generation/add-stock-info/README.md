@@ -32,13 +32,7 @@ Add a new product with a very long (max length as allowed by the database) multi
 - Open the solution in Visual Studio, run solution build and ensure that there are no errors
 - Ensure that **eShop.AppHost** is the startup project and run the solution
 - In the Resources dashboard that open, click on the HTTPS link of **WebApp** and wait for products to show up
-- Verify that:
-  - The long-titled item appears on the webpage with the title shown completely, split across two lines without breaking words
-  - Items having two-line titles have the whole title styled in the same way as items having one-line titles
-  - Item "Adventurer GPS Watch" shows "Out of stock" in red exactly under the price aligned right
-  - All other items show "In stock" in green exactly under the price aligned right irrespective of the length of the title
-  - Click on "Adventurer GPS Watch", observe that on the product-specific page, "Out of stock" is shown in red between the price and the "Log in to purchase" button
-  - Go back and click on any other item, observe that on the product-specific page, "In stock (100 units)" is shown in green between the price and the "Log in to purchase" button
+- Ensure that you have Node.js installed locally. Copy the **/e2e-tests** folder to your computer (or use it from the cloned repo), open it in PowerShell and run command **npm i && npx cypress run**. Wait for Cypress tests to run and observe that they all passed.
 
 ### Notes
 
