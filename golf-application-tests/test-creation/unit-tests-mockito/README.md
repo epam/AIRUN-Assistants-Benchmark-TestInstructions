@@ -12,7 +12,9 @@ https://github.com/PolinaTolkachova/golf-application
 - Highlight the CompetitionServiceImpl class
 - Open the chat AI interface and enter:
 
-> Implement unit tests for all methods of the CompetitionServiceImpl class applying Mockito library and cover both positive and negative scenarios
+```
+Implement unit tests for all methods of the CompetitionServiceImpl class applying Mockito library and cover both positive and negative scenarios
+```
 
 - Submit the question
 - Add the suggested code to the src/test/java/com/golf/app/service/CompetitionServiceImplTest.java class
@@ -28,13 +30,6 @@ https://github.com/PolinaTolkachova/golf-application
 - Check that tests cover the main functionalities and edge cases of the class logic
 - Check that the tests are isolated and do not depend on each other
 - Run tests in the CompetitionServiceImplTest class. Tests must pass successfully
-- Run the command in the terminal:
-
-```
-mvn clean test jacoco:report
-```
-
-- Open the target/site/jacoco/index.html file. The coverage must exceed 70% for CompetitionServiceImplTest class methods
 
 *Additional note*
 

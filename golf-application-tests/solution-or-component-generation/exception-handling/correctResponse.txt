@@ -5,8 +5,11 @@ public class CourseNotFoundException extends RuntimeException {
     public CourseNotFoundException(String message) {
         super(message);
     }
-}
 
+    public CourseNotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}
 package com.golf.app.controller;
 
 import com.golf.app.exception.CourseNotFoundException;

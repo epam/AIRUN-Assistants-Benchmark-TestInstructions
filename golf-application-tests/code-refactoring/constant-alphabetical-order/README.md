@@ -22,23 +22,6 @@ Primary sort is by the first word. If the first word is identical, sort by the n
 
 </details>
 
-<details>
-<summary>Developer Agent:</summary>
-
-- Open the developer agent interface
-- Add files to context:
-    - src/main/java/com/golf/app/utils/AppConstant.java
-- Enter task description:
-
-> Sort the constants alphabetically in the AppConstant class, treating the underscore `_` as a separator that implies a new word starting.
-Primary sort is by the first word. If the first word is identical, sort by the next word after the underscore
-
-- Submit the task description and wait implementation plan is generated
-- Go to the implementation plan
-- Follow the implementation plan steps and modify source code following the instructions
-
-</details>
-
 *Assert conditions*
 
 - Copy the AppConstantTest.java file to the src/test/java/com/golf/app/utils Golf application project folder
