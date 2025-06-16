@@ -13,9 +13,7 @@ namespace eShop.Identity.API.Services
             if (!query.TryGetValue("redirect_uri", out var redirectUriValues))
                 return string.Empty;
 
-            var redirectUri = redirectUriValues.FirstOrDefault();
-            if (redirectUri == null)
-                return string.Empty;
+            var redirectUri = redirectUriValues.First();
 
             // unescaping any encoded characters (such as : or /) in the redirect URL
             // also allows to unescape double-escaped characters
