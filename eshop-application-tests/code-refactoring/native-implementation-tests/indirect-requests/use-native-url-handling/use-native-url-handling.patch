@@ -53,18 +53,19 @@ index 0000000..af697ad
 +</Project>
 diff --git a/tests/Identity.UnitTests/MSTestSettings.cs b/tests/Identity.UnitTests/MSTestSettings.cs
 new file mode 100644
-index 0000000..aaf278c
+index 0000000..300f5b1
 --- /dev/null
 +++ b/tests/Identity.UnitTests/MSTestSettings.cs
 @@ -0,0 +1 @@
 +[assembly: Parallelize(Scope = ExecutionScope.MethodLevel)]
 diff --git a/tests/Identity.UnitTests/RedirectServiceSecurityTests.cs b/tests/Identity.UnitTests/RedirectServiceSecurityTests.cs
 new file mode 100644
-index 0000000..6565916
+index 0000000..0f734aa
 --- /dev/null
 +++ b/tests/Identity.UnitTests/RedirectServiceSecurityTests.cs
-@@ -0,0 +1,87 @@
+@@ -0,0 +1,117 @@
 +using eShop.Identity.API.Services;
++using Microsoft.VisualStudio.TestTools.UnitTesting;
 +
 +namespace eShop.Identity.UnitTests
 +{
@@ -76,7 +77,8 @@ index 0000000..6565916
 +            new(
 +                [
 +                    new Uri("https://trusted.com/callback"),
-+                    new Uri("https://secure-site.com/return")
++                    new Uri("https://secure-site.com/return"),
++                    new Uri("https://another-trusted.com/redirect?auto=true")
 +                ]
 +            );
 +
@@ -130,6 +132,13 @@ index 0000000..6565916
 +        }
 +
 +        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_EmptyRedirectUriValueWithoutEquals_ReturnsEmpty()
++        {
++            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri");
++            Assert.AreEqual(string.Empty, result);
++        }
++
++        [TestMethod]
 +        public void ExtractRedirectUriFromReturnUrl_InvalidPercentEncoding_ReturnsEmpty()
 +        {
 +            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri=%2");
@@ -149,5 +158,37 @@ index 0000000..6565916
 +            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri=https://malicious.com/callback&https://trusted.com/callback");
 +            Assert.AreEqual(string.Empty, result);
 +        }
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_InvalidUri_ReturnsEmtpy()
++        {
++            var result = redirectService.ExtractRedirectUriFromReturnUrl("Some invalid URI");
++            Assert.AreEqual(string.Empty, result);
++        }
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_EmptyUri_ReturnsEmtpy()
++        {
++            var result = redirectService.ExtractRedirectUriFromReturnUrl(string.Empty);
++            Assert.AreEqual(string.Empty, result);
++        }
++
++        [TestMethod]
++        public void ExtractRedirectUriFromReturnUrl_ValidIncludingAnotherQuestionMark_ReturnsUrl()
++        {
++            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://another-trusted.com?redirect_uri=https://another-trusted.com/redirect%3Fauto=true");
++            Assert.AreEqual("https://another-trusted.com/redirect?auto=true", result);
++        }
 +    }
 +}
+diff --git a/tests/Identity.UnitTests/stryker-config.yaml b/tests/Identity.UnitTests/stryker-config.yaml
+new file mode 100644
+index 0000000..b485f97
+--- /dev/null
++++ b/tests/Identity.UnitTests/stryker-config.yaml
+@@ -0,0 +1,5 @@
++stryker-config:
++    project: 'Identity.API.csproj'
++    mutation-level: 'Complete'
++    coverage-analysis: 'perTestInIsolation'
++    disable-mix-mutants: true
