@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<TestSpec>
+    <Id>0003</Id>
+    <Title>Refactor Golf application access-control layer, replace Basic Authentication with Oauth2 Authorization</Title>
+    <Category>code-refactoring</Category>
+    <Complexity>medium</Complexity>
+    <CodeRepository>https://github.com/PolinaTolkachova/golf-application</CodeRepository>
+    <Stack>
+        <Languages>
+            <Language primary="true">Java</Language>
+        </Languages>
+    </Stack>
+    <Task>
+<![CDATA[
+Refactor Golf application access-control layer, replace Basic Authentication with OAuth2 authorization.
+/admin endpoint should be accessed only by a client granted with GOLF:ADMIN scope.
+A client granted with GOLF:COACH scope should access all endpoints except /admin endpoint.
+A client granted with GOLF:USER scope should access all read only endpoints except /admin endpoint.
+]]>
+    </Task>
+    <Context>
+        <Files>
+            <File>pom.xml</File>
+            <File>src/main/resources/application.properties</File>
+            <File>src/main/java/com/golf/app/security/AppSecurityConfig.java</File>
+            <File>src/main/java/com/golf/app/controller/AdminController.java</File>
+            <File>src/main/java/com/golf/app/controller/CompetitionController.java</File>
+            <File>src/main/java/com/golf/app/controller/CompetitionExceptionHandlerController.java</File>
+            <File>src/main/java/com/golf/app/controller/CourseController.java</File>
+            <File>src/main/java/com/golf/app/controller/ExceptionHandlerController.java</File>
+            <File>src/main/java/com/golf/app/controller/MainController.java</File>
+            <File>src/main/java/com/golf/app/controller/PlayerController.java</File>
+            <File>src/main/java/com/golf/app/controller/PlayerPhotoController.java</File>
+            <File>src/main/java/com/golf/app/controller/RoundController.java</File>
+            <File>src/main/java/com/golf/app/controller/RoundScoreController.java</File>
+            <File>src/main/java/com/golf/app/controller/ScoreCardController.java</File>
+            <File>src/main/java/com/golf/app/controller/ScoreCardImageController.java</File>
+            <File>src/main/java/com/golf/app/controller/UserController.java</File>
+        </Files>
+    </Context>
+    <TestPlan>
+        <TestStep><![CDATA[
+download WireMock JWT Standalone extension with the command:
+
+```bash
+(cd extensions && curl -O https://repo1.maven.org/maven2/org/wiremock/extensions/wiremock-jwt-extension-standalone/0.1.0/wiremock-jwt-extension-standalone-0.1.0.jar)
+```
+]]>
+        </TestStep>
+        <TestStep><![CDATA[
+start Mysql container and OAuth2 authorization server container with the command:
+
+```bash
+docker-compose up
+```
+]]>
+        </TestStep>
+        <TestStep>update database configuration in application.properties to match it with your local environment</TestStep>
+        <TestStep>update OAUTH2 resource server URI configuration in application.properties to match it with your local environment</TestStep>
+        <TestStep>set org.springframework.security logging level to DEBUG in src/main/resources/logback-spring.xml by adding the logger:
+<![CDATA[
+```xml
+    <logger name="org.springframework.security" level="DEBUG"/>
+```
+]]>
+        </TestStep>
+        <TestStep>build the application with the command: `mvn clean install`</TestStep>
+        <TestStep>start the application with the command: `mvn spring-boot:run`</TestStep>
+        <TestStep><![CDATA[
+assert /admin request is accessible with GOLF:ADMIN scope by running the commands:
+
+```bash
+ACCESSTOKEN=`curl -s --request POST --url ${GOLF_OAUTH2_SERVER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:ADMIN" | jq -r .access_token`
+
+curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admin
+```
+]]>
+        </TestStep>
+        <TestStep><![CDATA[
+verify the response:
+
+```
+HTTP status code: 200
+Content-Type: text/plain;charset=UTF-8
+Body: admin
+```
+]]>
+        </TestStep>
+        <TestStep><![CDATA[
+assert /admin request is not accessible with scope other than GOLF:ADMIN by running the commands:
+
+```bash
+ACCESSTOKEN=`curl -s --request POST --url ${GOLF_OAUTH2_SERVER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:COACH" | jq -r .access_token`
+
+curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admin
+```
+]]>
+        </TestStep>
+        <TestStep><![CDATA[
+verify the response:
+
+```
+HTTP status code: 403
+WWW-Authenticate: Bearer error="insufficient_scope", error_description="The request requires higher privileges than provided by the access token.", error_uri="https://tools.ietf.org/html/rfc6750#section-3.1"
+```
+]]>
+        </TestStep>
+        <TestStep><![CDATA[
+assert /player/add GET request is accessible with GOLF:USER scope by running the commands:
+
+```bash
+ACCESSTOKEN=`curl -s --request POST --url ${GOLF_OAUTH2_SERVER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:USER" | jq -r .access_token`
+
+curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/player/add
+```
+]]>
+        </TestStep>
+        <TestStep><![CDATA[
+verify the response:
+
+```
+HTTP status code: 200
+Content-Type: text/html;charset=UTF-8
+Body contains src/main/resources/templates/player/player-add.html
+```
+]]>
+        </TestStep>
+        <TestStep><![CDATA[
+assert /player/add POST request is accessible with GOLF:COACH scope by running the commands:
+
+```bash
+ACCESSTOKEN=`curl -s --request POST --url ${GOLF_OAUTH2_SERVER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:COACH" | jq -r .access_token`
+
+curl -v --header "Authorization: Bearer $ACCESSTOKEN" --header "Content-Type: application/x-www-form-urlencoded" --request POST --data 'name=Naomi&surname=OsaAF' http://localhost:8082/player/add
+```
+]]>
+        </TestStep>
+        <TestStep><![CDATA[
+verify the response:
+
+```
+HTTP status code: 302
+```
+]]>
+        </TestStep>
+        <TestStep>add results of the manual tests to output.md.</TestStep>
+    </TestPlan>
+    <Assertion>
+        <Assert type="completeness">Ensure that spring-boot-starter-oauth2-resource-server dependency is added to pom.xml.</Assert>
+        <Assert type="completeness">Ensure that authorization server URI is specified by `spring.security.oauth2.resourceserver.jwt.issuer-uri` property in application.properties.</Assert>
+        <Assert type="completeness">Ensure that EXTERNAL authorization server is configured.</Assert>
+        <Assert type="completeness">Ensure that in-memory user details management is removed from Spring configuration.</Assert>
+        <Assert type="completeness">Ensure that OAuth2 authorization is configured in Spring configuration.</Assert>
+        <Assert type="completeness">Ensure that access to /admin endpoint is restricted to clients granted with GOLF:ADMIN scope.</Assert>
+        <Assert type="completeness">Ensure that clients granted with GOLF:COACH scope have access to all endpoints except /admin endpoint.</Assert>
+        <Assert type="completeness">Ensure that clients granted with GOLF:USER scope have access to read only endpoints except /admin endpoint.</Assert>
+        <Assert type="completeness">Make sure that the application is built without errors</Assert>
+        <Assert type="completeness">Make sure that the application is launched without errors</Assert>
+        <Assert type="accuracy">Make sure that CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is syntactically correct, compiles without errors, and accomplishes the intended functionality.</Assert>
+        <Assert type="accuracy">Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+        <Assert type="accuracy">Make sure the CHANGED code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.</Assert>
+        <Assert type="accuracy">Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.</Assert>
+        <Assert type="accuracy">Ensure that ADDED OAuth2 authorization denies access by default, so resources are not be accessible unless explicitly authorized.</Assert>
+        <Assert type="accuracy">Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+    </Assertion>
+    <MetaInfo>
+        <Meta>See [testing-template.md](testing-template.md)</Meta>
+    </MetaInfo>
+</TestSpec>

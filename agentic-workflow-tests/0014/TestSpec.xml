@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<TestSpec>
+    <Id>0014</Id>
+    <Title>User Account Menu in Golf application</Title>
+    <Category>solution-or-component-generation</Category>
+    <Complexity>low</Complexity>
+    <CodeRepository>https://github.com/PolinaTolkachova/golf-application</CodeRepository>
+    <Stack>
+        <Languages>
+            <Language primary="true">Java</Language>
+            <Language>HTML</Language>
+            <Language>JavaScript</Language>
+        </Languages>
+    </Stack>
+    <Task>
+<![CDATA[
+Create an account menu for the Golf application pages. Add the following items to the account menu:
+- logged user information including user name
+- logout link
+]]>
+    </Task>
+    <Context>
+        <Files>
+            <File>pom.xml</File>
+            <File>src/main/resources/templates/home.html</File>
+            <File>src/main/resources/templates/blocks/header.html</File>
+            <File>src/main/resources/static/styles/main.css</File>
+            <File>src/main/java/com/golf/app/controller/MainController.java</File>
+            <File>src/main/java/com/golf/app/model/User.java</File>
+            <File>src/main/java/com/golf/app/security/AppSecurityConfig.java</File>
+        </Files>
+    </Context>
+    <TestPlan>
+        <TestStep>Build the application with the command: `mvn clean install`</TestStep>
+        <TestStep>Launch the application with the command: `mvn spring-boot:run`</TestStep>
+        <TestStep>Login to the application</TestStep>
+        <TestStep>Verify that an account menu is added to navigation bar on Main page, Players page, Round scores page, Competitions page, Courses page</TestStep>
+        <TestStep>Verify that the account menu is  dropdown menu and it expands downwards</TestStep>
+        <TestStep>Verify that an username is displayed in the account menu</TestStep>
+        <TestStep>Verify that a logout link is added to the account menu</TestStep>
+        <TestStep>Verify that an user is signed out after a click on the logout link</TestStep>
+        <TestStep>Add results of the manual tests to output.md. See (testing-template.md)[testing-template.md].</TestStep>
+    </TestPlan>
+    <Assertion>
+        <Assert type="completeness">Ensure that dependency org.thymeleaf.extras:thymeleaf-extras-springsecurity6 is added to pom.xml</Assert>
+        <Assert type="completeness">Ensure that the html element of file containing the account menu includes the attribute defining the security namespace xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"</Assert>
+        <Assert type="completeness">Ensure that div element with the attribute sec:authorize="isAuthenticated()" is added into nav element in src/main/resources/templates/blocks/header.html</Assert>
+        <Assert type="completeness">Ensure that an element with the attribute sec:authentication="name" is added into authentication guarded element in src/main/resources/templates/blocks/header.html</Assert>
+        <Assert type="completeness">Ensure that /logout link is added into is added into authentication guarded element in src/main/resources/templates/blocks/header.html</Assert>
+        <Assert type="completeness">Ensure that script bootstrap.bundle.min.js is imported on pages with account menu</Assert>
+        <Assert type="completeness">Make sure that the application is built without errors</Assert>
+        <Assert type="completeness">Make sure that the application is launched without errors</Assert>
+        <Assert type="completeness">Make sure that an account menu is added to navigation bar</Assert>
+        <Assert type="completeness">Make sure that the account menu expands downwards</Assert>
+        <Assert type="completeness">Make sure that an username is displayed in the account menu</Assert>
+        <Assert type="completeness">Make sure that a logout link is added to the account menu</Assert>
+        <Assert type="completeness">Make sure that an user is signed out after a click on the logout link</Assert>
+        <Assert type="accuracy">Make sure that CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is syntactically correct, compiles without errors, and accomplishes the intended functionality.</Assert>
+        <Assert type="accuracy">Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+        <Assert type="accuracy">Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+        <Assert type="accuracy">Make sure the CHANGED code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.</Assert>
+        <Assert type="accuracy">Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.</Assert>
+        <Assert type="accuracy">Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+    </Assertion>
+    <MetaInfo>
+        <Meta>See samples of correct solution in the [exemplar directory](exemplar).</Meta>
+    </MetaInfo>
+</TestSpec>

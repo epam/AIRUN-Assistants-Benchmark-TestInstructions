@@ -25,8 +25,10 @@ services:
     networks:
       - agentic-0003-net
     environment:
-        MYSQL_ROOT_PASSWORD: 1234
-        MYSQL_DATABASE: golf04
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_pass}
+        MYSQL_DATABASE: ${MYSQL_DATABASE:-golf_db}
+        MYSQL_USER: ${MYSQL_USER:-golf_user}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD:-golf_pass}
     ports:
         - "3306:3306"
     volumes:
