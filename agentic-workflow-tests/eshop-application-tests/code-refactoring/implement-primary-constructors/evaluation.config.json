@@ -1,0 +1,42 @@
+{
+    "evaluationSteps": [
+        {
+            "id": "necessity",
+            "steps": [
+                {
+                    "id": "1",
+                    "name": "Prepare code for LLM",
+                    "evaluator": "powershell",
+                    "command": "cd $env:DOTNET_TEST_SLN_DIR; git diff HEAD > agent-solution.patch",
+                    "evaluationRequired": false
+                },
+                {
+                    "id": "2",
+                    "name": "Code evaluation by LLM",
+                    "evaluator": "llm",
+                    "originalTask": "In the Ordering.API project, change all files where primary constructors aren't used. Where possible, remove private fields set by the primary constructor. Where a primary constructor is already used but private fields set by it aren't removed, remove them if possible. Your solution must not change the functionality. The solution must build without errors. Ensure that your solution is efficient.",
+                    "evaluationPrompt": "Review the provided code changes. Define unnecessary code as new code that is not strictly related to the given task. Output the number of lines containing unnecessary code. A single empty line serving as a delimiter is not unnecessary, but multiple consecutive empty lines always are.",
+                    "attachments": [
+                        {
+                            "name": "Agent code changes",
+                            "type": "file",
+                            "value": "$env:DOTNET_TEST_SLN_DIR/agent-solution.patch"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "sufficiency",
+            "steps": [
+                {
+                    "id": "1",
+                    "name": "Prepare code for LLM",
+                    "evaluator": "powershell",
+                    "command": "cp $env:TEST_INSTR_DIR/eshop-application-tests/code-refactoring/implement-primary-constructors/implement-primary-constructors.patch $env:DOTNET_TEST_SLN_DIR; cd $env:DOTNET_TEST_SLN_DIR; git apply implement-primary-constructors.patch; cd $env:DOTNET_TEST_SLN_DIR/src/Ordering.API; dotnet build",
+                    "evaluationRequired": true
+                }
+            ]
+        }
+    ]
+}
