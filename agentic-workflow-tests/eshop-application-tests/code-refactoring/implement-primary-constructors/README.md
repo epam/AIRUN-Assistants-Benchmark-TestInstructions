@@ -17,5 +17,3 @@ The solution must build without errors. Ensure that your solution is efficient.
 - Submit the request
 - Wait until the agent finishes working, accepting requests to continue working (if requested) and requests to run external tools (e.g., PowerShell commands)
 - Accept all changes
-
-</details>
