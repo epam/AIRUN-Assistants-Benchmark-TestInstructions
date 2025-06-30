@@ -39,6 +39,7 @@ evaluationSteps:
           cd $env:DOTNET_TEST_SLN_PATH/src/Ordering.API; 
           dotnet build
         evaluationRequired: true
+        autoEvaluate: false
   - id: efficiency
     steps:
       - id: 1
