@@ -1,0 +1,91 @@
+evaluationSteps:
+  - id: necessity
+    steps:
+      - id: 1
+        name: Prepare code for LLM
+        evaluator: powershell
+        command: cd $env:DOTNET_TEST_SLN_PATH; git diff $env:DOTNET_TEST_SLN_BASE_COMMIT > agent-solution.patch
+        evaluationRequired: false
+      - id: 2
+        name: Code evaluation by LLM
+        evaluator: llm
+        originalTask: >-
+          In the Ordering.API project, change all files where primary constructors aren't used. 
+          Where possible, remove private fields set by the primary constructor. 
+          Where a primary constructor is already used but private fields set by it aren't removed, remove them if possible. 
+          Your solution must not change the functionality. 
+          The solution must build without errors. 
+          Ensure that your solution is efficient.
+        evaluationPrompt: >-
+          Review the provided code changes. 
+          Define unnecessary code as new code that is not strictly related to the given task. 
+          A single empty line serving as a delimiter is not unnecessary, but multiple consecutive empty lines always are.
+          Output the number of lines containing unnecessary code.
+          You may add a brief justification for your evaluation, but your response must end with "Unnecessary code lines : x",
+          where x is the number of lines containing unnecessary code.
+        attachments:
+          - name: Agent code changes
+            type: file
+            value: $env:DOTNET_TEST_SLN_PATH/agent-solution.patch
+  - id: sufficiency
+    steps:
+      - id: 1
+        name: Run build with settings catching task-specific errors
+        evaluator: powershell
+        command: >-
+          cp $env:TEST_INSTR_PATH/eshop-application-tests/code-refactoring/implement-primary-constructors/implement-primary-constructors.patch $env:DOTNET_TEST_SLN_PATH; 
+          cd $env:DOTNET_TEST_SLN_PATH; 
+          git apply implement-primary-constructors.patch; 
+          cd $env:DOTNET_TEST_SLN_PATH/src/Ordering.API; 
+          dotnet build
+        evaluationRequired: true
+  - id: efficiency
+    steps:
+      - id: 1
+        name: Prepare code for LLM
+        evaluator: powershell
+        command: cd $env:DOTNET_TEST_SLN_PATH; git diff $env:DOTNET_TEST_SLN_BASE_COMMIT > agent-solution.patch
+        evaluationRequired: false
+      - id: 2
+        name: Code evaluation by LLM
+        evaluator: llm
+        originalTask: >-
+          In the Ordering.API project, change all files where primary constructors aren't used. 
+          Where possible, remove private fields set by the primary constructor. 
+          Where a primary constructor is already used but private fields set by it aren't removed, remove them if possible. 
+          Your solution must not change the functionality. 
+          The solution must build without errors. 
+          Ensure that your solution is efficient.
+        evaluationPrompt: |-
+          Review the provided code changes.
+          Focus exclusively on algorithmic efficiency and scalability, excluding code quality aspects like formatting, security vulnerabilitities or maintainability.
+
+          Define efficient code as code:
+          (1) using algorithms with optimal time/space complexity,
+          (2) using language-specific optimizations where applicable,
+          (3) easily scalable to handle larger datasets or increased load.
+          
+          Evaluate the code changes, where LOC metrics include only the added or modified lines, using the following 0-5 Likert scale:
+          5 (Highly efficient):
+          - Critical code segments use optimal algorithms,
+          - The solution scales without modification,
+          - The are no memory leaks.
+          4 (Mostly efficient):
+          - Most new code (80% LOC) uses optimal algorithms, but some (<20% LOC) algorithms are efficient enough for the task,
+          - The solution scales with minimal changes.
+          3 (Moderately efficient):
+          - Some new code (50% LOC) uses efficient algorithms, but other algorithms are efficient enough for the task,
+          - The solution requires certain rework to become scalable.
+          2 (Mostly inefficient):
+          - Some inefficient algorithms (<20% LOC) are used,
+          - The solution requires major rework to become scalable.
+          1 (Highly inefficient):
+          - Algorithms are mostly inefficient,
+          - The solution requires full rework to become scalable.
+          0 (Inapplicable): The code is irrelevant to the task or has critical errors preventing it from running.
+
+          Output the evaluation score and a brief justification.
+        attachments:
+          - name: Agent code changes
+            type: file
+            value: $env:DOTNET_TEST_SLN_PATH/agent-solution.patch
