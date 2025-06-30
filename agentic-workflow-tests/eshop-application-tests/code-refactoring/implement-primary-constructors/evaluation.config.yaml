@@ -84,7 +84,7 @@ evaluationSteps:
           - The solution requires full rework to become scalable.
           0 (Inapplicable): The code is irrelevant to the task or has critical errors preventing it from running.
 
-          Output the evaluation score and a brief justification.
+          Output the evaluation score and a brief justification. Your response must end with "Evaluation score: x", where x is the evaluation score.
         attachments:
           - name: Agent code changes
             type: file
