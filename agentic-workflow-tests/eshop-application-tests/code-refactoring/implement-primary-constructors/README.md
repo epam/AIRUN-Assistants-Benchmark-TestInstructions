@@ -19,15 +19,3 @@ The solution must build without errors. Ensure that your solution is efficient.
 - Accept all changes
 
 </details>
-
-## Assert
-
-### Solution Necessity
-
-55
-
-### Solution Sufficiency
-
-- Copy **implement-primary-constructors.patch** file to the solution root
-- Open PowerShell and run **git apply ./implement-primar-constructors.patch**
-- Run **cd ./src/Ordering.API && dotnet build** and observe that there are no build errors (note: IDE0290 errors are enforced by the patch, they are directly relevant to this task)
