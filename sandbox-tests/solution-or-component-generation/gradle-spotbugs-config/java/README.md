@@ -11,12 +11,30 @@ A developer is trying to configure Spotbugs plugin in build.gradle script
 
 - Open the project solution-or-component-generation/spring-boot/java
 - Open the build.gradle file
-- Move to `plugins` sections, enter the comment `//spotbugs` and press Enter
+- Move to `plugins` sections, enter the comment
+
+```
+//spotbugs
+```
+
+- Press Enter
 - Accept the best suggested implementation using the TAB and ENTER keys
-- Go to the line before `eclipse` section, enter the comment `// configure spotbugs to generate HTML and XML reports` and press Enter
+- Go to the line before `eclipse` section, enter the comment
+
+```
+// configure spotbugs to generate HTML and XML reports
+```
+
+- Press Enter
 - Accept the best suggested implementation using the TAB and ENTER keys
 - Open gradle.properties file
-- Enter `rev_spotbugs=` on a new line and press Enter
+- Enter on a new line
+
+```
+rev_spotbugs=
+```
+
+- Press Enter
 - Accept the best suggested implementation using the TAB and ENTER keys
 
 </details>

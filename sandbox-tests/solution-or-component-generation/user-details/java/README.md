@@ -32,7 +32,7 @@ A developer is trying to generate a UserDetailsImpl class that implements the Us
 
 ```
 Generate the following UserDetailsImpl class implementation:
-- UserDetailsImpl must implement the UserDetails interface from Spring Security
+- UserDetailsImpl must implement the UserDetails interface from org.springframework.security
 - UserDetailsImpl must wrap an existing User class object
 ```
 

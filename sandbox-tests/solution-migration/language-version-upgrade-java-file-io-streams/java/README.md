@@ -28,6 +28,8 @@ return Files.
 
 - Code must compile
 - Verify the code rewritten using java.nio.file.Files API
+- Copy the `FileUtilsTest.java` file to the `solution-migration/language-version-upgrade/java/src/test/java` folder.
+- Run tests in the `FileUtilsTest` class. All tests must pass successfully.
 
 *Additional note*
 
