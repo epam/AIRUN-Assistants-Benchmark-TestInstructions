@@ -21,7 +21,9 @@ A developer is trying to rewrite code using Java 1.8 functional interfaces
 *Assert conditions*
 
 - Code must compile
-- Verify the code rewritten using lambda expressions with standard functional interfaces from  java.util.function package
+- Verify the code rewritten using lambda expressions with standard functional interfaces from java.util.function package
+- Copy the CsvUtilsTest.java file to the solution-migration/language-version-upgrade/java/src/test/java folder
+- Run tests in the CsvUtilsTest class. Tests must pass successfully
 
 *Additional note*
 
