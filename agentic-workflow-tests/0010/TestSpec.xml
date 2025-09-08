@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<TestSpec>
+    <Id>0010</Id>
+    <Title>Fix an issue with hardcoded player photo id in Golf application</Title>
+    <Objectives>
+    </Objectives>
+    <Category>code-bugfixing</Category>
+    <Complexity>medium</Complexity>
+    <CodeRepository>https://github.com/PolinaTolkachova/golf-application</CodeRepository>
+    <Stack>
+        <Languages>
+            <Language primary="true">Java</Language>
+            <Language>HTML</Language>
+        </Languages>
+        <Technologies>
+        </Technologies>
+    </Stack>
+    <Task>
+<![CDATA[
+Fix the issue given below.
+
+# Other player photo is shown for a player with missing photo
+
+## Description
+Other player photo is shown on the page of a player with missing photo.
+
+## Steps to reproduce
+
+0. PlayerPhoto entity with id 1L must exist in database.
+1. Add a new player without photo.
+2. Visit the added player page, for instance http://localhost:8082/player/2
+
+## Actual results
+- Image from PlayerPhoto entity with id 1L is showed on the page
+
+## Expected results
+- A photo placeholder explicitly indicating a missing photo is shown on the page
+
+## Fix acceptance criteria
+- A photo with hardcoded id 1L should not be shown on a page of player with missing photo
+- A photo placeholder should be shown instead of missing photo on player page
+- A new player should be added without photo
+]]>
+    </Task>
+    <Context>
+        <Files>
+            <File>src/main/java/com/golf/app/model/Player.java</File>
+            <File>src/main/java/com/golf/app/model/PlayerPhoto.java</File>
+            <File>src/main/java/com/golf/app/dto/PlayerPhotoDto.java</File>
+            <File>src/main/java/com/golf/app/controller/PlayerController.java</File>
+            <File>src/main/java/com/golf/app/controller/PlayerPhotoController.java</File>
+            <File>src/main/java/com/golf/app/service/PlayerPhotoService.java</File>
+            <File>src/main/java/com/golf/app/service/PlayerPhotoServiceImpl.java</File>
+            <File>src/main/resources/templates/player/player-details.html</File>
+        </Files>
+    </Context>
+    <Arrangement>
+    </Arrangement>
+    <Act>
+        <ActStep>Submit the task and wait implementation plan is generated</ActStep>
+        <ActStep>Go to the implementation plan</ActStep>
+        <ActStep>Follow the implementation plan steps and modify source code following the instructions</ActStep>
+    </Act>
+    <TestPlan>
+        <TestStep>Build the application with the command: `mvn clean install`</TestStep>
+        <TestStep>Start the application with the command: `mvn spring-boot:run`</TestStep>
+        <TestStep>Open application UI at http://localhost:8082/player</TestStep>
+        <TestStep>Click 'Add new player' button to visit add player page</TestStep>
+        <TestStep>Create a new player</TestStep>
+        <TestStep>Visit the new player page</TestStep>
+        <TestStep>Make sure a photo placeholder is shown instead of missing photo</TestStep>
+        <TestStep>Add results of the manual tests to output.md. See (testing-template.md)[testing-template.md]</TestStep>
+    </TestPlan>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert weight="low">Ensure that the line "player.setPhotoId(1L);" removed from the PlayerController method addPlayer.</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Ensure that the PlayerController method displayPlayerDetailsPage is changed to proper handle missing player photo.</Assert>
+        </Criterion>
+    </Criteria>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert weight="low">Ensure that the code to show player photo in player-details.html is changed to show placeholder image when no photo is available.</Assert>
+        </Criterion>
+    </Criteria>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert weight="low">Ensure that a player photo placeholder image is created.</Assert>
+        </Criterion>
+    </Criteria>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert weight="low">Ensure that a photo placeholder is shown instead of missing photo on player page.</Assert>
+        </Criterion>
+    </Criteria>
+    <Criteria>
+        <Criterion type="accuracy">
+            <Assert weight="low">Make sure that CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that the CHANGED code is syntactically correct, compiles without errors, and accomplishes the intended functionality.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Make sure the CHANGED code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+        </Criterion>
+    </Criteria>
+    <MetaInfo>
+        <Meta>See [testing-template.md](testing-template.md) for example of extra report sections.</Meta>
+        <Meta>See sample of correct solution in the [exemplar directory](exemplar).</Meta>
+    </MetaInfo>
+</TestSpec>

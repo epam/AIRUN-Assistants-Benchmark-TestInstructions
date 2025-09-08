@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<TestSpec>
+    <Id>0011</Id>
+    <Title>Verify User e-mail upon Registration in Golf application</Title>
+    <Objectives>
+    </Objectives>
+    <Category>solution-or-component-generation</Category>
+    <Complexity>medium</Complexity>
+    <CodeRepository>https://github.com/PolinaTolkachova/golf-application</CodeRepository>
+    <Stack>
+        <Languages>
+            <Language primary="true">Java</Language>
+        </Languages>
+        <Technologies>
+            <Technology>Spring Security</Technology>
+            <Technology>e-mail</Technology>
+        </Technologies>
+    </Stack>
+    <Task>
+<![CDATA[
+```markdown
+## Task
+
+Finish user registration process by verifying the user’s email to enable the user’s account
+
+## Context
+
+The application UI is protected with Spring Security.
+The default Spring Security schema is used to store users and roles.
+An user enters his e-mail address during registration.
+
+## Instructions
+
+- Make an user account to be disabled just after registration.
+- Send a confirmation email message to an user entered e-mail address with link pointing to the application e-mail verification endpoint.
+- Make the e-mail address verification link expires within a configured period, 5 minutes by default.
+- Enable the user account after the verification link is visited.
+```
+]]>
+    </Task>
+    <Context>
+        <Files>
+            <File></File>
+        </Files>
+    </Context>
+    <Arrangement>
+        <Arrange>
+<![CDATA[
+Apply [the patch from 0011 test](../0011/exemplar/0001-Migrate-in-memory-user-and-roles-definitions-to-data.patch) to prepare project codebase for test:
+
+```bash
+git am < path_to_patch/0001-Migrate-in-memory-user-and-roles-definitions-to-data.patch
+```
+]]>
+        </Arrange>
+        <Arrange>
+<![CDATA[
+Apply [the patch from 0012 test](../0012/exemplar/0001-Fix-up-user-registration.patch) to prepare project codebase for test:
+
+```bash
+git am < path_to_patch/0012/exemplar/0001-Fix-up-user-registration.patch
+```
+]]>
+        </Arrange>
+        <Arrange>
+<![CDATA[
+Start MailHog docker container:
+
+```bash
+docker run -p 8025:8025 -p 1025:1025 mailhog/mailhog
+```
+]]>
+        </Arrange>
+    </Arrangement>
+    <Act>
+        <ActStep>Submit the task and wait implementation plan is generated</ActStep>
+        <ActStep>Go to the implementation plan</ActStep>
+        <ActStep>Follow the implementation plan steps and modify source code following the instructions</ActStep>
+    </Act>
+    <TestPlan>
+        <TestStep>Update database configuration in application.properties to make it compatible with your local environment</TestStep>
+        <TestStep>Update email configuration in application.properties to make it compatible with your local environment</TestStep>
+        <TestStep>Build the application with the command: `mvn clean install`</TestStep>
+        <TestStep>Start the application with the command: `mvn spring-boot:run`</TestStep>
+        <TestStep>Open application UI at http://localhost:8082/register</TestStep>
+        <TestStep>Register a first user</TestStep>
+        <TestStep>Visit MailHog UI at http://localhost:8025/</TestStep>
+        <TestStep>Look for the user registration email in Inbox</TestStep>
+        <TestStep>Visit the user email address verification link found in the email</TestStep>
+        <TestStep>Login with the first user credentials</TestStep>
+        <TestStep>Register a second user</TestStep>
+        <TestStep>Try to login with the second user credentials</TestStep>
+        <TestStep>Wait 5 minutes and look for the user email registration email in MailHog Inbox</TestStep>
+        <TestStep>Try to visit the user email address verification link found in the email</TestStep>
+        <TestStep>Add results of the registration test and login test to output.md</TestStep>
+    </TestPlan>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert weight="low">Ensure that org.springframework.boot:spring-boot-starter-mail dependency has been added added to pom.xml</Assert>
+        </Criterion>
+    </Criteria>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert weight="low">Ensure that spring mail has been configured in src/main/resources/application.properties</Assert>
+        </Criterion>
+    </Criteria>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert weight="low">Make user that registration confirmation template has been created</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make user that registration verification template has been created</Assert>
+        </Criterion>
+    </Criteria>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that UserController registerUser method returns registration confirmation view name</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that verifyEmail method parameterized by token is added to UserController class</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that UserController verifyEmail method is annotated with @GetMapping</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that UserController verifyEmail method verify token via userService method call</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that UserController verifyEmail method returns registration verification view name</Assert>
+        </Criterion>
+    </Criteria>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that UserServiceImpl creates a not enabled user in registerUser method</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that UserServiceImpl creates an user email verification token in registerUser method</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that verifyEmail method is added to UserServiceImpl class</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that UserServiceImpl verifyEmail method enables an user if a non-expired user email verification token exists</Assert>
+        </Criterion>
+    </Criteria>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that the application sends an email to an address specified by a registered user and includes an user email verification link</Assert>
+        </Criterion>
+    </Criteria>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that the application is built without errors</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that the application is launched without errors</Assert>
+        </Criterion>
+    </Criteria>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that an user can be registered in the application</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that the registered user cannot log in to the application until the email address is verified</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure the application sends an email about the user's registration to the address they provided</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure the user registration email contains email verification link</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure the user email verification link can be successfully opened</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure that the registered user can log in to the application after verifying the email address</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert weight="low">Make sure the expired email verification link opened unsuccessfully</Assert>
+        </Criterion>
+    </Criteria>
+    <Criteria>
+        <Criterion type="accuracy">
+            <Assert weight="low">Make sure that CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that the CHANGED code is syntactically correct, compiles without errors, and accomplishes the intended functionality.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Make sure the CHANGED code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that application sends an user registration email after committing of user registration transaction</Assert>
+        </Criterion>
+        <Criterion type="accuracy">
+            <Assert weight="low">Ensure that application sends an user registration email asynchronously</Assert>
+        </Criterion>
+    </Criteria>
+    <MetaInfo>
+        <Meta>See [testing-template.md](testing-template.md) for example of extra report sections.</Meta>
+        <Meta>See samples of correct solution in the [exemplar directory](exemplar).</Meta>
+    </MetaInfo>
+</TestSpec>
