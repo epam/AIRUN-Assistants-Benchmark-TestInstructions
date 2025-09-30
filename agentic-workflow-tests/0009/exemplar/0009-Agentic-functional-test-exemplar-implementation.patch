@@ -1,51 +1,56 @@
-From 5656f2bf15ec093a9251167d71d73d1751320424 Mon Sep 17 00:00:00 2001
+From 7649989e18da5dfe318791a75f3e7f2ac297d893 Mon Sep 17 00:00:00 2001
 From: siarhei-z1 <148881157+siarhei-z1@users.noreply.github.com>
 Date: Tue, 17 Dec 2024 16:19:17 +0300
 Subject: [PATCH] 0009: Agentic functional test exemplar implementation
 
 ---
- pom.xml                                       |  25 +++
+ pom.xml                                       |  23 +++
  .../golf/app/functional/BaseSeleniumTest.java |  64 ++++++++
  .../functional/config/WebDriverConfig.java    |  26 ++++
  .../player/PlayerManagementTest.java          | 144 ++++++++++++++++++
- .../application-functionalTest.properties     |  12 ++
- 5 files changed, 271 insertions(+)
+ .../application-functionalTest.properties     |   7 +
+ 5 files changed, 264 insertions(+)
  create mode 100644 src/test/java/com/golf/app/functional/BaseSeleniumTest.java
  create mode 100644 src/test/java/com/golf/app/functional/config/WebDriverConfig.java
  create mode 100644 src/test/java/com/golf/app/functional/player/PlayerManagementTest.java
  create mode 100644 src/test/resources/application-functionalTest.properties
 
 diff --git a/pom.xml b/pom.xml
-index 7d465cc..b48dd05 100644
+index 7d465cc..2218baa 100644
 --- a/pom.xml
 +++ b/pom.xml
-@@ -112,6 +112,31 @@
+@@ -16,6 +16,8 @@
+     <description>Project for Golf club management</description>
+     <properties>
+         <java.version>17</java.version>
++        <junit.version>5.13.4</junit.version>
++        <selenium.version>4.35.0</selenium.version>
+         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+         <org.projectlombok.version>1.18.34</org.projectlombok.version>
+     </properties>
+@@ -112,6 +114,27 @@
              <artifactId>modelmapper</artifactId>
              <version>3.2.0</version>
          </dependency>
-+    <!-- Selenium -->
++        <!-- Selenium -->
 +        <dependency>
 +            <groupId>org.seleniumhq.selenium</groupId>
 +            <artifactId>selenium-java</artifactId>
-+            <version>4.18.1</version>
 +            <scope>test</scope>
 +        </dependency>
 +        <dependency>
 +            <groupId>org.seleniumhq.selenium</groupId>
 +            <artifactId>selenium-chrome-driver</artifactId>
-+            <version>4.18.1</version>
 +            <scope>test</scope>
 +        </dependency>
 +        <dependency>
 +            <groupId>org.seleniumhq.selenium</groupId>
 +            <artifactId>selenium-firefox-driver</artifactId>
-+            <version>4.18.1</version>
 +            <scope>test</scope>
 +        </dependency>
 +        <dependency>
 +            <groupId>org.seleniumhq.selenium</groupId>
 +            <artifactId>selenium-edge-driver</artifactId>
-+            <version>4.18.1</version>
 +            <scope>test</scope>
 +        </dependency>
      </dependencies>
@@ -308,15 +313,10 @@ index 0000000..7086f96
 \ No newline at end of file
 diff --git a/src/test/resources/application-functionalTest.properties b/src/test/resources/application-functionalTest.properties
 new file mode 100644
-index 0000000..7ae7000
+index 0000000..259a768
 --- /dev/null
 +++ b/src/test/resources/application-functionalTest.properties
-@@ -0,0 +1,12 @@
-+spring.datasource.url=jdbc:mysql://localhost:3306/golf_test_db
-+spring.datasource.username=root
-+spring.datasource.password=root
-+spring.jpa.hibernate.ddl-auto=create-drop
-+
+@@ -0,0 +1,7 @@
 +# Browser configuration (chrome, firefox, or edge)
 +test.browser=firefox
 +
@@ -326,5 +326,5 @@ index 0000000..7ae7000
 +test.userpassword=1
 \ No newline at end of file
 -- 
-2.45.1
+2.51.0
 

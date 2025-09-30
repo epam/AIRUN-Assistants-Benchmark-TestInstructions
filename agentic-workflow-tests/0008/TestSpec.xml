@@ -113,7 +113,7 @@ Cleanup unused or legacy logging configuration.
         </Criterion>
         <Criterion type="accuracy" weight="high" comment="adherence to task requirements">
             <Assert>Make sure that the CHANGES are primarily made to achieve the intended functionality.</Assert>
-            <Assert>Make sure that the CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+            <Assert>Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.</Assert>
         </Criterion>
         <Criterion type="accuracy" weight="high" comment="code quality">
             <Assert>Ensure that the CHANGED code is syntactically correct, compiles without errors.</Assert>

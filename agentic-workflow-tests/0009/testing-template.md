@@ -1,6 +1,6 @@
 # Build and Run
 
-## output of "mvn clean install"
+## output of "mvn clean compile test"
 
 ```
 ```

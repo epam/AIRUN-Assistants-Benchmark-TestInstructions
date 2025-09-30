@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <TestSpec>
-    <Id>0010</Id>
+    <Id>0012</Id>
     <Title>User Registration Fixup in Golf application</Title>
     <Objectives>
     </Objectives>
@@ -17,7 +17,6 @@
     </Stack>
     <Task>
 <![CDATA[
-```markdown
 ## Task
 
 Fix up user registration in Golf application.
@@ -65,7 +64,6 @@ Text input is used for password in user registration form.
     - alter USERS table by adding column "email".
     - update existing users by setting email to value username@golf.com.
     - create an unique index on USERS table by "email" column.
-```
 ]]>
     </Task>
     <Context>
@@ -102,173 +100,100 @@ git am < path_to_patch/0001-Migrate-in-memory-user-and-roles-definitions-to-data
         <TestStep>Update database configuration in application.properties to make it compatible with your local environment</TestStep>
         <TestStep>Build the application with the command: `mvn clean install`</TestStep>
         <TestStep>Start the application with the command: `mvn spring-boot:run`</TestStep>
-        <TestStep>Open application UI at http://localhost:8082/register</TestStep>
+        <TestStep>Open the application [user registration page](http://localhost:8082/register)</TestStep>
         <TestStep>Register a new user</TestStep>
         <TestStep>Login with the new user credentials</TestStep>
         <TestStep>Add results of the registration test and login test to output.md</TestStep>
     </TestPlan>
     <Criteria>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that User class is annotated with @Table(name = "users")</Assert>
+            <Assert>Ensure that `User` class is annotated with `@Table(name = "users")`</Assert>
+            <Assert>Ensure that `User` class implements `UserDetails`</Assert>
+            <Assert>Ensure that `User` class implements `CredentialsContainer`</Assert>
+            <Assert>Ensure that field `id` is removed from `User` class</Assert>
+            <Assert>Ensure that field `username` is annotated `@id` in `User` class</Assert>
+            <Assert>Ensure that field `password` has been made non-nullable in `User` class</Assert>
+            <Assert>Ensure that unique non nullable string field `email` has been added to `User` class</Assert>
+            <Assert>Ensure that non nullable boolean field `enabled` has been added to `User` class</Assert>
+            <Assert>Ensure that `authorities` field has been added to `User` class</Assert>
+            <Assert>Ensure that method `getAuthorities` has been overridden in `User` class</Assert>
+            <Assert>Ensure that method `isAccountNonExpired` has been overridden in `User` class</Assert>
+            <Assert>Ensure that method `isCredentialsNonExpired` has been overridden in `User` class</Assert>
+            <Assert>Ensure that method `isEnabled` has been overridden in `User` class</Assert>
+            <Assert>Ensure that overridden method `eraseCredentials` set `password` field to `null` in `User` class</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that User class implements UserDetails</Assert>
+            <Assert>Ensure that `com.golf.app.model.Role` class is created</Assert>
+            <Assert>Ensure that `Role` class is annotated with `@Table(name = "authorities")`</Assert>
+            <Assert>Ensure that string field `username` has been added to `Role` class</Assert>
+            <Assert>Ensure that field `username` annotated with `@Id` in `Role` class</Assert>
+            <Assert>Ensure that string field `authority` has been added to `Role` class</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that User class implements CredentialsContainer</Assert>
+            <Assert>Make sure that `@RequestBody` annotation is removed from `user` parameter of `registerUser` method of `UserController` class</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that field id is removed from User class</Assert>
+            <Assert>Make sure that request matcher for `HttpMethod.POST` has been removed in `filterChain` method in `AppSecurityConfig` class</Assert>
+            <Assert>Make sure that request matcher for `/register/**` path has been permitted in `filterChain` method in `AppSecurityConfig` class</Assert>
+            <Assert>Make sure that request matcher for `/styles/**` path has been permitted in `filterChain` method in `AppSecurityConfig` class</Assert>
+            <Assert>Make sure that request matcher for `/js/**` path has been permitted in `filterChain` method in `AppSecurityConfig` class</Assert>
+            <Assert>Make sure that request matcher for `/images/**` path has been permitted in `filterChain` method in `AppSecurityConfig` class</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that field username is annotated @id in User class</Assert>
+            <Assert>Make sure that `PasswordEncoder` field has been added to `UserServiceImpl` class</Assert>
+            <Assert>Make sure that `registerUser` method is made transactional in `UserServiceImpl` class</Assert>
+            <Assert>Make sure that `registerUser` method encodes user password before user saving in `UserServiceImpl` class</Assert>
+            <Assert>Make sure that `registerUser` method assigns `ROLE_USER` to user before saving in `UserServiceImpl` class</Assert>
+            <Assert>Make sure that `registerUser` method makes user enabled before saving in `UserServiceImpl` class</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that field password has made not nullable in User class</Assert>
+            <Assert>Make sure that type of password input is changed to `password` in `src/main/resources/templates/registration/registration.html`</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that unique non nullable string field email has been added to User class</Assert>
+            <Assert>Make sure that the created migration SQL script adds `email` column to `users` table</Assert>
+            <Assert>Make sure that the created migration SQL script updates users `email` column value to concatenation of username and @golf.com</Assert>
+            <Assert>Make sure that the created migration SQL script creates unique index users email</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that non nullable boolean field enabled has been added to User class</Assert>
+            <Assert>Make sure that the migration SQL script(s) is executed on the application database without errors</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that authorities field has been added to User class</Assert>
+            <Assert>Make sure that the application is built without errors</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that method getAuthorities has been overridden in User class</Assert>
+            <Assert>Make sure that the application is launched without errors</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that method isAccountNonExpired has been overridden in User class</Assert>
+            <Assert>Make sure that a new user can be registered</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that method isCredentialsNonExpired has been overridden in User class</Assert>
+            <Assert>Make sure that a new user can login after registration</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Ensure that method isEnabled has been overridden in User class</Assert>
+        <Criterion type="accuracy" weight="high" comment="functionality">
+            <Assert>Ensure that the CHANGED code accomplishes the intended functionality.</Assert>
+            <Assert>Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Ensure that overridden method eraseCredentials set password field to null in User class</Assert>
+        <Criterion type="accuracy" weight="high" comment="adherence to task requirements">
+            <Assert>Make sure that the CHANGES are primarily made to achieve the intended functionality.</Assert>
+            <Assert>Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.</Assert>
         </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Ensure that com.golf.app.model.Role class is created</Assert>
+        <Criterion type="accuracy" weight="high" comment="code quality">
+            <Assert>Ensure that the CHANGED code is syntactically correct, compiles without errors.</Assert>
+            <Assert>Ensure that the CHANGED code follows project style guides and maintain consistency with the existing codebase.</Assert>
+            <Assert>Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+            <Assert>Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+            <Assert>Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Ensure that Role class is annotated with @Table(name = "authorities")</Assert>
+        <Criterion type="accuracy" weight="high" comment="documentation">
+            <Assert>Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Ensure that string field username has been added to Role class</Assert>
+        <Criterion type="accuracy" weight="high" comment="security">
+            <Assert>Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques.</Assert>
+            <Assert>Ensure that CHANGED code avoids exposing sensitive data.</Assert>
+            <Assert>Ensure that CHANGED code protects the application from common security vulnerabilities.</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Ensure that field username annotated with @Id in Role class</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Ensure that string field authority has been added to Role class</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that @RequestBody annotation is removed from user parameter of registerUser method of UserController class</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that request matcher for HttpMethod.POST has been removed in filterChain method in AppSecurityConfig class</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that request matcher for "/register/**" path has been permitted in filterChain method in AppSecurityConfig class</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that request matcher for "/styles/**" path has been permitted in filterChain method in AppSecurityConfig class</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that request matcher for "/js/**" path has been permitted in filterChain method in AppSecurityConfig class</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that request matcher for "/images/**" path has been permitted in filterChain method in AppSecurityConfig class</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that PasswordEncoder field has been added to UserServiceImpl class</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that registerUser method is made transactional in UserServiceImpl class</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that registerUser method encodes user password before user saving in UserServiceImpl class</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that registerUser method assigns ROLE_USER to user before saving in UserServiceImpl class</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that registerUser method makes user enabled before saving in UserServiceImpl class</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that type of password input is changed to password in src/main/resources/templates/registration/registration.html</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that the created migration SQL script adds email column to users table</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that the created migration SQL script updates users email column value to concatenation of username and @golf.com</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that the created migration SQL script creates unique index users email</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that the migration SQL script(s) is executed on the application database without errors</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that the application is built without errors</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that the application is launched without errors</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that a new user can be registered</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that a new user can login after registration</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="accuracy">
-            <Assert weight="low">Make sure that CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is syntactically correct, compiles without errors, and accomplishes the intended functionality.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Make sure the CHANGED code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+        <Criterion type="accuracy" weight="high" comment="configuration">
+            <Assert>Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
         </Criterion>
     </Criteria>
     <MetaInfo>

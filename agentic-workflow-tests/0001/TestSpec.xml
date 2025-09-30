@@ -64,7 +64,7 @@ Create a Docker Compose file to manage the MySQL container to be used for develo
         <TestStep>Start Mysql container with the command: `docker-compose up`</TestStep>
         <TestStep>Migrate the database with the command: `flyway -configFiles=flyway.conf migrate`</TestStep>
         <TestStep>Build the application with the command: `mvn clean install`</TestStep>
-        <TestStep>Launch the application with the command: `mvn spring-boot:run -Dspring-boot.run.arguments=spring.jpa.hibernate.ddl-auto=validate`</TestStep>
+        <TestStep>Launch the application with the command: `mvn spring-boot:run -Dspring-boot.run.arguments=--spring.jpa.hibernate.ddl-auto=validate`</TestStep>
         <TestStep>
 <![CDATA[
 Send test requests to the application:
@@ -113,7 +113,7 @@ curl -v -u 1:1 http://localhost:8082/round
         </Criterion>
         <Criterion type="accuracy" weight="high" comment="adherence to task requirements">
             <Assert>Make sure that the CHANGES are primarily made to achieve the intended functionality.</Assert>
-            <Assert>Make sure that the CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+            <Assert>Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.</Assert>
         </Criterion>
         <Criterion type="accuracy" weight="high" comment="code quality">
             <Assert>Ensure that the CHANGED code is syntactically correct, compiles without errors.</Assert>
