@@ -13,9 +13,11 @@
     <Task>
 <![CDATA[
 Refactor Golf application access-control layer, replace Basic Authentication with OAuth2 authorization.
-/admin endpoint should be accessed only by a client granted with GOLF:ADMIN scope.
-A client granted with GOLF:COACH scope should access all endpoints except /admin endpoint.
-A client granted with GOLF:USER scope should access all read only endpoints except /admin endpoint.
+
+Establish scope-based authorization:
+- /admin endpoint should be accessed only by a client granted with GOLF:ADMIN scope.
+- a client granted with GOLF:COACH scope should access all endpoints except /admin endpoint.
+- a client granted with GOLF:USER scope should access all read only endpoints except /admin endpoint.
 ]]>
     </Task>
     <Context>
@@ -148,6 +150,7 @@ verify the response:
 
 ```
 HTTP status code: 302
+Location: http://localhost:8082/player
 ```
 ]]>
         </TestStep>
@@ -179,7 +182,7 @@ HTTP status code: 302
         </Criterion>
         <Criterion type="accuracy" weight="high" comment="adherence to task requirements">
             <Assert>Make sure that the CHANGES are primarily made to achieve the intended functionality.</Assert>
-            <Assert>Make sure that the CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+            <Assert>Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.</Assert>
         </Criterion>
         <Criterion type="accuracy" weight="high" comment="code quality">
             <Assert>Ensure that the CHANGED code is syntactically correct, compiles without errors.</Assert>

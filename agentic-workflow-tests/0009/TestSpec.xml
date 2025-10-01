@@ -30,7 +30,7 @@ At the this phase only player management should be tested.
 - a test should be parameterized by properties.
 - the application is secured with authentication and authorization. Perform test user login for each test.
 - the application functionality should be tested with the most common browsers: Chrome, Edge, Firefox. A concrete browser must be selected by a property.
-- tests should executed over clean database. Do not rely on hardcoded database objects.
+- tests should not rely on hardcoded database objects.
 ]]>
     </Task>
     <Context>
@@ -55,119 +55,77 @@ At the this phase only player management should be tested.
         <ActStep>Follow the implementation plan steps and modify source code following the instructions</ActStep>
     </Act>
     <TestPlan>
-        <TestStep>Build the application with the command: `mvn clean install`</TestStep>
+        <TestStep>Run the application tests with the command: `mvn clean compile test`</TestStep>
+        <TestStep>Add the command output to output.md. See (testing-template.md)[testing-template.md]</TestStep>
     </TestPlan>
     <Criteria>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure org.seleniumhq.selenium:selenium-java dependency is added in pom.xml.</Assert>
+            <Assert>Ensure org.seleniumhq.selenium:selenium-java dependency is added in `pom.xml`.</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure org.seleniumhq.selenium:selenium-chrome-driver dependency is added in pom.xml.</Assert>
+            <Assert>Ensure org.seleniumhq.selenium:selenium-chrome-driver dependency is added in `pom.xml`.</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure org.seleniumhq.selenium:selenium-firefox-driver dependency is added in pom.xml.</Assert>
+            <Assert>Ensure org.seleniumhq.selenium:selenium-firefox-driver dependency is added in `pom.xml`.</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure org.seleniumhq.selenium:selenium-edge-driver dependency is added in pom.xml.</Assert>
+            <Assert>Ensure org.seleniumhq.selenium:selenium-edge-driver dependency is added in `pom.xml`.</Assert>
         </Criterion>
     </Criteria>
     <Criteria>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure a base abstract class is created for functional tests.</Assert>
+            <Assert>Ensure a base abstract class is created for functional tests.</Assert>
+            <Assert>Make sure the base abstract class is annotated with `@SpringBootTest` and configured to use a random port.</Assert>
+            <Assert>Make sure the base abstract class is annotated with `@ActiveProfiles` pointing to a functional test profile.</Assert>
+            <Assert>Make sure the base abstract class has BeforeEach method initializing Selenium WebDriver and WebDriverWait.</Assert>
+            <Assert>Make sure the base abstract class has AfterEach method calling WebDriver quit method.</Assert>
+            <Assert>Make sure the base abstract class has a protected `login` method authentificating a test user.</Assert>
+            <Assert>Make sure there is WebDriver bean configuration creating a browser driver instance of type specified by browser property.</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure the base abstract class is annotated with "@SpringBootTest" and configured to use a random port.</Assert>
+            <Assert>Ensure a properties file for functional test profile is created in `src/test/resources/` directory.</Assert>
+            <Assert>Make sure the functional test properties file defines tested browser, user name, user password.</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure the base abstract class is annotated with "@ActiveProfiles" pointing to a functional test profile.</Assert>
+            <Assert>Ensure player management test class is created.</Assert>
+            <Assert>Make sure the player management test class defines method testing application shows player list successfully.</Assert>
+            <Assert>Make sure the player management test class defines method testing application adds player successfully.</Assert>
+            <Assert>Make sure the player management test class defines method testing application modifies player successfully.</Assert>
+            <Assert>Make sure the player management test class defines method testing application deletes player list successfully.</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure the base abstract class has BeforeEach method initializing Selenium WebDriver and WebDriverWait.</Assert>
+            <Assert>Ensure that the command `mvn clean compile test` output is given and contains evidence of the application successfully built and all tests passed.</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure the base abstract class has AfterEach method calling WebDriver quit method.</Assert>
+            <Assert>Make sure the player addition test passed.</Assert>
+            <Assert>Make sure the player edition test passed.</Assert>
+            <Assert>Make sure the player deletion test passed.</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the base abstract class has a protected login method authentificating a test user.</Assert>
+        <Criterion type="accuracy" weight="high" comment="functionality">
+            <Assert>Ensure that the CHANGED code accomplishes the intended functionality.</Assert>
+            <Assert>Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure there is WebDriver bean configuration creating a browser driver instance of type specified by browser property.</Assert>
+        <Criterion type="accuracy" weight="high" comment="adherence to task requirements">
+            <Assert>Make sure that the CHANGES are primarily made to achieve the intended functionality.</Assert>
+            <Assert>Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.</Assert>
         </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Ensure a properties file for functional test profile is created in src/test/resources/ directory.</Assert>
+        <Criterion type="accuracy" weight="high" comment="code quality">
+            <Assert>Ensure that the CHANGED code is syntactically correct, compiles without errors.</Assert>
+            <Assert>Ensure that the CHANGED code follows project style guides and maintain consistency with the existing codebase.</Assert>
+            <Assert>Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+            <Assert>Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+            <Assert>Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the functional test properties file defines spring.datasource.url, spring.datasource.username, spring.datasource.password properties.</Assert>
+        <Criterion type="accuracy" weight="high" comment="documentation">
+            <Assert>Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the functional test properties file overrides spring.jpa.hibernate.ddl-auto property is equal to create-drop.</Assert>
+        <Criterion type="accuracy" weight="high" comment="security">
+            <Assert>Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques.</Assert>
+            <Assert>Ensure that CHANGED code avoids exposing sensitive data.</Assert>
+            <Assert>Ensure that CHANGED code protects the application from common security vulnerabilities.</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the functional test properties file defines properties test.browser, test.username, test.userpassword.</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Ensure player management test class is created.</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the player management test class defines method testing application shows player list successfully.</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the player management test class defines method testing application adds player successfully.</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the player management test class defines method testing application modifies player successfully.</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the player management test class defines method testing application deletes player list successfully.</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Ensure that the command `mvn clean install` output is given and contains evidence of the application successfully built and all tests passed.</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the application logged successful addition of player to the output.</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the application logged successful edition of player to the output.</Assert>
-        </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the application logged successful deletion of player to the output.</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="accuracy">
-            <Assert weight="low">Make sure that CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is syntactically correct, compiles without errors, and accomplishes the intended functionality.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Make sure the CHANGED code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+        <Criterion type="accuracy" weight="high" comment="configuration">
+            <Assert>Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
         </Criterion>
     </Criteria>
     <MetaInfo>

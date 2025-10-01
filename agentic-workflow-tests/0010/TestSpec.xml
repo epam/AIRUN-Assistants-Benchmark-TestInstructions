@@ -73,54 +73,41 @@ Other player photo is shown on the page of a player with missing photo.
     </TestPlan>
     <Criteria>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that the line "player.setPhotoId(1L);" removed from the PlayerController method addPlayer.</Assert>
+            <Assert>Ensure that the line `player.setPhotoId(1L);` removed from the `PlayerController` method `addPlayer`.</Assert>
+            <Assert>Ensure that the `PlayerController` method `displayPlayerDetailsPage` is changed to proper handle missing player photo.</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that the PlayerController method displayPlayerDetailsPage is changed to proper handle missing player photo.</Assert>
+            <Assert>Ensure that the code in `player-details.html` is changed to show a placeholder image when no photo is available.</Assert>
         </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Ensure that the code to show player photo in player-details.html is changed to show placeholder image when no photo is available.</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
         <Criterion type="completeness">
             <Assert weight="low">Ensure that a player photo placeholder image is created.</Assert>
+            <Assert weight="high">Ensure that a photo placeholder is shown instead of missing photo on player page.</Assert>
         </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Ensure that a photo placeholder is shown instead of missing photo on player page.</Assert>
+        <Criterion type="accuracy" weight="high" comment="functionality">
+            <Assert>Ensure that the CHANGED code accomplishes the intended functionality.</Assert>
+            <Assert>Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.</Assert>
         </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="accuracy">
-            <Assert weight="low">Make sure that CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+        <Criterion type="accuracy" weight="high" comment="adherence to task requirements">
+            <Assert>Make sure that the CHANGES are primarily made to achieve the intended functionality.</Assert>
+            <Assert>Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.</Assert>
         </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is syntactically correct, compiles without errors, and accomplishes the intended functionality.</Assert>
+        <Criterion type="accuracy" weight="high" comment="code quality">
+            <Assert>Ensure that the CHANGED code is syntactically correct, compiles without errors.</Assert>
+            <Assert>Ensure that the CHANGED code follows project style guides and maintain consistency with the existing codebase.</Assert>
+            <Assert>Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+            <Assert>Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+            <Assert>Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
         </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
+        <Criterion type="accuracy" weight="high" comment="documentation">
+            <Assert>Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
         </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+        <Criterion type="accuracy" weight="high" comment="security">
+            <Assert>Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques.</Assert>
+            <Assert>Ensure that CHANGED code avoids exposing sensitive data.</Assert>
+            <Assert>Ensure that CHANGED code protects the application from common security vulnerabilities.</Assert>
         </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Make sure the CHANGED code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+        <Criterion type="accuracy" weight="high" comment="configuration">
+            <Assert>Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
         </Criterion>
     </Criteria>
     <MetaInfo>

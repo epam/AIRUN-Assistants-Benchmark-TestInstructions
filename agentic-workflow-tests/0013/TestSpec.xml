@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <TestSpec>
-    <Id>0011</Id>
+    <Id>0013</Id>
     <Title>Verify User e-mail upon Registration in Golf application</Title>
     <Objectives>
     </Objectives>
@@ -18,7 +18,6 @@
     </Stack>
     <Task>
 <![CDATA[
-```markdown
 ## Task
 
 Finish user registration process by verifying the user’s email to enable the user’s account
@@ -35,7 +34,6 @@ An user enters his e-mail address during registration.
 - Send a confirmation email message to an user entered e-mail address with link pointing to the application e-mail verification endpoint.
 - Make the e-mail address verification link expires within a configured period, 5 minutes by default.
 - Enable the user account after the verification link is visited.
-```
 ]]>
     </Task>
     <Context>
@@ -82,9 +80,9 @@ docker run -p 8025:8025 -p 1025:1025 mailhog/mailhog
         <TestStep>Update email configuration in application.properties to make it compatible with your local environment</TestStep>
         <TestStep>Build the application with the command: `mvn clean install`</TestStep>
         <TestStep>Start the application with the command: `mvn spring-boot:run`</TestStep>
-        <TestStep>Open application UI at http://localhost:8082/register</TestStep>
+        <TestStep>Open the application [user registration page](http://localhost:8082/register)</TestStep>
         <TestStep>Register a first user</TestStep>
-        <TestStep>Visit MailHog UI at http://localhost:8025/</TestStep>
+        <TestStep>Visit [MailHog UI](http://localhost:8025/)</TestStep>
         <TestStep>Look for the user registration email in Inbox</TestStep>
         <TestStep>Visit the user email address verification link found in the email</TestStep>
         <TestStep>Login with the first user credentials</TestStep>
@@ -96,122 +94,81 @@ docker run -p 8025:8025 -p 1025:1025 mailhog/mailhog
     </TestPlan>
     <Criteria>
         <Criterion type="completeness">
-            <Assert weight="low">Ensure that org.springframework.boot:spring-boot-starter-mail dependency has been added added to pom.xml</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Ensure that spring mail has been configured in src/main/resources/application.properties</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make user that registration confirmation template has been created</Assert>
+            <Assert>Ensure that org.springframework.boot:spring-boot-starter-mail dependency has been added added to `pom.xml`</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make user that registration verification template has been created</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that UserController registerUser method returns registration confirmation view name</Assert>
+            <Assert>Ensure that spring mail has been configured in `src/main/resources/application.properties`</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure that verifyEmail method parameterized by token is added to UserController class</Assert>
+            <Assert>Make user that registration confirmation template has been created</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure that UserController verifyEmail method is annotated with @GetMapping</Assert>
+            <Assert>Make user that registration verification template has been created</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure that UserController verifyEmail method verify token via userService method call</Assert>
+            <Assert>Make sure that `UserController.registerUser` method returns registration confirmation view name</Assert>
+            <Assert>Make sure that `verifyEmail` method parameterized by token is added to `UserController` class</Assert>
+            <Assert>Make sure that `UserController.verifyEmail` method is annotated with `@GetMapping`</Assert>
+            <Assert>Make sure that `UserController.verifyEmail` method verifies token via `userService` method call</Assert>
+            <Assert>Make sure that `UserController.verifyEmail` method returns registration verification view name</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure that UserController verifyEmail method returns registration verification view name</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that UserServiceImpl creates a not enabled user in registerUser method</Assert>
+            <Assert>Make sure that `UserServiceImpl.registerUser` creates a not enabled user</Assert>
+            <Assert>Make sure that `UserServiceImpl.registerUser` creates an user email verification token</Assert>
+            <Assert>Make sure that `verifyEmail` method is added to `UserServiceImpl` class</Assert>
+            <Assert>Make sure that `UserServiceImpl.verifyEmail` method enables an user if a non-expired user email verification token exists</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure that UserServiceImpl creates an user email verification token in registerUser method</Assert>
+            <Assert>Make sure that the application sends an email to the address specified by a registered user and includes an user email verification link</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure that verifyEmail method is added to UserServiceImpl class</Assert>
+            <Assert>Make sure that the application is built without errors</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure that UserServiceImpl verifyEmail method enables an user if a non-expired user email verification token exists</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that the application sends an email to an address specified by a registered user and includes an user email verification link</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that the application is built without errors</Assert>
+            <Assert>Make sure that the application is launched without errors</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure that the application is launched without errors</Assert>
-        </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that an user can be registered in the application</Assert>
+            <Assert>Make sure that an user can be registered in the application</Assert>
+            <Assert>Make sure that the registered user cannot log in to the application until the email address is verified</Assert>
+            <Assert>Make sure that the registered user can log in to the application after verifying the email address</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure that the registered user cannot log in to the application until the email address is verified</Assert>
+            <Assert>Make sure the application sends an email about the user's registration to the provided address</Assert>
+            <Assert>Make sure the user registration email contains email verification link</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert weight="low">Make sure the application sends an email about the user's registration to the address they provided</Assert>
+            <Assert>Make sure the non-expired user email verification link can be successfully opened</Assert>
+            <Assert>Make sure the expired email verification link opened unsuccessfully</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the user registration email contains email verification link</Assert>
+        <Criterion type="accuracy" weight="high" comment="functionality">
+            <Assert>Ensure that the CHANGED code accomplishes the intended functionality.</Assert>
+            <Assert>Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the user email verification link can be successfully opened</Assert>
+        <Criterion type="accuracy" weight="high" comment="adherence to task requirements">
+            <Assert>Make sure that the CHANGES are primarily made to achieve the intended functionality.</Assert>
+            <Assert>Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure that the registered user can log in to the application after verifying the email address</Assert>
+        <Criterion type="accuracy" weight="high" comment="code quality">
+            <Assert>Ensure that the CHANGED code is syntactically correct, compiles without errors.</Assert>
+            <Assert>Ensure that the CHANGED code follows project style guides and maintain consistency with the existing codebase.</Assert>
+            <Assert>Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+            <Assert>Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+            <Assert>Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
         </Criterion>
-        <Criterion type="completeness">
-            <Assert weight="low">Make sure the expired email verification link opened unsuccessfully</Assert>
+        <Criterion type="accuracy" weight="high" comment="documentation">
+            <Assert>Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
         </Criterion>
-    </Criteria>
-    <Criteria>
-        <Criterion type="accuracy">
-            <Assert weight="low">Make sure that CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
+        <Criterion type="accuracy" weight="high" comment="security">
+            <Assert>Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques.</Assert>
+            <Assert>Ensure that CHANGED code avoids exposing sensitive data.</Assert>
+            <Assert>Ensure that CHANGED code protects the application from common security vulnerabilities.</Assert>
         </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is syntactically correct, compiles without errors, and accomplishes the intended functionality.</Assert>
+        <Criterion type="accuracy" weight="high" comment="configuration">
+            <Assert>Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
         </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Make sure the CHANGED code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that application sends an user registration email after committing of user registration transaction</Assert>
-        </Criterion>
-        <Criterion type="accuracy">
-            <Assert weight="low">Ensure that application sends an user registration email asynchronously</Assert>
+        <Criterion type="accuracy" weight="high" comment="reliability and fault tolerance">
+            <Assert>Ensure that application sends an user registration email after committing of user registration transaction</Assert>
+            <Assert>Ensure that application sends an user registration email asynchronously</Assert>
         </Criterion>
     </Criteria>
     <MetaInfo>

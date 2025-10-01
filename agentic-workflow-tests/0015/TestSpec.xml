@@ -58,15 +58,32 @@ docker run -d -p 9411:9411 openzipkin/zipkin
             <Assert>Make sure that the application is launched without errors</Assert>
             <Assert>Make sure that the application is opened at http://localhost:8082/</Assert>
             <Assert>Make sure that an user has logged in in the application</Assert>
-            <Assert>Verify that traces have beed appeared in the Zipkin UI at http://localhost:9411/zipkin</Assert>
-            <Assert>Make sure that CHANGES do not contain unrequested code modifications, unused imports or code.</Assert>
-            <Assert>Ensure that the CHANGED code is syntactically correct, compiles without errors, and accomplishes the intended functionality.</Assert>
-            <Assert>Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
-            <Assert>Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+            <Assert>Verify that traces have been appeared in the Zipkin UI at http://localhost:9411/zipkin</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="functionality">
+            <Assert>Ensure that the CHANGED code accomplishes the intended functionality.</Assert>
+            <Assert>Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="adherence to task requirements">
+            <Assert>Make sure that the CHANGES are primarily made to achieve the intended functionality.</Assert>
+            <Assert>Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="code quality">
+            <Assert>Ensure that the CHANGED code is syntactically correct, compiles without errors.</Assert>
+            <Assert>Ensure that the CHANGED code follows project style guides and maintain consistency with the existing codebase.</Assert>
             <Assert>Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
             <Assert>Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
-            <Assert>Make sure the CHANGED code makes robust exception handling to handle unexpected issues gracefully and prevent the application from crashing.</Assert>
-            <Assert>Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques, and protect the application from common security vulnerabilities.</Assert>
+            <Assert>Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="documentation">
+            <Assert>Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="security">
+            <Assert>Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques.</Assert>
+            <Assert>Ensure that CHANGED code avoids exposing sensitive data.</Assert>
+            <Assert>Ensure that CHANGED code protects the application from common security vulnerabilities.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="configuration">
             <Assert>Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
         </Criterion>
     </Criteria>
