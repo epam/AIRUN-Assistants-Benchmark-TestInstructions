@@ -18,7 +18,7 @@ NAME
     $SCRIPT_NAME - prepare agent generated changes for LLM evaluation
 
 SYNOPSIS
-    $SCRIPT_NAME commit1 commit2 test_spec_xml
+    $SCRIPT_NAME commit1 commit2 test_spec_xml [ ignored_file ... ]
 
 DESCRIPTION
     Prepare text describing test task, task related files content, agent generated changes in LLM-readable format.
@@ -29,6 +29,20 @@ DESCRIPTION
 EOD
 }
 
+function check_value_in_array() {
+  local search_value="$1"
+  shift
+  local -a target_array=("$@")
+
+  for element in "${target_array[@]}"; do
+    if [[ "$element" == "$search_value" ]]; then
+      return 0
+    fi
+  done
+
+  return 1
+}
+
 function format_addition() {
     local file="$2"
     local commit2="$4"
@@ -36,7 +50,7 @@ function format_addition() {
 ## I suggest to create $file:
 
 \`\`\`${file##*.}
-$(git show $commit2:$file)
+$(git show "$commit2:$file")
 \`\`\`
 
 EOD
@@ -48,7 +62,7 @@ function format_deletion() {
 ## Delete the entire $file file as it's not longer needed.
 
 \`\`\`diff
-$(git diff -U100000 $commit1..$commit2 -- $file)
+$(git diff -U100000 $commit1..$commit2 -- "$file")
 \`\`\`
 
 EOD
@@ -62,7 +76,7 @@ function format_modification() {
 ## I suggest the following $file changes:
 
 \`\`\`diff
-$(git diff -U100000 $commit1..$commit2 -- $file)
+$(git diff -U100000 $commit1..$commit2 -- "$file")
 \`\`\`
 
 EOD
@@ -130,6 +144,8 @@ function format_patch() {
     local commit1=$1
     local commit2=$2
     local test_spec_xml=$3
+    shift 3
+    local -a ignored_files=("$@")
 
     local task
     read_task $test_spec_xml task
@@ -157,9 +173,12 @@ EOD
     local changed_files=()
     for file_status in "${file_statuses[@]}"; do
         read -r status file <<< $file_status
+        if check_value_in_array "$file" "${ignored_files[@]}" ; then
+            continue
+        fi
         formatter=${file_change_formatters[$status]:-"format_unrecognized"}
-        $formatter $status $file $commit1 $commit2
-        changed_files+=($file)
+        $formatter $status "$file" $commit1 $commit2
+        changed_files+=("$file")
     done
 
 cat <<EOD
@@ -169,7 +188,7 @@ EOD
     local unchanged_files=()
     array_substruct context_files changed_files unchanged_files
     for file in "${unchanged_files[@]}"; do
-        cat_file $file $commit2
+        cat_file "$file" $commit2
     done
 }
 
@@ -181,7 +200,12 @@ function main() {
         print_usage 2
         exit 1
     fi
-    format_patch $1 $2 $3
+    local commit1=$1
+    local commit2=$2
+    local test_spec_xml=$3
+    shift 3
+    local -a ignored_files=("$@")
+    format_patch $commit1 $commit2 $test_spec_xml "${ignored_files[@]}"
 }
 
 if ! (return 0 2> /dev/null); then
