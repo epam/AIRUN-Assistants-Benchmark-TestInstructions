@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<TestSpec>
+    <!-- DRAFT -->
+    <Id>0007</Id>
+    <Title>Migrate Golf application to reactive stack</Title>
+    <Objectives>
+    </Objectives>
+    <Category>code-refactoring</Category>
+    <Complexity>High</Complexity>
+    <CodeRepository>https://github.com/PolinaTolkachova/golf-application</CodeRepository>
+    <Stack>
+        <Languages>
+            <Language primary="true">Java</Language>
+        </Languages>
+        <Technologies>
+            <Technology>Spring Boot</Technology>
+            <Technology>Spring WebFlux</Technology>
+            <Technology>Spring Data R2DBC</Technology>
+            <Technology>Project Reactor</Technology>
+        </Technologies>
+    </Stack>
+    <Task>
+# WHY
+Improve the Golf application scalability, performance, and resource efficiency.
+
+# WHAT
+
+Migrate Spring MVC application with Thymeleaf templating to a fully reactive stack using Spring WebFlux and reactive Thymeleaf support.
+
+Scope:
+- Web layer migration (Controllers → Reactive Controllers)
+- Service layer refactoring to reactive patterns
+- Data access layer migration to reactive repositories
+- Template engine configuration for reactive support
+- Security migration to Spring Security Reactive
+- Testing strategy adaptation
+
+# HOW
+
+## Target Stack
+
+- Spring Boot 3.x (Reactive Support)
+- Spring WebFlux
+- Thymeleaf 3.1+ (Reactive Support)
+- Spring Data R2DBC
+- Netty (Reactive Server)
+- Spring Security Reactive
+- Reactive Session Management
+    </Task>
+    <Context>
+        <Files>
+            <File>pom.xml</File>
+            <File>src/main/java/com/golf/app/AppConfiguration.java</File>
+            <File>src/main/java/com/golf/app/GolfWebApplication.java</File>
+            <File>src/main/java/com/golf/app/api/CompetitionRestController.java</File>
+            <File>src/main/java/com/golf/app/security/AppSecurityConfig.java</File>
+            <File>src/main/java/com/golf/app/controller/AdminController.java</File>
+            <File>src/main/java/com/golf/app/controller/CompetitionController.java</File>
+            <File>src/main/java/com/golf/app/controller/CompetitionExceptionHandlerController.java</File>
+            <File>src/main/java/com/golf/app/controller/CourseController.java</File>
+            <File>src/main/java/com/golf/app/controller/ExceptionHandlerController.java</File>
+            <File>src/main/java/com/golf/app/controller/MainController.java</File>
+            <File>src/main/java/com/golf/app/controller/PlayerController.java</File>
+            <File>src/main/java/com/golf/app/controller/PlayerPhotoController.java</File>
+            <File>src/main/java/com/golf/app/controller/RoundController.java</File>
+            <File>src/main/java/com/golf/app/controller/RoundScoreController.java</File>
+            <File>src/main/java/com/golf/app/controller/ScoreCardController.java</File>
+            <File>src/main/java/com/golf/app/controller/ScoreCardImageController.java</File>
+            <File>src/main/java/com/golf/app/controller/UserController.java</File>
+            <File>src/main/java/com/golf/app/model/Competition.java</File>
+            <File>src/main/java/com/golf/app/model/Course.java</File>
+            <File>src/main/java/com/golf/app/model/Hole.java</File>
+            <File>src/main/java/com/golf/app/model/Judge.java</File>
+            <File>src/main/java/com/golf/app/model/Marker.java</File>
+            <File>src/main/java/com/golf/app/model/Par.java</File>
+            <File>src/main/java/com/golf/app/model/Player.java</File>
+            <File>src/main/java/com/golf/app/model/PlayerPhoto.java</File>
+            <File>src/main/java/com/golf/app/model/Round.java</File>
+            <File>src/main/java/com/golf/app/model/RoundScore.java</File>
+            <File>src/main/java/com/golf/app/model/Score.java</File>
+            <File>src/main/java/com/golf/app/model/ScoreCard.java</File>
+            <File>src/main/java/com/golf/app/model/ScoreCardImage.java</File>
+            <File>src/main/java/com/golf/app/model/StrokeIndex.java</File>
+            <File>src/main/java/com/golf/app/model/Team.java</File>
+            <File>src/main/java/com/golf/app/model/Tee.java</File>
+            <File>src/main/java/com/golf/app/model/User.java</File>
+            <File>src/main/java/com/golf/app/repo/CompetitionRepository.java</File>
+            <File>src/main/java/com/golf/app/repo/CourseRepository.java</File>
+            <File>src/main/java/com/golf/app/repo/MarkerRepository.java</File>
+            <File>src/main/java/com/golf/app/repo/ParRepository.java</File>
+            <File>src/main/java/com/golf/app/repo/PlayerPhotoRepository.java</File>
+            <File>src/main/java/com/golf/app/repo/PlayerRepository.java</File>
+            <File>src/main/java/com/golf/app/repo/RoundRepository.java</File>
+            <File>src/main/java/com/golf/app/repo/RoundScoreRepository.java</File>
+            <File>src/main/java/com/golf/app/repo/ScoreCardImageRepository.java</File>
+            <File>src/main/java/com/golf/app/repo/ScoreCardRepository.java</File>
+            <File>src/main/java/com/golf/app/repo/UserRepository.java</File>
+            <File>src/main/java/com/golf/app/service/CompetitionService.java</File>
+            <File>src/main/java/com/golf/app/service/CompetitionServiceImpl.java</File>
+            <File>src/main/java/com/golf/app/service/CourseService.java</File>
+            <File>src/main/java/com/golf/app/service/CourseServiceImpl.java</File>
+            <File>src/main/java/com/golf/app/service/MarkerService.java</File>
+            <File>src/main/java/com/golf/app/service/ParService.java</File>
+            <File>src/main/java/com/golf/app/service/ParServiceImpl.java</File>
+            <File>src/main/java/com/golf/app/service/PlayerPhotoService.java</File>
+            <File>src/main/java/com/golf/app/service/PlayerPhotoServiceImpl.java</File>
+            <File>src/main/java/com/golf/app/service/PlayerService.java</File>
+            <File>src/main/java/com/golf/app/service/PlayerServiceImpl.java</File>
+            <File>src/main/java/com/golf/app/service/RoundScoreService.java</File>
+            <File>src/main/java/com/golf/app/service/RoundScoreServiceImpl.java</File>
+            <File>src/main/java/com/golf/app/service/RoundService.java</File>
+            <File>src/main/java/com/golf/app/service/RoundServiceImpl.java</File>
+            <File>src/main/java/com/golf/app/service/ScoreCardImageService.java</File>
+            <File>src/main/java/com/golf/app/service/ScoreCardImageServiceImpl.java</File>
+            <File>src/main/java/com/golf/app/service/ScoreCardService.java</File>
+            <File>src/main/java/com/golf/app/service/ScoreCardServiceImpl.java</File>
+            <File>src/main/java/com/golf/app/service/UserService.java</File>
+            <File>src/main/java/com/golf/app/service/UserServiceImpl.java</File>
+            <File>src/main/resources/application.properties</File>
+        </Files>
+    </Context>
+    <Arrangement>
+    </Arrangement>
+    <Act>
+        <ActStep>Submit the task and wait implementation plan is generated</ActStep>
+        <ActStep>Go to the implementation plan</ActStep>
+        <ActStep>Follow the implementation plan steps and modify source code following the instructions</ActStep>
+    </Act>
+    <TestPlan>
+        <TestStep>Update database configuration in application.properties to match it with your local environment</TestStep>
+        <TestStep>Build the application with the command: `mvn clean install`</TestStep>
+        <TestStep>Launch the application with the command: `mvn spring-boot:run`</TestStep>
+        <TestStep>Open application UI at http://localhost:8082/</TestStep>
+        <TestStep>Visit the "PLAYERS" page and make sure the player list is displayed there</TestStep>
+        <TestStep>Visit the "ROUND SCORES" page and make sure the round score list is displayed there</TestStep>
+        <TestStep>Visit the "COMPETITIONS" page and make sure the competition list is displayed there</TestStep>
+        <TestStep>Visit the the "COURSE" page and make sure the course list is displayed there</TestStep>
+        <TestStep>Make sure the competition can be created on the "ADD COMPETITION" page</TestStep>
+    </TestPlan>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert>Ensure the `spring-boot-starter-web` dependency is removed in `pom.xml`.</Assert>
+            <Assert>Ensure the `spring-boot-starter-data-jpa` dependency is removed in `pom.xml`.</Assert>
+            <Assert>Ensure the MySQL JDBC driver dependency is removed in `pom.xml`.</Assert>
+            <Assert>Ensure the `spring-boot-starter-webflux` dependency is added in `pom.xml`.</Assert>
+            <Assert>Ensure the `spring-boot-starter-data-r2dbc` dependency is added in `pom.xml`.</Assert>
+            <Assert>Ensure the MySQL R2BC driver dependency is added in `pom.xml`.</Assert>
+            <Assert>Ensure the `reactor-test` dependency is added in `pom.xml`.</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Ensure `spring.datasource.*` properties are removed in `src/main/resources/application.properties`.</Assert>
+            <Assert>Ensure `spring.r2dbc.url` property is configured in `src/main/resources/application.properties`.</Assert>
+            <Assert>Ensure `spring.r2dbc.username` property is configured in `src/main/resources/application.properties`.</Assert>
+            <Assert>Ensure `spring.r2dbc.password` property is configured in `src/main/resources/application.properties`.</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `Competition`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `Course`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `Hole`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `Judge`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `Marker`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `Par`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `Player`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `PlayerPhoto`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `Round`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `RoundScore`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `Score`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `ScoreCard`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `ScoreCardImage`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `StrokeIndex`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `Team`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `Tee`.</Assert>
+            <Assert>Ensure JPA annotations are replaced with R2DBC annotations in `User`.</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Ensure `CompetitionRestController` is converted to reactive controller.</Assert>
+            <Assert>Ensure `AdminController` is converted to reactive controller.</Assert>
+            <Assert>Ensure `CompetitionController` is converted to reactive controller.</Assert>
+            <Assert>Ensure `CompetitionExceptionHandlerController` is converted to reactive controller.</Assert>
+            <Assert>Ensure `CourseController` is converted to reactive controller.</Assert>
+            <Assert>Ensure `ExceptionHandlerController` is converted to reactive controller.</Assert>
+            <Assert>Ensure `MainController` is converted to reactive controller.</Assert>
+            <Assert>Ensure `PlayerController` is converted to reactive controller.</Assert>
+            <Assert>Ensure `PlayerPhotoController` is converted to reactive controller.</Assert>
+            <Assert>Ensure `RoundController` is converted to reactive controller.</Assert>
+            <Assert>Ensure `RoundScoreController` is converted to reactive controller.</Assert>
+            <Assert>Ensure `ScoreCardController` is converted to reactive controller.</Assert>
+            <Assert>Ensure `ScoreCardImageController` is converted to reactive controller.</Assert>
+            <Assert>Ensure `UserController` is converted to reactive controller.</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Ensure `CompetitionRepository` is migrated to reactive repository.</Assert>
+            <Assert>Ensure `CourseRepository` is migrated to reactive repository.</Assert>
+            <Assert>Ensure `MarkerRepository` is migrated to reactive repository.</Assert>
+            <Assert>Ensure `ParRepository` is migrated to reactive repository.</Assert>
+            <Assert>Ensure `PlayerPhotoRepository` is migrated to reactive repository.</Assert>
+            <Assert>Ensure `PlayerRepository` is migrated to reactive repository.</Assert>
+            <Assert>Ensure `RoundRepository` is migrated to reactive repository.</Assert>
+            <Assert>Ensure `RoundScoreRepository` is migrated to reactive repository.</Assert>
+            <Assert>Ensure `ScoreCardImageRepository` is migrated to reactive repository.</Assert>
+            <Assert>Ensure `ScoreCardRepository` is migrated to reactive repository.</Assert>
+            <Assert>Ensure `UserRepository` is migrated to reactive repository.</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Ensure `CompetitionService` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `CompetitionServiceImpl` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `CourseService` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `CourseServiceImpl` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `ParService` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `ParServiceImpl` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `PlayerPhotoService` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `PlayerPhotoServiceImpl` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `PlayerService` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `PlayerServiceImpl` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `RoundScoreService` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `RoundScoreServiceImpl` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `RoundService` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `RoundServiceImpl` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `ScoreCardImageService` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `ScoreCardImageServiceImpl` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `ScoreCardService` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `ScoreCardServiceImpl` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `UserService` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `UserServiceImpl` is converted from blocking patterns to reactive patterns.</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Ensure `CustomAccessDeniedHandler` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `CustomAuthenticationFailureHandler` is converted from blocking patterns to reactive patterns.</Assert>
+            <Assert>Ensure `CustomLogoutSuccessHandler` is converted from blocking patterns to reactive patterns.</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Ensure R2DBC are enabled in Spring configuration.</Assert>
+            <Assert>Ensure WebFlux security is enabled in Spring configuration.</Assert>
+            <Assert>Ensure `InMemoryUserDetailsManager` is replaced with `MapReactiveUserDetailsService` in Spring configuration.</Assert>
+            <Assert>Ensure servlet filter chain is replaced with WebFilter chain in Spring configuration.</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Ensure that database schema management is addressed after removing the Hibernate management.</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Make sure that the application is built without errors</Assert>
+            <Assert>Make sure that the application is launched without errors</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Make sure the player list is displayed on the "PLAYERS" page</Assert>
+            <Assert>Make sure the round score list is displayed on the "ROUND SCORES" page</Assert>
+            <Assert>Make sure the competition list is displayed on the "COMPETITIONS" page</Assert>
+            <Assert>Make sure the course list is displayed on the "COURSE" page</Assert>
+            <Assert>Make sure the competition can be created on the "ADD COMPETITION" page</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="functionality">
+            <Assert>Ensure that the CHANGED code accomplishes the intended functionality.</Assert>
+            <Assert>Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="adherence to task requirements">
+            <Assert>Make sure that the CHANGES are primarily made to achieve the intended functionality.</Assert>
+            <Assert>Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="code quality">
+            <Assert>Ensure that the CHANGED code is syntactically correct, compiles without errors.</Assert>
+            <Assert>Ensure that the CHANGED code follows project style guides and maintain consistency with the existing codebase.</Assert>
+            <Assert>Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+            <Assert>Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+            <Assert>Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="documentation">
+            <Assert>Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="security">
+            <Assert>Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques.</Assert>
+            <Assert>Ensure that CHANGED code avoids exposing sensitive data.</Assert>
+            <Assert>Ensure that CHANGED code protects the application from common security vulnerabilities.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="configuration">
+            <Assert>Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+        </Criterion>
+    </Criteria>
+    <MetaInfo>
+        <Meta>See [testing-template.md](testing-template.md)</Meta>
+    </MetaInfo>
+</TestSpec>
