@@ -55,6 +55,7 @@ At the this phase only player management should be tested.
         <ActStep>Follow the implementation plan steps and modify source code following the instructions</ActStep>
     </Act>
     <TestPlan>
+        <TestStep>Examine Selenium dependencies by running the command: `mvn dependency:tree -Dincludes=org.seleniumhq.selenium:*`</TestStep>
         <TestStep>Run the application tests with the command: `mvn clean compile test`</TestStep>
         <TestStep>Add the command output to output.md. See (testing-template.md)[testing-template.md]</TestStep>
     </TestPlan>
@@ -80,7 +81,7 @@ At the this phase only player management should be tested.
             <Assert>Make sure the base abstract class has BeforeEach method initializing Selenium WebDriver and WebDriverWait.</Assert>
             <Assert>Make sure the base abstract class has AfterEach method calling WebDriver quit method.</Assert>
             <Assert>Make sure the base abstract class has a protected `login` method authentificating a test user.</Assert>
-            <Assert>Make sure there is WebDriver bean configuration creating a browser driver instance of type specified by browser property.</Assert>
+            <Assert>Make sure WebDriver is initialized for the browser specified by the browser property.</Assert>
         </Criterion>
         <Criterion type="completeness">
             <Assert>Ensure a properties file for functional test profile is created in `src/test/resources/` directory.</Assert>

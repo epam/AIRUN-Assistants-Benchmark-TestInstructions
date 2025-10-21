@@ -11,10 +11,12 @@ The more abstract version of [0001](../0001).
     <Stack>
         <Languages>
             <Language primary="true">Java</Language>
+        </Languages>
+        <Technologies>
             <Technology>Docker</Technology>
             <Technology>MySQL</Technology>
             <Technology>Flyway</Technology>
-        </Languages>
+        </Technologies>
     </Stack>
     <Task>
 Add Flyway support continuously remodel the database schema outside the application.

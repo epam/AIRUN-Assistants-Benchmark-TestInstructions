@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <TestSpec>
-    <Id>0013</Id>
+    <Id>0015</Id>
     <Title>Add Zipkin-backed Tracing to Golf application</Title>
     <Category>solution-or-component-generation</Category>
     <Complexity>low</Complexity>
@@ -25,6 +25,13 @@ Configure tracing to sample 100% of requests.
             <File>src/main/resources/application.properties</File>
         </Files>
     </Context>
+    <Arrangement>
+    </Arrangement>
+    <Act>
+        <ActStep>Submit the task and wait implementation plan is generated</ActStep>
+        <ActStep>Go to the implementation plan</ActStep>
+        <ActStep>Follow the implementation plan steps and modify source code following the instructions</ActStep>
+    </Act>
     <TestPlan>
         <TestStep><![CDATA[
 Start Zipkin either as Java jar:
@@ -40,22 +47,28 @@ docker run -d -p 9411:9411 openzipkin/zipkin
 ```
 ]]>
         </TestStep>
-        <TestStep></TestStep>
-        <TestStep>build the application with the command: `mvn clean install`</TestStep>
-        <TestStep>start the application with the command: `mvn spring-boot:run`</TestStep>
+        <TestStep>Update Zipkin tracing endpoint property in application.properties to match it your local environment</TestStep>
+        <TestStep>Build the application with the command: `mvn clean install`</TestStep>
+        <TestStep>Start the application with the command: `mvn spring-boot:run`</TestStep>
         <TestStep>Open the application at http://localhost:8082/ and login</TestStep>
         <TestStep>Verify that traces appeared in the Zipkin UI at http://localhost:9411/zipkin</TestStep>
         <TestStep>Add results of the manual tests to output.md. See (testing-template.md)[testing-template.md]</TestStep>
     </TestPlan>
     <Criteria>
-        <Criterion>
-            <Assert>Ensure that org.springframework.boot:spring-boot-starter-actuator dependency has been added added to pom.xml</Assert>
-            <Assert>Ensure that io.micrometer:micrometer-tracing-bridge-brave dependency has been added added to pom.xml</Assert>
-            <Assert>Ensure that io.zipkin.reporter2:zipkin-reporter-brave dependency has been added added to pom.xml</Assert>
-            <Assert>Ensure that management.tracing.sampling.probability=1.0 property has been configured in src/main/resources/application.properties</Assert>
-            <Assert>Ensure that management.zipkin.tracing.endpoint=http://localhost:9411/api/v2/spans property has been configured in src/main/resources/application.properties</Assert>
+        <Criterion type="completeness">
+            <Assert>Ensure that `org.springframework.boot:spring-boot-starter-actuator` dependency has been added added to `pom.xml`</Assert>
+            <Assert>Ensure that `io.micrometer:micrometer-tracing-bridge-brave` dependency has been added added to `pom.xml`</Assert>
+            <Assert>Ensure that `io.zipkin.reporter2:zipkin-reporter-brave` dependency has been added added to `pom.xml`</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Ensure that `management.tracing.sampling.probability=1.0` property has been configured in `src/main/resources/application.properties`</Assert>
+            <Assert>Ensure that `management.zipkin.tracing.endpoint=http://localhost:9411/api/v2/spans` property has been configured in src/main/resources/application.properties`</Assert>
+        <Criterion type="completeness">
             <Assert>Make sure that the application is built without errors</Assert>
+        </Criterion>
+        <Criterion type="completeness">
             <Assert>Make sure that the application is launched without errors</Assert>
+        </Criterion>
             <Assert>Make sure that the application is opened at http://localhost:8082/</Assert>
             <Assert>Make sure that an user has logged in in the application</Assert>
             <Assert>Verify that traces have been appeared in the Zipkin UI at http://localhost:9411/zipkin</Assert>

@@ -60,48 +60,49 @@ Cleanup unused or legacy logging configuration.
     </TestPlan>
     <Criteria>
         <Criterion type="completeness" weight="high">
-            <Assert>Ensure spring-boot-starter-logging is excluded from spring-boot-starter dependency in pom.xml.</Assert>
-            <Assert>Ensure spring-boot-starter-log4j2 dependency is added in pom.xml.</Assert>
-            <Assert>Ensure com.lmax:disruptor dependency is added in pom.xml.</Assert>
-            <Assert>Make sure there is not logback dependency by running the command `mvn dependency:tree -Dincludes=ch.qos.logback:*`.</Assert>
+            <Assert>Ensure `spring-boot-starter-logging` is excluded from Spring Boot starter dependencies in `pom.xml`.</Assert>
+            <Assert>Ensure `spring-boot-starter-log4j2` dependency is added in `pom.xml`.</Assert>
+            <Assert>Ensure `com.lmax:disruptor` dependency is added in `pom.xml`.</Assert>
+            <Assert>Make sure there is not Logback dependency by running the command `mvn dependency:tree -Dincludes=ch.qos.logback:*`.</Assert>
         </Criterion>
         <Criterion type="completeness" weight="low">
-            <Assert>Ensure logback-spring.xml is deleted from resources folder.</Assert>
-            <Assert>Ensure logging.properties is deleted from resources folder.</Assert>
-            <Assert>Ensure logging properties prefixed logging.level. are removed from src/main/resources/application.properties.</Assert>
+            <Assert>Ensure `logback-spring.xml` is deleted from `src/main/resources` folder.</Assert>
+            <Assert>Ensure `logging.properties` is deleted from `src/main/resources` folder.</Assert>
+            <Assert>Ensure logging properties prefixed `logging.level.` are removed from `src/main/resources/application.properties`.</Assert>
         </Criterion>
         <Criterion type="completeness" weight="high">
-            <Assert>Ensure log4j2 configuration file is added in resources folder.</Assert>
-            <Assert>Ensure console appender is added in log4j2 configuration.</Assert>
-            <Assert>Ensure file appender is added in log4j2 configuration.</Assert>
-            <Assert>Ensure logger for "com.golf.app" is configured in log4j2 configuration.</Assert>
-            <Assert>Ensure logger for "org.springframework.web" is configured in log4j2 configuration.</Assert>
+            <Assert>Ensure Log4j2 configuration file is added in `src/main/resources` folder.</Assert>
+            <Assert>Log4j2 is properly configured.</Assert>
+            <Assert>Ensure console appender is added in Log4j2 configuration.</Assert>
+            <Assert>Ensure file appender is added in Log4j2 configuration.</Assert>
+            <Assert>Ensure logger for "com.golf.app" is configured in Log4j2 configuration.</Assert>
+            <Assert>Ensure logger for "org.springframework.web" is configured in Log4j2 configuration.</Assert>
         </Criterion>
         <Criterion type="completeness" weight="high">
             <Assert>Ensure logging is fully asynchronous in Log4j2 configuration.</Assert>
             <Assert>Ensure LMAX Disruptor is utilized in Log4j2's logging.</Assert>
-            <Assert>Ensure file appender is configured as RollingRandomAccessFile in log4j2 configuration.</Assert>
-            <Assert>Ensure ALL log4j2 loggers are configured as asynchronous.</Assert>
+            <Assert>Ensure file appender is configured as RollingRandomAccessFile in Log4j2 configuration.</Assert>
+            <Assert>Ensure ALL Log4j2 loggers are configured as asynchronous.</Assert>
             <Assert weight="low">Make sure that parameterized messages are used everywhere in SLF4J logging calls to boost logging performance for disabled logging statements.</Assert>
         </Criterion>
         <Criterion type="completeness" weight="high">
-            <Assert>Ensure Slf4j annotation is added to PlayerController class.</Assert>
-            <Assert>Ensure LOGGER field declaration is removed from PlayerController class.</Assert>
-            <Assert>Ensure PlayerController addPlayer method logging is changed to log.info(...).</Assert>
-            <Assert>Ensure PlayerController updatePlayer method logging is changed to log.info(...).</Assert>
-            <Assert>Ensure PlayerController deletePlayer method logging is changed to log.info(...).</Assert>
-            <Assert>Ensure Slf4j annotation is added to CustomAccessDeniedHandler class.</Assert>
-            <Assert>Ensure CustomAccessDeniedHandler handle method logging is changed to log.warn(...).</Assert>
-            <Assert>Ensure Slf4j annotation is added to CompetitionController class.</Assert>
-            <Assert>Make sure that all calls of System.out.println(...) are replaced with log.info(...) or log.warn(...) or log.debug(...) in CompetitionController class.</Assert>
-            <Assert>Ensure Slf4j annotation is added to RoundController class.</Assert>
-            <Assert>Make sure that all calls of System.out.println(...) are replaced with log.info(...) or log.warn(...) or log.debug(...) in RoundController class.</Assert>
-            <Assert>Ensure Slf4j annotation is added to CustomLogoutSuccessHandler class.</Assert>
-            <Assert>Make sure that a call of System.out.println(...) is replaced with log.info(...) or log.warn(...) or log.debug(...) in CustomLogoutSuccessHandler class.</Assert>
+            <Assert>Ensure `@Slf4j` annotation is added to `PlayerController` class.</Assert>
+            <Assert>Ensure `LOGGER` field declaration is removed from `PlayerController` class.</Assert>
+            <Assert>Ensure `PlayerController.addPlayer` method logging is changed to `log.info(...)`.</Assert>
+            <Assert>Ensure `PlayerController.updatePlayer` method logging is changed to `log.info(...)`.</Assert>
+            <Assert>Ensure `PlayerController.deletePlayer` method logging is changed to `log.info(...)`.</Assert>
+            <Assert>Ensure `@Slf4j` annotation is added to `CustomAccessDeniedHandler` class.</Assert>
+            <Assert>Ensure `CustomAccessDeniedHandler.handle` method logging is changed to `log.warn(...)`.</Assert>
+            <Assert>Ensure `@Slf4j` annotation is added to `CompetitionController` class.</Assert>
+            <Assert>Make sure that all calls of `System.out.println(...)` are replaced with `log.info(...)`, `log.warn(...)`, or `log.debug(...)` in `CompetitionController` class.</Assert>
+            <Assert>Ensure `@Slf4j` annotation is added to `RoundController` class.</Assert>
+            <Assert>Make sure that all calls of `System.out.println(...)` are replaced with `log.info(...)`, `log.warn(...)`, or `log.debug(...)` in `RoundController` class.</Assert>
+            <Assert>Ensure `@Slf4j` annotation is added to `CustomLogoutSuccessHandler` class.</Assert>
+            <Assert>Make sure that a call of `System.out.println(...)` is replaced with `log.info(...)` or `log.warn(...)` or `log.debug(...)` in `CustomLogoutSuccessHandler` class.</Assert>
         </Criterion>
         <Criterion type="completeness" weight="high">
             <Assert>Verify that the application console output is given and contains the application logs.</Assert>
-            <Assert>Verify that logs/golf-app.log file is created AND contains the application log events.</Assert>
+            <Assert>Verify that the application log file is created AND contains the application log events.</Assert>
         </Criterion>
         <Criterion type="completeness" weight="medium">
             <Assert>Ensure that the command `mvn clean install` output is given and contains evidence of the application successfully build.</Assert>

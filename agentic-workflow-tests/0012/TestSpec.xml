@@ -99,7 +99,7 @@ git am < path_to_patch/0001-Migrate-in-memory-user-and-roles-definitions-to-data
     <TestPlan>
         <TestStep>Update database configuration in application.properties to make it compatible with your local environment</TestStep>
         <TestStep>Build the application with the command: `mvn clean install`</TestStep>
-        <TestStep>Start the application with the command: `mvn spring-boot:run`</TestStep>
+        <TestStep>Start the application with the command: `mvn spring-boot:run -Dspring-boot.run.arguments="--logging.level.org.springframework.security=DEBUG"`</TestStep>
         <TestStep>Open the application [user registration page](http://localhost:8082/register)</TestStep>
         <TestStep>Register a new user</TestStep>
         <TestStep>Login with the new user credentials</TestStep>
