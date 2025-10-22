@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<TestSpec>
+    <Id>0006</Id>
+    <Title>Migrate Golf application to Spring Boot 3.5</Title>
+    <Objectives>
+    </Objectives>
+    <Category>code-refactoring</Category>
+    <Complexity>low</Complexity>
+    <CodeRepository>https://github.com/PolinaTolkachova/golf-application</CodeRepository>
+    <Stack>
+        <Languages>
+            <Language primary="true">Java</Language>
+        </Languages>
+        <Technologies>
+            <Technology>Spring Boot</Technology>
+        </Technologies>
+    </Stack>
+    <Task>
+Upgrade the Golf Application from Spring Boot 3.2.1 to Spring Boot 3.5.x,
+including the replacement of deprecated features with modern alternatives
+and adoption of new Spring Boot 3.5 capabilities.
+
+Make the minimal viable upgrade - Spring Boot 3.5 and fix deprecated features.
+    </Task>
+    <Context>
+        <Files>
+            <File>pom.xml</File>
+            <File>src/main/java/com/golf/app/api/CompetitionRestController.java</File>
+            <File>src/main/java/com/golf/app/security/AppSecurityConfig.java</File>
+            <File>src/main/resources/application.properties</File>
+        </Files>
+    </Context>
+    <Arrangement>
+    </Arrangement>
+    <Act>
+        <ActStep>Submit the task and wait implementation plan is generated</ActStep>
+        <ActStep>Go to the implementation plan</ActStep>
+        <ActStep>Follow the implementation plan steps and modify source code following the instructions</ActStep>
+    </Act>
+    <TestPlan>
+        <TestStep>Update database configuration in application.properties to match it with your local environment</TestStep>
+        <TestStep>Build the application with the command: `mvn clean install`</TestStep>
+        <TestStep>Launch the application with the command: `mvn spring-boot:run`</TestStep>
+    </TestPlan>
+    <Criteria>
+        <Criterion type="completeness">
+            <Assert>Ensure `spring-boot-starter-parent` version is changed to `3.5.x` in `pom.xml`.</Assert>
+            <Assert>Ensure `springfox-swagger2` dependency is removed in `pom.xml`.</Assert>
+            <Assert>Ensure `springdoc-openapi-starter-webmvc-ui` dependency is added in `pom.xml`.</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Ensure that Spring Boot managed dependency versions are not overridden in `pom.xml`.</Assert>
+            <Assert weight="low">Ensure `maven-compiler-plugin` configuration `source` and `target` properties a changed to `17` in `pom.xml`.</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Ensure that `.csrf().disable()` is replaces with `.csrf(csrf -> csrf.disable())` in `AppSecurityConfig.filterChain` method.</Assert>
+        </Criterion>
+        <Criterion type="completeness">
+            <Assert>Make sure that the application is built without errors</Assert>
+            <Assert>Make sure that the application is launched without errors</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="functionality">
+            <Assert>Ensure that the CHANGED code accomplishes the intended functionality.</Assert>
+            <Assert>Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="adherence to task requirements">
+            <Assert>Make sure that the CHANGES are primarily made to achieve the intended functionality.</Assert>
+            <Assert>Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="code quality">
+            <Assert>Ensure that the CHANGED code is syntactically correct, compiles without errors.</Assert>
+            <Assert>Ensure that the CHANGED code follows project style guides and maintain consistency with the existing codebase.</Assert>
+            <Assert>Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.</Assert>
+            <Assert>Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.</Assert>
+            <Assert>Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="documentation">
+            <Assert>Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="security">
+            <Assert>Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques.</Assert>
+            <Assert>Ensure that CHANGED code avoids exposing sensitive data.</Assert>
+            <Assert>Ensure that CHANGED code protects the application from common security vulnerabilities.</Assert>
+        </Criterion>
+        <Criterion type="accuracy" weight="high" comment="configuration">
+            <Assert>Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.</Assert>
+        </Criterion>
+    </Criteria>
+    <MetaInfo>
+        <Meta>See [testing-template.md](testing-template.md)</Meta>
+    </MetaInfo>
+</TestSpec>
