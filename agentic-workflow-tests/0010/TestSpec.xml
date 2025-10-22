@@ -77,9 +77,7 @@ Other player photo is shown on the page of a player with missing photo.
             <Assert>Ensure that the `PlayerController` method `displayPlayerDetailsPage` is changed to proper handle missing player photo.</Assert>
         </Criterion>
         <Criterion type="completeness">
-            <Assert>Ensure that the code in `player-details.html` is changed to show a placeholder image when no photo is available.</Assert>
-        </Criterion>
-        <Criterion type="completeness">
+            <Assert weight="high">Ensure that the code in `player-details.html` is changed to show a placeholder image when no photo is available.</Assert>
             <Assert weight="low">Ensure that a player photo placeholder image is created.</Assert>
             <Assert weight="high">Ensure that a photo placeholder is shown instead of missing photo on player page.</Assert>
         </Criterion>

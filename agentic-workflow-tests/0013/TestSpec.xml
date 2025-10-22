@@ -38,7 +38,15 @@ An user enters his e-mail address during registration.
     </Task>
     <Context>
         <Files>
-            <File></File>
+            <File>pom.xml</File>
+            <File>src/main/resources/application.properties</File>
+            <File>src/main/java/com/golf/app/model/Role.java</File>
+            <File>src/main/java/com/golf/app/model/User.java</File>
+            <File>src/main/java/com/golf/app/controller/UserController.java</File>
+            <File>src/main/java/com/golf/app/service/UserService.java</File>
+            <File>src/main/java/com/golf/app/service/UserServiceImpl.java</File>
+            <File>src/main/java/com/golf/app/security/AppSecurityConfig.java</File>
+            <File>src/main/resources/templates/registration/registration.html</File>
         </Files>
     </Context>
     <Arrangement>
@@ -78,8 +86,9 @@ docker run -p 8025:8025 -p 1025:1025 mailhog/mailhog
     <TestPlan>
         <TestStep>Update database configuration in application.properties to make it compatible with your local environment</TestStep>
         <TestStep>Update email configuration in application.properties to make it compatible with your local environment</TestStep>
+        <TestStep>Run database migration scripts</TestStep>
         <TestStep>Build the application with the command: `mvn clean install`</TestStep>
-        <TestStep>Start the application with the command: `mvn spring-boot:run`</TestStep>
+        <TestStep>Start the application with the command: `mvn spring-boot:run -Dspring-boot.run.arguments=--spring.jpa.hibernate.ddl-auto=validate`</TestStep>
         <TestStep>Open the application [user registration page](http://localhost:8082/register)</TestStep>
         <TestStep>Register a first user</TestStep>
         <TestStep>Visit [MailHog UI](http://localhost:8025/)</TestStep>

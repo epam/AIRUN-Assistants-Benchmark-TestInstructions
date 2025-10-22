@@ -44,7 +44,6 @@ Replace user passwords in generated migration SQL script with the encoded ones.
 ]]>
         </TestStep>
         <TestStep>Run the generated migration SQL script(s)</TestStep>
-        <TestStep>Enable DEBUG logging for Spring Security by adding the corresponding logger to `src/main/resources/logback-spring.xml`: `<logger name="org.springframework.security" level="DEBUG" />`</TestStep>
         <TestStep>Update database configuration in application.properties to match it with your local environment</TestStep>
         <TestStep>Build the application with the command: `mvn clean install`</TestStep>
         <TestStep>Launch the application with the command: `mvn spring-boot:run -Dspring-boot.run.arguments="--logging.level.org.springframework.security=DEBUG"`</TestStep>
