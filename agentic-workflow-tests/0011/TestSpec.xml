@@ -38,6 +38,7 @@ Create a migration SQL script to import existing in-memory users and roles to da
     </Act>
     <TestPlan>
         <TestStep><![CDATA[
+(Optional)
 Copy [BCryptUsersPasswordSqlGenerator](BCryptUsersPasswordSqlGenerator.java) to golf-application/src/main/java.
 Encode BCrypt-encoded user passwords by running BCryptUsersPasswordSqlGenerator.
 Replace user passwords in generated migration SQL script with the encoded ones.
