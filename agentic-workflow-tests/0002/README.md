@@ -33,11 +33,11 @@ Use given Jakarta Persistence entities classes from the package com.golf.app.mod
 - send test requests to the application:
 
 ```bash
-curl -v -u 1:1 http://localhost:8082/competition/data/1/round
+curl -i -u 1:1 http://localhost:8082/competition/data/1/round
 
-curl -v -u 1:1 http://localhost:8082/player
+curl -i -u 1:1 http://localhost:8082/player
 
-curl -v -u 1:1 http://localhost:8082/round
+curl -i -u 1:1 http://localhost:8082/round
 ```
 
 *Assertion*

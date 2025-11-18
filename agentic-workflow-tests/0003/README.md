@@ -106,7 +106,7 @@ mvn spring-boot:run
 ```bash
 ACCESSTOKEN=`curl -s --request POST --url  ${GOLF_OAUTH2_SERVER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:ADMIN" | jq -r .access_token`
 
-curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admin
+curl -i --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admin
 ```
 
 - verify the response:
@@ -118,7 +118,7 @@ curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admi
 ```bash
 ACCESSTOKEN=`curl -s --request POST --url  ${GOLF_OAUTH2_SERVER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:WHATEVER" | jq -r .access_token`
 
-curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admin
+curl -i --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admin
 ```
 
 - verify the response:
@@ -129,7 +129,7 @@ curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admi
 ```bash
 ACCESSTOKEN=`curl -s --request POST --url  ${GOLF_OAUTH2_SERVER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:USER" | jq -r .access_token`
 
-curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/player/add
+curl -i --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/player/add
 ```
 
 - verify the response:
@@ -141,7 +141,7 @@ curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/play
 ```bash
 ACCESSTOKEN=`curl -s --request POST --url  ${GOLF_OAUTH2_SERVER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=GOLF:COACH" | jq -r .access_token`
 
-curl -v --header "Authorization: Bearer $ACCESSTOKEN" --header "Content-Type: application/x-www-form-urlencoded" --request POST --data 'name=Naomi&surname=OsaAF' http://localhost:8082/player/add
+curl -i --header "Authorization: Bearer $ACCESSTOKEN" --header "Content-Type: application/x-www-form-urlencoded" --request POST --data 'name=Naomi&surname=OsaAF' http://localhost:8082/player/add
 ```
 
 - verify the response:

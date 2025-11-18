@@ -21,7 +21,7 @@
 ## Manual testing protocol
 
 ```
-curl -s -v -u 1:1 --header 'accept: text/csv' http://localhost:8082/round-score
+curl -i -u 1:1 --header 'accept: text/csv' http://localhost:8082/round-score
 
 ...PLACE_OUTPUT_HERE...
 ```
