@@ -25,19 +25,19 @@
 ## manual test protocol
 
 ```
-curl -v -u 1:1 http://localhost:8082/competition/2025
+curl -i -u 1:1 http://localhost:8082/competition/2025
 
 ...PASTE OUTPUT HERE...
 ```
 
 ```
-curl -v -u 1:1 http://localhost:8082/player
+curl -i -u 1:1 http://localhost:8082/player
 
 ...PASTE OUTPUT HERE...
 ```
 
 ```
-curl -v -u 1:1 http://localhost:8082/round
+curl -i -u 1:1 http://localhost:8082/round
 
 ...PASTE OUTPUT HERE...
 ```

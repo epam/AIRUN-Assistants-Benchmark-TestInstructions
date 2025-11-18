@@ -38,11 +38,11 @@ Create a Docker Compose file to manage the MySQL container to be used for develo
 - send test requests to the application:
 
 ```bash
-curl -v -u 1:1 http://localhost:8082/competition/2025
+curl -i -u 1:1 http://localhost:8082/competition/2025
 
-curl -v -u 1:1 http://localhost:8082/player
+curl -i -u 1:1 http://localhost:8082/player
 
-curl -v -u 1:1 http://localhost:8082/round
+curl -i -u 1:1 http://localhost:8082/round
 ```
 
 *Assertion*

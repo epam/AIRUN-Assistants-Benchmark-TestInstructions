@@ -43,7 +43,7 @@ mvn spring-boot:run
     - send the request
 
 ```bash
-curl -s -v -u 1:1 --header 'accept: text/csv' http://localhost:8082/round-score
+curl -s -i -u 1:1 --header 'accept: text/csv' http://localhost:8082/round-score
 ```
 
     - verify the response:

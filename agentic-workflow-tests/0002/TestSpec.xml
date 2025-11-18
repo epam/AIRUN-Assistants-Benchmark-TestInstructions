@@ -64,11 +64,11 @@ Use given Jakarta Persistence entities classes from the package com.golf.app.mod
 Send test requests to the application:
 
 ```bash
-curl -v -u 1:1 curl -v -u 1:1 http://localhost:8082/competition/2025
+curl -i -u 1:1 http://localhost:8082/competition/2025
 
-curl -v -u 1:1 http://localhost:8082/player
+curl -i -u 1:1 http://localhost:8082/player
 
-curl -v -u 1:1 http://localhost:8082/round
+curl -i -u 1:1 http://localhost:8082/round
 ```
 ]]>
         </TestStep>

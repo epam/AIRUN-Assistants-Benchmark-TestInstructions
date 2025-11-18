@@ -76,7 +76,7 @@ GOLF_SCOPE=GOLF:ADMIN
 ACCESSTOKEN=`curl -s --request POST --url ${GOLF_APP_OAUTH2_ISSUER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=${GOLF_SCOPE}" | jq -r .access_token`
 
 echo GOLF_SCOPE=$GOLF_SCOPE
-curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admin
+curl -i --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admin
 ```
 ]]>
         </TestStep>
@@ -98,7 +98,7 @@ GOLF_SCOPE=GOLF:COACH
 ACCESSTOKEN=`curl -s --request POST --url ${GOLF_APP_OAUTH2_ISSUER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=${GOLF_SCOPE}" | jq -r .access_token`
 
 echo GOLF_SCOPE=$GOLF_SCOPE
-curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admin
+curl -i --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/admin
 ```
 ]]>
         </TestStep>
@@ -119,7 +119,7 @@ GOLF_SCOPE=GOLF:USER
 ACCESSTOKEN=`curl -s --request POST --url ${GOLF_APP_OAUTH2_ISSUER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=${GOLF_SCOPE}" | jq -r .access_token`
 
 echo GOLF_SCOPE=$GOLF_SCOPE
-curl -v --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/player/add
+curl -i --header "Authorization: Bearer $ACCESSTOKEN" http://localhost:8082/player/add
 ```
 ]]>
         </TestStep>
@@ -141,7 +141,7 @@ GOLF_SCOPE=GOLF:COACH
 ACCESSTOKEN=`curl -s --request POST --url ${GOLF_APP_OAUTH2_ISSUER_URI}/oauth2/token -u u1:p1 --header 'accept: application/json' --header 'content-type: application/x-www-form-urlencoded' --data "grant_type=client_credentials&scope=${GOLF_SCOPE}" | jq -r .access_token`
 
 echo GOLF_SCOPE=$GOLF_SCOPE
-curl -v --header "Authorization: Bearer $ACCESSTOKEN" --header "Content-Type: application/x-www-form-urlencoded" --request POST --data 'name=Naomi&surname=OsaAF' http://localhost:8082/player/add
+curl -i --header "Authorization: Bearer $ACCESSTOKEN" --header "Content-Type: application/x-www-form-urlencoded" --request POST --data 'name=Naomi&surname=OsaAF' http://localhost:8082/player/add
 ```
 ]]>
         </TestStep>
