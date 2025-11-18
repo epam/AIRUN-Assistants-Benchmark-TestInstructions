@@ -165,7 +165,7 @@ Act:
 - Extract the criteria to be evaluated from the test specification in the format required by the framework:
 
 ```bash
-python $TESTROOT/utils/llm-evaluate.py --test-spec $TESTROOT/$TESTNBR/TestSpec.xml --meta-dump-file $TESTROOT/$TESTNBR/meta.yaml
+$TESTROOT/utils/llm-evaluate.py --test-spec $TESTROOT/$TESTNBR/TestSpec.xml --meta-dump-file $TESTROOT/$TESTNBR/meta.yaml
 ```
 - Evaluate the solution by LLM:
 
@@ -189,7 +189,7 @@ Act:
 - Convert the framework output to an editable file `TestLog.xml` for human review:
 
 ```bash
-python $TESTROOT/utils/llm-report-2-test-log.py --llm-reports $TESTROOT/$TESTNBR/completeness.md $TESTROOT/$TESTNBR/accuracy.md --test-log-file $TESTROOT/$TESTNBR/TestLog.xml
+$TESTROOT/utils/llm-report-2-test-log.py --llm-reports $TESTROOT/$TESTNBR/completeness.md $TESTROOT/$TESTNBR/accuracy.md --test-log-file $TESTROOT/$TESTNBR/TestLog.xml
 ```
 
 - Review of test results in `$TESTROOT/$TESTNBR/TestLog.xml`, in case of an incorrect LLM assessment, you can set a different status for the assertion: `<ReviewedStatus>Pass</ReviewedStatus>` or `<ReviewedStatus>Fail</ReviewedStatus>`
@@ -222,7 +222,7 @@ Act:
  - Calculate the solution score:
 
 ```bash
-python $TESTROOT/utils/llm-evaluate.py --test-spec $TESTROOT/$TESTNBR/TestSpec.xml --calculate-from-test-log $TESTROOT/$TESTNBR/TestLog.xml --update-test-grades-in $TESTROOT/tests-grading.csv --test-nbr $TESTNBR
+$TESTROOT/utils/llm-evaluate.py --test-spec $TESTROOT/$TESTNBR/TestSpec.xml --calculate-from-test-log $TESTROOT/$TESTNBR/TestLog.xml --update-test-grades-in $TESTROOT/tests-grading.csv --test-nbr $TESTNBR
 ```
 
 ### Solution Refining Run

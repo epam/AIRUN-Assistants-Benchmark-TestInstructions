@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 # temporary tool to convert  TestSpec.xml to meta.yaml
 
@@ -44,7 +44,7 @@ class TestStatus(Enum):
             case 'Fail':
                 result = TestStatus.FAILED
             case _:
-                raise ValueError(f'Invalid Assert type: {s}')
+                raise ValueError(f'Invalid Assert type: {status}')
         return result
 
 
