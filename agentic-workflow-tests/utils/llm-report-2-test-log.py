@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 # temporary tool to convert  TestSpec.xml to meta.yaml
 
