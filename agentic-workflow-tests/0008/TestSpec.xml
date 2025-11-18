@@ -13,12 +13,12 @@
     </Stack>
     <Task>
 <![CDATA[
-Refactor Golf application, replace logback logging with log4j2.
+Refactor Golf application, replace logback logging with Log4j2.
 
 # migration
 
-Migrate logback configuration to log4j2 configuration.
-Configure log4j2 for performance.
+Migrate logback configuration to Log4j2 configuration.
+Configure Log4j2 for performance.
 
 # logging
 Unify the application logging by using SLF4J logging facade:
@@ -43,9 +43,9 @@ Cleanup unused or legacy logging configuration.
         </Files>
     </Context>
     <Arrangement>
-        <Arrange>Copy logback-spring.xml to golf-application/src/main/resources/logback-spring.xml</Arrange>
+        <Arrange>Copy `logback-spring.xml` to `golf-application/src/main/resources/logback-spring.xml`</Arrange>
         <Arrange>Add the file to git index with the command: `git add src/main/resources/logback-spring.xml`</Arrange>
-        <Arrange>Record the changes to the repository with the command: `git commit -m "arrange codebase for test"`</Arrange>
+        <Arrange>Record the changes to the repository with the command: `git commit -m "add file logging"`</Arrange>
     </Arrangement>
     <Act>
         <ActStep>Submit the task and wait implementation plan is generated</ActStep>
@@ -53,6 +53,9 @@ Cleanup unused or legacy logging configuration.
         <ActStep>Follow the implementation plan steps and modify source code following the instructions</ActStep>
     </Act>
     <TestPlan>
+        <!-- To log if Logf4j2 logging is asynchronous -->
+        <TestStep>Copy `Log4j2ApplicationRunner.java` to `golf-application/src/main/java/com/golf/app/`.</TestStep>
+
         <TestStep>Build the application with the command: `mvn clean install`</TestStep>
         <TestStep>Make sure there is not logback dependency by running the command: `mvn dependency:tree -Dincludes=ch.qos.logback:*`</TestStep>
         <TestStep>Start the application with the command: `mvn spring-boot:run`</TestStep>
@@ -63,7 +66,7 @@ Cleanup unused or legacy logging configuration.
             <Assert>Ensure `spring-boot-starter-logging` is excluded from Spring Boot starter dependencies in `pom.xml`.</Assert>
             <Assert>Ensure `spring-boot-starter-log4j2` dependency is added in `pom.xml`.</Assert>
             <Assert>Ensure `com.lmax:disruptor` dependency is added in `pom.xml`.</Assert>
-            <Assert>Make sure there is not Logback dependency by running the command `mvn dependency:tree -Dincludes=ch.qos.logback:*`.</Assert>
+            <Assert>Make sure there is not Logback dependency by running `mvn dependency:tree -Dincludes=ch.qos.logback:*`.</Assert>
         </Criterion>
         <Criterion type="completeness" weight="low">
             <Assert>Ensure `logback-spring.xml` is deleted from `src/main/resources` folder.</Assert>
@@ -94,11 +97,11 @@ Cleanup unused or legacy logging configuration.
             <Assert>Ensure `@Slf4j` annotation is added to `CustomAccessDeniedHandler` class.</Assert>
             <Assert>Ensure `CustomAccessDeniedHandler.handle` method logging is changed to `log.warn(...)`.</Assert>
             <Assert>Ensure `@Slf4j` annotation is added to `CompetitionController` class.</Assert>
-            <Assert>Make sure that all calls of `System.out.println(...)` are replaced with `log.info(...)`, `log.warn(...)`, or `log.debug(...)` in `CompetitionController` class.</Assert>
+            <Assert>Make sure that all calls of `System.out.println(...)` are replaced with SLF4J logging in `CompetitionController` class.</Assert>
             <Assert>Ensure `@Slf4j` annotation is added to `RoundController` class.</Assert>
-            <Assert>Make sure that all calls of `System.out.println(...)` are replaced with `log.info(...)`, `log.warn(...)`, or `log.debug(...)` in `RoundController` class.</Assert>
+            <Assert>Make sure that all calls of `System.out.println(...)` are replaced with SLF4J logging in `RoundController` class.</Assert>
             <Assert>Ensure `@Slf4j` annotation is added to `CustomLogoutSuccessHandler` class.</Assert>
-            <Assert>Make sure that a call of `System.out.println(...)` is replaced with `log.info(...)` or `log.warn(...)` or `log.debug(...)` in `CustomLogoutSuccessHandler` class.</Assert>
+            <Assert>Make sure that a call of `System.out.println(...)` are replaced with SLF4J logging in `CustomLogoutSuccessHandler` class.</Assert>
         </Criterion>
         <Criterion type="completeness" weight="high">
             <Assert>Verify that the application console output is given and contains the application logs.</Assert>

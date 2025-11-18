@@ -41,6 +41,22 @@ Establish scope-based authorization:
         </Files>
     </Context>
     <Arrangement>
+        <Arrange><![CDATA[
+download WireMock JWT Standalone extension with the command:
+
+```bash
+(cd extensions && curl -O https://repo1.maven.org/maven2/org/wiremock/extensions/wiremock-jwt-extension-standalone/0.3.0/wiremock-jwt-extension-standalone-0.3.0.jar)
+```
+]]>
+        </Arrange>
+        <Arrange><![CDATA[
+start Mysql container and OAuth2 authorization server container with the command:
+
+```bash
+docker-compose up
+```
+]]>
+        </Arrange>
     </Arrangement>
     <Act>
         <ActStep>Submit the task and wait implementation plan is generated</ActStep>
@@ -48,22 +64,6 @@ Establish scope-based authorization:
         <ActStep>Follow the implementation plan steps and modify source code following the instructions</ActStep>
     </Act>
     <TestPlan>
-        <TestStep><![CDATA[
-download WireMock JWT Standalone extension with the command:
-
-```bash
-(cd extensions && curl -O https://repo1.maven.org/maven2/org/wiremock/extensions/wiremock-jwt-extension-standalone/0.3.0/wiremock-jwt-extension-standalone-0.3.0.jar)
-```
-]]>
-        </TestStep>
-        <TestStep><![CDATA[
-start Mysql container and OAuth2 authorization server container with the command:
-
-```bash
-docker-compose up
-```
-]]>
-        </TestStep>
         <TestStep>update database configuration in application.properties to match it with your local environment</TestStep>
         <TestStep>update OAUTH2 resource server URI configuration in application.properties to match it with your local environment</TestStep>
         <TestStep>build the application with the command: `mvn clean install`</TestStep>
