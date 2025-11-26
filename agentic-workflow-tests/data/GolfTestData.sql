@@ -4,7 +4,11 @@ VALUES
 (1,'1975-12-30','t-woodsitch@mail.test',0,6.5,'Tiger','Woodsitch'),
 (2,'1996-06-21','s-scheffleritch@mail.test',0,7.0,'Scottie','Scheffleritch'),
 (3,'1998-08-05','borg123@mail.test',1,3.0,'Celine','Borgitch'),
-(4,'1992-08-05','sarah.williams@mail.test',0,5.3,'Sarah','Williams');
+(4,'1992-08-05','sarah.williams@mail.test',0,5.3,'Sarah','Williams'),
+(5,'1992-08-05','s.christoffersen@mail.test',0,6.3,'Søren','Christoffersen'),
+(6,'1992-08-05','ulrikke@mail.test',1,5.6,'Ulrikke','Højgaard'),
+(7,'1992-08-05','t-carlsen@mail.test',0,5.7,'Torbjörn','Carlsen'),
+(8,'1992-08-05','astrid@mail.test',1,6.0,'Astrid','Hækkerup');
 
 INSERT player_photo (id,name, data)
 VALUES
@@ -102,7 +106,9 @@ INSERT INTO judge
 (id, name, surname)
 VALUES 
 (1, 'Michael', 'Brown'),
-(2, 'Patricia', 'Davis');
+(2, 'Patricia', 'Davis'),
+(3, 'Nicolai', 'Bjørn'),
+(4, 'Ahti', 'Välimäki');
 
 INSERT INTO marker
 (id, name, surname)
@@ -121,7 +127,9 @@ INSERT INTO team
 (id)
 VALUES 
 (1), 
-(2);
+(2),
+(3),
+(4);
 
 INSERT INTO team_players
 (team_id, players_id)
@@ -129,14 +137,20 @@ VALUES
 (1, 1),
 (1, 3),
 (2, 2),
-(2, 4);
+(2, 4),
+(3, 5),
+(3, 6),
+(4, 7),
+(4, 8);
+
 
 INSERT INTO course
 (id, location, name)
 VALUES
 (1,'5500 140th Ave NE, Bellevue, WA','Bellevue Golf Course'),
 (2,'4611 Tumwater Valley Dr SE, Tumwater, WA','Tumwater Valley Golf Club'),
-(3,'4002 Pennsylvania St, Longview, WA','Mint Valley Golf Course');
+(3,'4002 Pennsylvania St, Longview, WA','Mint Valley Golf Course'),
+(4,'00802 Sea View Rd, Bolongo, St Thomas, VI','Sydside Golf Course');
 
 INSERT INTO hole
 (id, hole_number, stroke_index, par)
@@ -158,7 +172,25 @@ VALUES
 (15, 15, 6, 5),
 (16, 16, 2, 4),
 (17, 17, 14, 3),
-(18, 18, 12, 4);
+(18, 18, 12, 4),
+(19, 1, 7, 4),
+(20, 2, 15, 4),
+(21, 3, 17, 4),
+(22, 4, 3, 4),
+(23, 5, 9, 5),
+(24, 6, 13, 5),
+(25, 7, 1, 4),
+(26, 8, 11, 4),
+(27, 9, 5, 5),
+(28, 10, 8, 4),
+(29, 11, 16, 4),
+(30, 12, 18, 3),
+(31, 13, 4, 4),
+(32, 14, 10, 4),
+(33, 15, 6, 5),
+(34, 16, 2, 3),
+(35, 17, 14, 3),
+(36, 18, 12, 4);
 
 INSERT INTO course_holes
 (course_id, holes_id)
@@ -180,7 +212,25 @@ VALUES
 (1, 15),
 (1, 16),
 (1, 17),
-(1, 18);
+(1, 18),
+(4, 19),
+(4, 20),
+(4, 21),
+(4, 22),
+(4, 23),
+(4, 24),
+(4, 25),
+(4, 26),
+(4, 27),
+(4, 28),
+(4, 29),
+(4, 30),
+(4, 31),
+(4, 32),
+(4, 33),
+(4, 34),
+(4, 35),
+(4, 36);
 
 INSERT INTO tee
 (id, tee_colour, length)
@@ -288,13 +338,16 @@ VALUES
 INSERT INTO competition
 (id, name, start_date, end_date, course_id)
 VALUES 
-(1, 'Spring Championship 2025', '2025-04-15', '2025-04-17', 1);
+(1, 'Spring Championship 2025', '2025-04-15', '2025-04-17', 1),
+(2, 'Sydside "Sea View" (Bolongo, VI)', '2027-11-26', '2027-11-27', 4);
 
 INSERT INTO competition_judges
 (competition_id, judges_id)
 VALUES 
 (1, 1),
-(1, 2);
+(1, 2),
+(2, 3),
+(2, 4);
 
 INSERT INTO competition_players
 (competition_id, players_id)
@@ -302,27 +355,37 @@ VALUES
 (1, 1),
 (1, 2),
 (1, 3),
-(1, 4);
+(1, 4),
+(2, 5),
+(2, 6),
+(2, 7),
+(2, 8);
 
 INSERT INTO competition_teams
 (competition_id, teams_id)
 VALUES 
 (1, 1),
-(1, 2);
+(1, 2),
+(2, 3),
+(2, 4);
 
 INSERT INTO round
 (id, competition_id, round_number, date, name)
 VALUES 
 (1, 1, 1, '2025-04-15', 'Round 1'),
 (2, 1, 2, '2025-04-16', 'Round 2'),
-(3, 1, 3, '2025-04-17', 'Round 3');
+(3, 1, 3, '2025-04-17', 'Round 3'),
+(4, 2, 1, '2027-11-26', 'Round A'),
+(5, 2, 2, '2027-11-27', 'Round B');
 
 INSERT INTO competition_rounds
 (competition_id, rounds_id)
 VALUES 
 (1, 1),
 (1, 2),
-(1, 3);
+(1, 3),
+(2, 4),
+(2, 5);
 
 INSERT INTO round_roundplayers
 (round_id, roundplayers_id)
@@ -341,7 +404,17 @@ VALUES
 (3, 1),
 (3, 2),
 (3, 3),
-(3, 4);
+(3, 4),
+-- Round A
+(4, 5),
+(4, 6),
+(4, 7),
+(4, 8),
+-- Round B
+(5, 5),
+(5, 6),
+(5, 7),
+(5, 8);
 
 
 INSERT INTO round_score
@@ -349,7 +422,8 @@ INSERT INTO round_score
 sum_gross_score,sum_net_score,sum_net_score_par,sum_penalty,sum_par,sum_stroke,sum_score_subtract_par,sum_score_subtract_par_hcp
 )
 VALUES
-(1,'2025-04-15',18,1,1,NULL,1,126,90,18,0,72,126,NULL,NULL);
+(1,'2025-04-15',18,1,1,NULL,1,126,90,18,0,72,126,NULL,NULL),
+(2,'2027-11-26',17,2,5,NULL,4,126,90,18,0,72,126,NULL,NULL);
 
 --INSERT INTO round_roundscores
 --(round_id,roundscores_id)
@@ -386,7 +460,25 @@ VALUES
 (15,0,1,2,5,4,0,1,NULL),
 (16,0,1,2,4,3,0,1,NULL),
 (17,0,1,2,6,5,0,1,NULL),
-(18,0,1,2,5,4,0,1,NULL);
+(18,0,1,2,5,4,0,1,NULL),
+(19,0,1,2,5,4,0,1,NULL),
+(20,0,1,2,6,5,0,1,NULL),
+(21,0,1,2,4,3,0,1,NULL),
+(22,0,1,2,5,4,0,1,NULL),
+(23,0,1,2,5,4,0,1,NULL),
+(24,0,1,2,5,4,0,1,NULL),
+(25,0,1,2,4,3,0,1,NULL),
+(26,0,1,2,5,4,0,1,NULL),
+(27,0,1,2,6,5,0,1,NULL),
+(28,0,1,2,5,4,0,1,NULL),
+(29,0,1,2,4,3,0,1,NULL),
+(30,0,1,2,5,4,0,1,NULL),
+(31,0,1,2,6,5,0,1,NULL),
+(32,0,1,2,5,4,0,1,NULL),
+(33,0,1,2,5,4,0,1,NULL),
+(34,0,1,2,4,3,0,1,NULL),
+(35,0,1,2,6,5,0,1,NULL),
+(36,0,1,2,5,4,0,1,NULL);
 
 INSERT INTO round_score_scores
 (round_score_id,scores_id)
@@ -408,4 +500,22 @@ VALUES
 (1,15),
 (1,16),
 (1,17),
-(1,18);
+(1,18),
+(2,19),
+(2,20),
+(2,21),
+(2,22),
+(2,23),
+(2,24),
+(2,25),
+(2,26),
+(2,27),
+(2,28),
+(2,29),
+(2,30),
+(2,31),
+(2,32),
+(2,33),
+(2,34),
+(2,35),
+(2,36);
