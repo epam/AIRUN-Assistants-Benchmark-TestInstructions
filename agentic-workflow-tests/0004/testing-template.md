@@ -17,6 +17,8 @@
 - The application returns round scores in CSV format in response to a text/csv request: PASSED
 - The returned CSV contains only expected headers (Id,Date,Player,HCP,Competition,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,Stroke,Penalty,GrossScore,NetScore,NetScorePar,Stableford): PASSED
 - Null values are returned as empty strings: PASSED
+- Data field containing a comma is enclosed in double quotes: PASSED
+- Double quote contained in data field is escaped by doubling it: PASSED
 
 ## Manual testing protocol
 
