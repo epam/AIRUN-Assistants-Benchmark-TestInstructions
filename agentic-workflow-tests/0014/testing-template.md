@@ -17,5 +17,5 @@
 - an account menu is added to navigation bar on all pages: PASSED
 - the account menu expands downwards: PASSED
 - an username is displayed in the account menu: PASSED
-- logout link is added to the account menu: PASSED
-- an user is signed out after a click on the logout link: PASSED
+- logout element is added to the account menu: PASSED
+- an user is signed out after a click on the logout element: PASSED
