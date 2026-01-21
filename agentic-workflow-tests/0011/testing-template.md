@@ -1,5 +1,10 @@
 # Build and Run
 
+## output of database schema migration
+
+```
+```
+
 ## output of "mvn clean install"
 
 ```
