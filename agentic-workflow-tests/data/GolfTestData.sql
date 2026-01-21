@@ -338,8 +338,8 @@ VALUES
 INSERT INTO competition
 (id, name, start_date, end_date, course_id)
 VALUES 
-(1, 'Spring Championship 2025', '2025-04-15', '2025-04-17', 1),
-(2, 'Sydside "Sea View" (Bolongo, VI)', '2027-11-26', '2027-11-27', 4);
+(1, 'Spring Championship, 2025', '2025-04-15', '2025-04-17', 1),
+(2, 'Sydside "Sea View" (Bolongo)', '2027-11-26', '2027-11-27', 4);
 
 INSERT INTO competition_judges
 (competition_id, judges_id)
