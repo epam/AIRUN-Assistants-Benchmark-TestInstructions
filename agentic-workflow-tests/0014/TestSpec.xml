@@ -3,7 +3,7 @@
     <Id>0014</Id>
     <Title>User Account Menu in Golf application</Title>
     <Category>solution-or-component-generation</Category>
-    <Complexity>low</Complexity>
+    <Complexity>medium</Complexity>
     <CodeRepository>https://github.com/PolinaTolkachova/golf-application</CodeRepository>
     <Stack>
         <Languages>
