@@ -20,7 +20,10 @@ services:
   mysql:
     image: mysql:8.0
     container_name: agentic-0003-mysql
-    command: ["--default-authentication-plugin=mysql_native_password"]
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=caching_sha2_password
     restart: always
     networks:
       - agentic-0003-net
@@ -30,7 +33,7 @@ services:
         MYSQL_USER: ${MYSQL_USER:-golf_user}
         MYSQL_PASSWORD: ${MYSQL_PASSWORD:-golf_pass}
     ports:
-        - "3306:3306"
+        - "${MYSQL_PORT:-3306}:3306"
     volumes:
         - mysql_data:/var/lib/mysql
 
