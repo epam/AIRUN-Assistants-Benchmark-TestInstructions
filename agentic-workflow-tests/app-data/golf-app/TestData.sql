@@ -425,20 +425,22 @@ VALUES
 (1,'2025-04-15',18,1,1,NULL,1,126,90,18,0,72,126,NULL,NULL),
 (2,'2027-11-26',17,2,5,NULL,4,126,90,18,0,72,126,NULL,NULL);
 
---INSERT INTO round_roundscores
---(round_id,roundscores_id)
---VALUES
---(1,67),
---(1,68),
---(1,69),
---(1,70),
---(1,71),
---(1,63),
---(1,58),
---(1,59),
---(1,60),
---(1,61),
---(1,62);
+/*
+INSERT INTO round_roundscores
+(round_id,roundscores_id)
+VALUES
+(1,67),
+(1,68),
+(1,69),
+(1,70),
+(1,71),
+(1,63),
+(1,58),
+(1,59),
+(1,60),
+(1,61),
+(1,62);
+*/
 
 INSERT INTO score
 (id,score_subtract_par,score_subtract_par_hcp,stableford,gross_score,net_score,net_score_par,penalty,stroke)
