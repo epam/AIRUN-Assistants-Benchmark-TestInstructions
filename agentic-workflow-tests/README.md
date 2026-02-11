@@ -23,9 +23,7 @@ The framework setup is described in the README in its [Run Environment Setup sec
 Set the framework environment:
 
 ```bash
-# Two keys to access LLMs:
-
-export AZURE_API_KEY=...
+# API key to access LLM:
 
 export OPENAI_API_KEY=...
 
@@ -77,11 +75,14 @@ Act:
 - Clone the project repository
 - Create a branch to run test in
 - Specify test number
+- Specify test run tag
 
 ```bash
-git checkout -b test/agentic/0016/amp/run20250605
+git checkout -b test/agentic/0001/amp/run20250605
 
 TESTNBR=0001
+
+TESTTAG=VM01
 ```
 
 ### First-Shot Run
@@ -156,54 +157,46 @@ Input:
 - Evalution-ready `output.md`
 
 Output:
-- LLM evaluation report of solution by categories: `accuracy.md`, `completeness.md`
+- Test log file `TestLog.xml` for human review:
+- LLM evaluation logs of solution by categories: `accuracy.json`, `completeness.json`
 
 Description:
-> The evaluation is done by launching `evaluate.py` from AIRUN-Evaluation-Framework. The script produces two files completeness.md, accuracy.md in Markdown format for two hard-coded categories. The report includes the status of each evaluated criteria  (e.g., Pass, Fail),  the model's confidence in the conclusion it has reached (e.g., 100%), and optional explanation how model gets to the conclusion.
+> The evaluation is done by launching `llm-evaluate.py` with `evaluate` command. The script produces two files `accuracy.json`, `completeness.json` for two hard-coded categories. The files includes the status of each evaluated criteria  (e.g., Passed, Failed), the model's confidence in the conclusion it has reached (e.g., 100%), and optional explanation how model gets to the conclusion.
+>
+> The test log file `TestLog.xml` collects the evaluation results in a single file intended for human review and further processing.
 
 Act:
-- Extract the criteria to be evaluated from the test specification in the format required by the framework:
-
-```bash
-$TESTROOT/utils/llm-evaluate.py --test-spec $TESTROOT/$TESTNBR/TestSpec.xml --meta-dump-file $TESTROOT/$TESTNBR/meta.yaml
-```
 - Evaluate the solution by LLM:
 
 ```bash
-python $EVALFRMROOT/evaluate.py --data-dir $TESTROOT --scenario-ranges $TESTNBR --report-path $TESTROOT/grading-$TESTNBR-`date +%Y%m%d-%H%M%S`.csv
+$TESTROOT/utils/llm-evaluate.py evaluate --test-spec $TESTROOT/$TESTNBR/TestSpec.xml --evaluated-file $TESTROOT/$TESTNBR/output.md --llm-report-dir $TESTROOT/$TESTNBR --test-log $TESTROOT/$TESTNBR/TestLog.xml
 ```
 
 #### First Short Evaluation Review by Human
 
 Input:
-- LLM evaluation report
+- LLM evaluation log
 
 Output:
-- Reviewed evaluation report
+- Reviewed evaluation log
 
 Description:
-> A human reviews the status of each LLM evaluated criteria.
+> A human reviews the status of each LLM evaluated criterion.
 
 Act:
 
-- Convert the framework output to an editable file `TestLog.xml` for human review:
-
-```bash
-$TESTROOT/utils/llm-report-2-test-log.py --llm-reports $TESTROOT/$TESTNBR/completeness.md $TESTROOT/$TESTNBR/accuracy.md --test-log-file $TESTROOT/$TESTNBR/TestLog.xml
-```
-
-- Review of test results in `$TESTROOT/$TESTNBR/TestLog.xml`, in case of an incorrect LLM assessment, you can set a different status for the assertion: `<ReviewedStatus>Pass</ReviewedStatus>` or `<ReviewedStatus>Fail</ReviewedStatus>`
+- Review of test results in `$TESTROOT/$TESTNBR/TestLog.xml`, in case of an incorrect LLM assessment, you can set a different status for the assertion: `<ReviewedStatus>Passed</ReviewedStatus>` or `<ReviewedStatus>Failed</ReviewedStatus>` and provide the review cause `<ReviewedStatus>The application launch logs show ...</ReviewedStatus>`
 
 #### First Short Scoring
 
 Input:
-- Reviewed evaluation report
+- Reviewed evaluation log
 
 Output:
 - The task solution score
 
 Description:
-> Calculation of generated solution score in each category and in total. The results are accumulated in `$TESTROOT/tests-grading.csv`.
+> Calculation of generated solution score in each category and in total. The results are accumulated in the test report `$TESTROOT/tests-grading.csv`.
 
 ```
 To make the grade more objective, each criterion is given a weight and the result calculated as a weighted average.
@@ -222,7 +215,7 @@ Act:
  - Calculate the solution score:
 
 ```bash
-$TESTROOT/utils/llm-evaluate.py --test-spec $TESTROOT/$TESTNBR/TestSpec.xml --calculate-from-test-log $TESTROOT/$TESTNBR/TestLog.xml --update-test-grades-in $TESTROOT/tests-grading.csv --test-nbr $TESTNBR
+$TESTROOT/utils/llm-evaluate.py grade --test-spec $TESTROOT/$TESTNBR/TestSpec.xml --test-log $TESTROOT/$TESTNBR/TestLog.xml --test-report $TESTROOT/tests-grading.csv --test-tag ${TESTTAG:-Local} --test-stage first
 ```
 
 ### Solution Refining Run
@@ -241,6 +234,15 @@ Output:
 
 Act:
 - Review the solution
+- Add the review or comment in `$TESTROOT/$TESTNBR/Refinement.xml`
+
+```xml
+<Refinement>
+    <Comment>
+        Could you check V1__initial_schema.sql to have all tables, columns, relations, etc and update it?
+    </Comment>
+</Refinement>
+```
 
 ##### Provide feedback and ask to regenerate
 
@@ -291,7 +293,8 @@ Input:
 - Evalution-ready `output.md`
 
 Output:
-- LLM evaluation report of solution by categories: `accuracy.md`, `completeness.md`
+- Test log file `TestLog.xml` for human review:
+- LLM evaluation logs of solution by categories: `accuracy.json`, `completeness.json`
 
 Description:
 > The same to the analogous first-shot step.
@@ -299,54 +302,37 @@ Description:
 #### Final Evaluation Review by Human
 
 Input:
-- LLM evaluation report
+- LLM evaluation log `TestLog.xml`
 
 Output:
-- Reviewed evaluation report
+- Reviewed evaluation log
 
 Description:
 > The same to the analogous first-shot step with additional step described below.
 
 Act:
-- Convert the framework output to an editable file `TestLog.xml` for human review
 - Review of test results in `$TESTROOT/$TESTNBR/TestLog.xml`
-- Register comments/feedbacks in the Refinement section of `TestLog.xml`. For example:
 
-```xml
-<Refinement>
-    <Comment>
-        Could you check V1__initial_schema.sql to have all tables, columns, relations, etc and update it?
-    </Comment>
-    <Comment>
-        Schema-validation: missing table [competition_judges]
-    </Comment>
-</Refinement>
-```
 
-#### Final Solution Scoring
+#### Final Solution Scoring and Performance Calculation
 
 Input:
-- Reviewed evaluation report
+- Reviewed evaluation log
+- List of developer feedback or comments or requests in the file `$TESTROOT/$TESTNBR/Refinement.xml`
 
 Output:
 - The task solution score
-
-Description:
-> The same to the analogous first-shot step.
-
-#### Agent-Assisted Coding Performance Evaluation
-
-Input:
-- List of developer feedback or comments or requests (comments/feedbacks in the Refinement section of `TestLog.xml`)
-
-Output:
 - Agent-assisted coding performance grade
 
 Description:
-> The complexity of obtaining a solution using an agent is estimated based on the number of iterations. It is computed within previous step. The results are accumulated in `$TESTROOT/tests-grading.csv`.
+> Calculate the score analogously to the first-shot step.
+>
+> Calculate the performance of obtaining a solution. The performance relies on the complexity of obtaining a solution using an agent, the estimation is based on the number of iterations.
+>
+> The results are accumulated in `$TESTROOT/tests-grading.csv`.
 
 ```
-The formula of the grade calculation is defined as:
+The formula of the performance grade calculation is defined as:
 
     Grade = M * POW( e, -a * max⁡(0,T−s) )
 
@@ -358,9 +344,16 @@ where:
     s: Shift parameter, which shifts the steep drop to occur after s attempts (set s=1 for this case).
 ```
 
+Act:
+ - Calculate the solution score and performance:
+
+```bash
+$TESTROOT/utils/llm-evaluate.py grade --test-spec $TESTROOT/$TESTNBR/TestSpec.xml --test-log $TESTROOT/$TESTNBR/TestLog.xml --test-report $TESTROOT/tests-grading.csv --test-tag ${TESTTAG:-Local} --test-stage final --test-refinement $TESTROOT/$TESTNBR/Refinement.xml
+```
+
 ### Final Test Grade
 
-The final test grade takes into account the grade of the solution obtained after the first attempt, the grade of the final solution, and the complexity of obtaining the final solution.
+The final test grade takes into account the grade of the solution obtained after the first attempt, the grade of the final solution, and the performance of obtaining the final solution.
 
 ```
 Grade = SUM( C1(i) ) / COUNT( C1(i) ) / 2 + SUM( Cf(i) ) / COUNT( Cf(i) ) / 2 * P
@@ -419,7 +412,7 @@ Lines:
 ## Agent's Final Rating
 
 Input:
-- List of per-test grades: `$TESTROOT/tests-grading.csv`
+- Test report with list of per-test grades: `$TESTROOT/tests-grading.csv`
 
 Output:
 - Agent's total grades
@@ -435,3 +428,9 @@ Description:
 | | | | | | | *0.57* |
 
 
+Act:
+ - Calculate the final agent rating:
+
+```bash
+$TESTROOT/utils/llm-evaluate.py summarize --test-report $TESTROOT/tests-grading.csv excel --summary-excel $TESTROOT/tests-summary.xlsx
+```
