@@ -10,7 +10,8 @@ namespace eShop.Identity.UnitTests
             new(
                 [
                     new Uri("https://trusted.com/callback"),
-                    new Uri("https://secure-site.com/return")
+                    new Uri("https://secure-site.com/return"),
+                    new Uri("https://another-trusted.com/redirect?auto=true")
                 ]
             );
 
@@ -64,6 +65,13 @@ namespace eShop.Identity.UnitTests
         }
 
         [TestMethod]
+        public void ExtractRedirectUriFromReturnUrl_EmptyRedirectUriValueWithoutEquals_ReturnsEmpty()
+        {
+            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri");
+            Assert.AreEqual(string.Empty, result);
+        }
+
+        [TestMethod]
         public void ExtractRedirectUriFromReturnUrl_InvalidPercentEncoding_ReturnsEmpty()
         {
             var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri=%2");
@@ -82,6 +90,27 @@ namespace eShop.Identity.UnitTests
         {
             var result = redirectService.ExtractRedirectUriFromReturnUrl("https://trusted.com?redirect_uri=https://malicious.com/callback&https://trusted.com/callback");
             Assert.AreEqual(string.Empty, result);
+        }
+
+        [TestMethod]
+        public void ExtractRedirectUriFromReturnUrl_InvalidUri_ReturnsEmtpy()
+        {
+            var result = redirectService.ExtractRedirectUriFromReturnUrl("Some invalid URI");
+            Assert.AreEqual(string.Empty, result);
+        }
+
+        [TestMethod]
+        public void ExtractRedirectUriFromReturnUrl_EmptyUri_ReturnsEmtpy()
+        {
+            var result = redirectService.ExtractRedirectUriFromReturnUrl(string.Empty);
+            Assert.AreEqual(string.Empty, result);
+        }
+
+        [TestMethod]
+        public void ExtractRedirectUriFromReturnUrl_ValidIncludingAnotherQuestionMark_ReturnsUrl()
+        {
+            var result = redirectService.ExtractRedirectUriFromReturnUrl("https://another-trusted.com?redirect_uri=https://another-trusted.com/redirect%3Fauto=true");
+            Assert.AreEqual("https://another-trusted.com/redirect?auto=true", result);
         }
     }
 }
