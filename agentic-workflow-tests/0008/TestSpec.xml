@@ -13,11 +13,11 @@
     </Stack>
     <Task>
 <![CDATA[
-Refactor Golf application, replace logback logging with Log4j2.
+Refactor Golf application, replace Logback logging with Log4j2.
 
 # migration
 
-Migrate logback configuration to Log4j2 configuration.
+Migrate Logback configuration to Log4j2 configuration.
 Configure Log4j2 for performance.
 
 # logging
