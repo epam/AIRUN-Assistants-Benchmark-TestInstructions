@@ -46,6 +46,7 @@ Create an account menu for the Golf application pages. Add the following items t
         <TestStep>Verify that an username is displayed in the account menu</TestStep>
         <TestStep>Verify that a logout element is added to the account menu</TestStep>
         <TestStep>Verify that an user is signed out after a click on the logout element</TestStep>
+        <TestStep>Verify that an user is redirected to the proper login page after logout</TestStep>
         <TestStep>Add results of the manual tests to output.md. See (testing-template.md)[testing-template.md].</TestStep>
     </TestPlan>
     <Criteria>
@@ -65,6 +66,7 @@ Create an account menu for the Golf application pages. Add the following items t
             <Assert>Make sure that an username is displayed in the account menu</Assert>
             <Assert>Make sure that a logout element is added to the account menu</Assert>
             <Assert>Make sure that an user is signed out after a click on the logout element</Assert>
+            <Assert>Make sure that an user is redirected to the proper login page after logout</Assert>
         </Criterion>
         <Criterion type="completeness" weight="medium">
             <Assert>Make sure that the application is built without errors</Assert>
