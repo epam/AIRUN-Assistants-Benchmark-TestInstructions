@@ -19,3 +19,4 @@
 - an username is displayed in the account menu: PASSED
 - logout element is added to the account menu: PASSED
 - an user is signed out after a click on the logout element: PASSED
+- an user is redirected to the proper login page after logout: PASSED
