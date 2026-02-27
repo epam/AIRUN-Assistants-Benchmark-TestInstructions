@@ -47,7 +47,7 @@ Replace user passwords in generated migration SQL script with the encoded ones.
         <TestStep>Run the generated migration SQL script(s)</TestStep>
         <TestStep>Update database configuration in application.properties to match it with your local environment</TestStep>
         <TestStep>Build the application with the command: `mvn clean install`</TestStep>
-        <TestStep>Launch the application with the command: `mvn spring-boot:run -Dspring-boot.run.arguments="--logging.level.org.springframework.security=DEBUG"`</TestStep>
+        <TestStep>Launch the application with the command: `mvn spring-boot:run -Dspring-boot.run.arguments="--logging.level.org.springframework.security.web.context=DEBUG --logging.level.org.springframework.security.web.authentication=DEBUG"`</TestStep>
         <TestStep>Open the application at http://localhost:8082 and login with user `1` credentials</TestStep>
         <TestStep>Open the application at http://localhost:8082 and login with user `user` credentials</TestStep>
         <TestStep>Open the application at http://localhost:8082 and login with user `coach` credentials</TestStep>
