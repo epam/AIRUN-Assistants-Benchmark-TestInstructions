@@ -81,8 +81,10 @@ Id,Date,Player,HCP,Competition,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,Stro
         <Criterion type="completeness" weight="high">
             <Assert>Make sure the application returns round scores in CSV format in response to a request that accepts text/csv.</Assert>
             <Assert>Ensure the produced CSV has headers corresponding to scorecardsTable fields in the round-score-main.html.</Assert>
+            <Assert>Make sure that null values ​​are represented as empty strings.</Assert>
             <Assert>Make sure the data field containing the comma is enclosed in double quotes.</Assert>
             <Assert>Make sure that the double quote contained in the data field is escaped by doubling it.</Assert>
+            <Assert>Make sure that the CVS text is encoded with proper charset and not garbled</Assert>
         </Criterion>
         <Criterion type="completeness" weight="high">
             <Assert weight="low">Ensure the CHANGED code allows to convert collection of RoundScore to CSV format.</Assert>

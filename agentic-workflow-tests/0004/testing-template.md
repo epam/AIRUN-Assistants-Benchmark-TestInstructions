@@ -19,6 +19,7 @@
 - Null values are returned as empty strings: PASSED
 - Data field containing a comma is enclosed in double quotes: PASSED
 - Double quote contained in data field is escaped by doubling it: PASSED
+- The CVS text is encoded with proper charset and not garbled: PASSED
 
 ## Manual testing protocol
 
