@@ -434,3 +434,24 @@ Act:
 ```bash
 $TESTROOT/utils/llm-evaluate.py summarize --test-report $TESTROOT/tests-grading.csv excel --summary-excel $TESTROOT/tests-summary.xlsx
 ```
+
+## Transform TestSpec.xml to human-readable README.md
+
+Download the latest Saxon-HE release from [Saxonica](https://www.saxonica.com/download/java.xml) and unzip it.
+
+```sh
+SAXON_HE_PATH=/path/to/saxon-he.jar
+
+# one file
+
+f=0001/TestSpec.xml
+
+java -classpath $SAXON_HE_PATH net.sf.saxon.Transform -s:$f -xsl:utils/readme-md.xsl -o:`dirname $f`/README.md
+
+# all files
+
+for f in `find . -name TestSpec.xml`
+do
+    java -classpath $SAXON_HE_PATH net.sf.saxon.Transform -s:$f -xsl:utils/readme-md.xsl -o:`dirname $f`/README.md
+done
+```
