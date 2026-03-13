@@ -1,9 +1,9 @@
 
-# 0010. Fix an issue with hardcoded player photo id in Golf application
+# 0006. Migrate Golf application to Spring Boot 3.5
 
 
-**Category:** code-bugfixing  
-**Complexity:** medium  
+**Category:** code-refactoring  
+**Complexity:** low  
 **Repository:** [https://github.com/PolinaTolkachova/golf-application](https://github.com/PolinaTolkachova/golf-application)  
 
 ---
@@ -13,53 +13,29 @@
 ### Languages
 
 - **Java** (primary)
-- HTML
 
 ### Technologies
 
-N/A
-
+- Spring Boot
 
 ## Task
 
 ```md
-Fix the issue given below.
+Upgrade the Golf Application from Spring Boot 3.2.1 to Spring Boot 3.5.x,
+including the replacement of deprecated features with modern alternatives
+and adoption of new Spring Boot 3.5 capabilities.
 
-# Other player photo is shown for a player with missing photo
-
-## Description
-Other player photo is shown on the page of a player with missing photo.
-
-## Steps to reproduce
-
-0. PlayerPhoto entity with id 1L must exist in database.
-1. Add a new player without photo.
-2. Visit the added player page, for instance http://localhost:8082/player/2
-
-## Actual results
-- Image from PlayerPhoto entity with id 1L is showed on the page
-
-## Expected results
-- A photo placeholder explicitly indicating a missing photo is shown on the page
-
-## Fix acceptance criteria
-- A photo with hardcoded id 1L should not be shown on a page of player with missing photo
-- A photo placeholder should be shown instead of missing photo on player page
-- A new player should be added without photo
+Make the minimal viable upgrade - Spring Boot 3.5 and fix deprecated features.
 ```
 
 ## Context
 
 ### Files
 
-- `src/main/java/com/golf/app/model/Player.java`
-- `src/main/java/com/golf/app/model/PlayerPhoto.java`
-- `src/main/java/com/golf/app/dto/PlayerPhotoDto.java`
-- `src/main/java/com/golf/app/controller/PlayerController.java`
-- `src/main/java/com/golf/app/controller/PlayerPhotoController.java`
-- `src/main/java/com/golf/app/service/PlayerPhotoService.java`
-- `src/main/java/com/golf/app/service/PlayerPhotoServiceImpl.java`
-- `src/main/resources/templates/player/player-details.html`
+- `pom.xml`
+- `src/main/java/com/golf/app/api/CompetitionRestController.java`
+- `src/main/java/com/golf/app/security/AppSecurityConfig.java`
+- `src/main/resources/application.properties`
 
 ## Arrangement
 
@@ -75,14 +51,9 @@ N/A
 
 ## Testing
 
+- Update database configuration in application.properties to match it with your local environment
 - Build the application with the command: `mvn clean install`
-- Start the application with the command: `mvn spring-boot:run`
-- Open application UI at http://localhost:8082/player
-- Click 'Add new player' button to visit add player page
-- Create a new player
-- Visit the new player page
-- Make sure a photo placeholder is shown instead of missing photo
-- Add results of the manual tests to output.md. See (testing-template.md)[testing-template.md]
+- Launch the application with the command: `mvn spring-boot:run`
 
 ## Assertion
 
@@ -90,12 +61,17 @@ The generated solution is asserted against the criteria given below:
 
 
 - **completeness** (==high==)
-    - (==high==) Ensure that the line `player.setPhotoId(1L);` removed from the `PlayerController` method `addPlayer`.
-    - (==high==) Ensure that the `PlayerController` method `displayPlayerDetailsPage` is changed to proper handle missing player photo.
+    - (==high==) Ensure `spring-boot-starter-parent` version is changed to `3.5.x` in `pom.xml`.
+    - (==high==) Ensure `springfox-swagger2` dependency is removed in `pom.xml`.
+    - (==high==) Ensure `springdoc-openapi-starter-webmvc-ui` dependency is added in `pom.xml`.
 - **completeness** (==high==)
-    - (==high==) Ensure that the code in `player-details.html` is changed to show a placeholder image when no photo is available.
-    - (==low==) Ensure that a player photo placeholder image is created.
-    - (==high==) Ensure that a photo placeholder is shown instead of missing photo on player page.
+    - (==high==) Ensure that Spring Boot managed dependency versions are not overridden in `pom.xml`.
+    - (==low==) Ensure `maven-compiler-plugin` configuration `source` and `target` properties a changed to `17` in `pom.xml`.
+- **completeness** (==high==)
+    - (==high==) Ensure that `.csrf().disable()` is replaces with `.csrf(csrf -> csrf.disable())` in `AppSecurityConfig.filterChain` method.
+- **completeness** (==high==)
+    - (==high==) Make sure that the application is built without errors
+    - (==high==) Make sure that the application is launched without errors
 - **accuracy** (==high==): __functionality__
     - (==high==) Ensure that the CHANGED code accomplishes the intended functionality.
     - (==high==) Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.
@@ -119,5 +95,4 @@ The generated solution is asserted against the criteria given below:
 
 ## Additional Notes
 
-- See [testing-template.md](testing-template.md) for example of extra report sections.
-- See sample of correct solution in the [exemplar directory](exemplar).
+- See [testing-template.md](testing-template.md)

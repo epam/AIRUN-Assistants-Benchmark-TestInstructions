@@ -1,15 +1,28 @@
-**0011. Migrate in-memory user and role definitions to database in Golf application**
 
-*Act*
+# 00011. Migrate in-memory user and role definitions to database in Golf application
 
-- Open the Golf application project from the repository https://github.com/PolinaTolkachova/golf-application
-- Open the developer agent interface
-- Add files to context if the agent doesn't support auto-discovering of relevant source code:
-    - src/main/java/com/golf/app/security/AppSecurityConfig.java
-    - src/main/resources/application.properties
-- Enter task description:
 
-```
+**Category:** code-refactoring  
+**Complexity:** low  
+**Repository:** [https://github.com/PolinaTolkachova/golf-application](https://github.com/PolinaTolkachova/golf-application)  
+
+---
+
+## Stack
+
+### Languages
+
+- **Java** (primary)
+- SQL
+
+### Technologies
+
+N/A
+
+
+## Task
+
+```md
 Migrate in-memory user and roles definitions to database.
 
 Configure Spring Security to retrieve user information from the database.
@@ -20,74 +33,94 @@ Ignore current user registration related model and functionality.
 Create a migration SQL script to import existing in-memory users and roles to database.
 ```
 
-- Submit the task description and wait implementation plan is generated
+## Context
+
+### Files
+
+- `src/main/java/com/golf/app/security/AppSecurityConfig.java`
+- `src/main/resources/application.properties`
+
+## Arrangement
+
+N/A
+
+
+## Act
+
+- Submit the task and wait implementation plan is generated
 - Go to the implementation plan
 - Follow the implementation plan steps and modify source code following the instructions
 
-*Assertion*
 
-<details>
-<summary>Manual Assertion:</summary>
+## Testing
 
-- Make sure, the following changes suggested in src/main/java/com/golf/app/security/AppSecurityConfig.java:
-    - the method declaring InMemoryUserDetailsManager bean has been removed
-    - added a method declaring UserDetailsService bean and creating JdbcUserDetailsManager as the bean implementation:
+- (Optional)
+Copy [BCryptUsersPasswordSqlGenerator](BCryptUsersPasswordSqlGenerator.java) to golf-application/src/main/java.
+Encode BCrypt-encoded user passwords by running BCryptUsersPasswordSqlGenerator.
+Replace user passwords in generated migration SQL script with the encoded ones.
 
-```java
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-        return users;
-    }
-```
+        
+- Run the generated migration SQL script(s)
+- Update database configuration in application.properties to match it with your local environment
+- Build the application with the command: `mvn clean install`
+- Launch the application with the command: `mvn spring-boot:run -Dspring-boot.run.arguments="--logging.level.org.springframework.security.web.context=DEBUG --logging.level.org.springframework.security.web.authentication=DEBUG"`
+- Open the application at http://localhost:8082 and login with user `1` credentials
+- Open the application at http://localhost:8082 and login with user `user` credentials
+- Open the application at http://localhost:8082 and login with user `coach` credentials
+- Open the application at http://localhost:8082 and login with user `a` credentials
+- Add results of the manual tests to output.md. See [testing-template.md](testing-template.md).
 
-- Make sure that a SQL script(s) to import existing in-memory users and roles to database is created.
-    - The script has statements to create tables USERS and AUTHORITIES. An unique index is created for AUTHORITIES table for username, authority:
+## Assertion
 
-```sql
-CREATE TABLE IF NOT EXISTS users (
-    username VARCHAR(50) NOT NULL PRIMARY KEY,
-    password VARCHAR(100) NOT NULL,
-    enabled BOOLEAN NOT NULL
-);
+The generated solution is asserted against the criteria given below:
 
-CREATE TABLE IF NOT EXISTS authorities (
-    username VARCHAR(50) NOT NULL,
-    authority VARCHAR(50) NOT NULL,
-    CONSTRAINT fk_authorities_users FOREIGN KEY (username) REFERENCES users(username)
-);
 
-CREATE UNIQUE INDEX ix_auth_username ON authorities (username, authority);
-```
+- **completeness** (==high==)
+    - (==high==) Ensure that the method declaring InMemoryUserDetailsManager bean has been removed from AppSecurityConfig.
+- **completeness** (==high==)
+    - (==high==) Ensure that a bean implementing UserDetailsService is created and it obtains user details from database.
+- **completeness** (==high==)
+    - (==high==) Ensure that a SQL script(s) to import existing in-memory users and roles to database is created.
+    - (==high==) Ensure that the SQL script creates tables USERS and AUTHORITIES.
+    - (==high==) Ensure that the SQL script creates an unique index for AUTHORITIES table for username, authority.
+- **completeness** (==high==)
+    - (==high==) Ensure that the SQL script inserts user '1' into USERS table.
+    - (==high==) Ensure that the SQL script inserts user 'user' into USERS table.
+    - (==high==) Ensure that the SQL script inserts user 'coach' into USERS table.
+    - (==high==) Ensure that the SQL script inserts user 'a' into USERS table.
+    - (==high==) Ensure that the SQL script inserts 'user', 'ROLE_USER' into AUTHORITIES table.
+    - (==high==) Ensure that the SQL script inserts '1', 'ROLE_USER' into AUTHORITIES table.
+    - (==high==) Ensure that the SQL script inserts 'coach', 'ROLE_COACH' into AUTHORITIES table.
+    - (==high==) Ensure that the SQL script inserts 'a', 'ROLE_ADMIN' into AUTHORITIES table.
+- **completeness** (==medium==)
+    - (==high==) Make sure that the application is built without errors
+    - (==high==) Make sure that the application is launched without errors
+- **completeness** (==high==)
+    - (==high==) Assert that user '1' successfully did login with its credentials.
+    - (==high==) Assert that user 'user' successfully logged in with its credentials.
+    - (==high==) Assert that user 'coach' successfully logged in with its credentials.
+    - (==high==) Assert that user 'a' successfully logged in with its credentials.
+- **accuracy** (==high==): __functionality__
+    - (==high==) Ensure that the CHANGED code accomplishes the intended functionality.
+    - (==high==) Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.
+- **accuracy** (==high==): __adherence to task requirements__
+    - (==high==) Make sure that the CHANGES are primarily made to achieve the intended functionality.
+    - (==high==) Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.
+- **accuracy** (==high==): __code quality__
+    - (==high==) Ensure that the CHANGED code is syntactically correct, compiles without errors.
+    - (==high==) Ensure that the CHANGED code follows project style guides and maintain consistency with the existing codebase.
+    - (==high==) Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.
+    - (==high==) Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.
+    - (==high==) Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.
+- **accuracy** (==high==): __documentation__
+    - (==high==) Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.
+- **accuracy** (==high==): __security__
+    - (==high==) Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques.
+    - (==high==) Ensure that CHANGED code avoids exposing sensitive data.
+    - (==high==) Ensure that CHANGED code protects the application from common security vulnerabilities.
+- **accuracy** (==high==): __configuration__
+    - (==high==) Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.
 
-    - The script has a statement inserting existing users into USERS table:
+## Additional Notes
 
-```sql
-INSERT INTO users (username, password, enabled) VALUES
-('user', '$2a$10$eWpP7/tdQM1gShtMC2dEtOReHUgRC6ImkoaKygE0JSRKDoDvOWLRW', true),
-('1', '$2a$10$Uh7aJbjjCIZjfgfRYD2lxuWNAsFXZIfFDBnL/75yUh959WmtHK.VO', true),
-('coach', '$2a$10$QAlLQjUrC9D/XlDkveCGm.oU53ufhXYqO7blYkL5OVL2LJRYooewq', true),
-('a', '$2a$10$jn5UYee96Ay8OWss1QAAHO61hDakVLaUFmQ/fFiUmttQXMfLVfVUq', true);
-```
-
-    - The script has a statement inserting user roles into AUTHORITIES table:
-
-```sql
-INSERT INTO authorities (username, authority) VALUES
-('user', 'ROLE_USER'),
-('1', 'ROLE_USER'),
-('coach', 'ROLE_COACH'),
-('a', 'ROLE_ADMIN');
-```
-
-</details>
-
-<details>
-<summary>Automated LLM Assertion:</summary>
-
-Make evaluation following steps described in [auto-llm-eval README](../auto-llm-eval/README.md).
-
-</details>
-
-*Additional note*
-
-See a sample of correct solution in the [0001-Migrate-in-memory-user-and-roles-definitions-to-data path](exemplar/0001-Migrate-in-memory-user-and-roles-definitions-to-data.patch).
+- See samples of correct solution in the [exemplar directory](exemplar).

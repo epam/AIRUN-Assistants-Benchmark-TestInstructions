@@ -1,27 +1,34 @@
-**0008. Refactor Golf application, replace logback logging with Log4j 2.x logging framework and SLF4J as logging facade**
 
-*Act*
+# 0008. Refactor Golf application, replace logback logging with Log4j 2.x logging framework and SLF4J as logging facade
 
-- Open the Golf application project from the repository https://github.com/PolinaTolkachova/golf-application 
-- Copy logback-spring.xml to golf-application/src/main/resources/logback-spring.xml
 
-- Open the developer agent interface
-- Add files to context if the agent doesn't support auto-discovering of relevant source code:
-    - src/main/resources/application.properties
-    - src/main/resources/logback-spring.xml
-    - src/main/resources/logging.properties
-    - pom.xml
-    - src/main/java/com/golf/app/controller/PlayerController.java
-    - src/main/java/com/golf/app/security/CustomAccessDeniedHandler.java
-- Enter task description:
+**Category:** solution-migration  
+**Complexity:** medium  
+**Repository:** [https://github.com/PolinaTolkachova/golf-application](https://github.com/PolinaTolkachova/golf-application)  
 
-```
-Refactor Golf application, replace logback logging with log4j2.
+---
+
+## Stack
+
+### Languages
+
+- **Java** (primary)
+- XML
+
+### Technologies
+
+N/A
+
+
+## Task
+
+```md
+Refactor Golf application, replace Logback logging with Log4j2.
 
 # migration
 
-Migrate logback configuration to log4j2 configuration.
-Configure log4j2 for performance.
+Migrate Logback configuration to Log4j2 configuration.
+Configure Log4j2 for performance.
 
 # logging
 Unify the application logging by using SLF4J logging facade:
@@ -33,90 +40,109 @@ Unify the application logging by using SLF4J logging facade:
 Cleanup unused or legacy logging configuration.
 ```
 
-- Submit the task description and wait implementation plan is generated
+## Context
+
+### Files
+
+- `src/main/resources/application.properties`
+- `src/main/resources/logback-spring.xml`
+- `src/main/resources/logging.properties`
+- `pom.xml`
+- `src/main/java/com/golf/app/controller/PlayerController.java`
+- `src/main/java/com/golf/app/controller/RoundController.java`
+- `src/main/java/com/golf/app/security/CustomAccessDeniedHandler.java`
+- `src/main/java/com/golf/app/security/CustomLogoutSuccessHandler.java`
+
+## Arrangement
+
+- Copy `logback-spring.xml` to `golf-application/src/main/resources/logback-spring.xml`
+- Add the file to git index with the command: `git add src/main/resources/logback-spring.xml`
+- Record the changes to the repository with the command: `git commit -m "add file logging"`
+
+## Act
+
+- Submit the task and wait implementation plan is generated
 - Go to the implementation plan
 - Follow the implementation plan steps and modify source code following the instructions
 
-*Assertion*
 
-<details>
-<summary>Manual Assertion:</summary>
+## Testing
 
-- Make sure, the following changes suggested in pom.xml:
-    - `spring-boot-starter-logging` excluded from `org.springframework.boot` dependencies:
+- Copy `Log4j2ApplicationRunner.java` to `golf-application/src/main/java/com/golf/app/`.
+- Build the application with the command: `mvn clean install`
+- Make sure there is not logback dependency by running the command: `mvn dependency:tree -Dincludes=ch.qos.logback:*`
+- Start the application with the command: `mvn spring-boot:run`
+- Examine content of logs/golf-app.log
 
-```xml
-           <exclusions>
-               <exclusion>
-                   <groupId>org.springframework.boot</groupId>
-                   <artifactId>spring-boot-starter-logging</artifactId>
-               </exclusion>
-           </exclusions>
-```
+## Assertion
 
-    - log4j2 dependencies are added:
+The generated solution is asserted against the criteria given below:
 
-```xml
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.lmax</groupId>
-            <artifactId>disruptor</artifactId>
-            <version>3.4.4</version>
-        </dependency>
-```
 
--  _ src/main/resources/logback-spring.xml _  is deleted.
-- Make sure there is not logback dependency by running the command `mvn dependency:tree -Dincludes=ch.qos.logback:*`
--  _ src/main/resources/logging.properties _  is deleted.
-- Removed logging configuration from  _ src/main/resources/application.properties _  :
+- **completeness** (==high==)
+    - (==high==) Ensure `spring-boot-starter-logging` is excluded from Spring Boot starter dependencies in `pom.xml`.
+    - (==high==) Ensure `spring-boot-starter-log4j2` dependency is added in `pom.xml`.
+    - (==high==) Ensure `com.lmax:disruptor` dependency is added in `pom.xml`.
+    - (==high==) Make sure there is not Logback dependency by running `mvn dependency:tree -Dincludes=ch.qos.logback:*`.
+- **completeness** (==low==)
+    - (==high==) Ensure `logback-spring.xml` is deleted from `src/main/resources` folder.
+    - (==high==) Ensure `logging.properties` is deleted from `src/main/resources` folder.
+    - (==high==) Ensure logging properties prefixed `logging.level.` are removed from `src/main/resources/application.properties`.
+- **completeness** (==high==)
+    - (==high==) Ensure Log4j2 configuration file is added in `src/main/resources` folder.
+    - (==high==) Log4j2 is properly configured.
+    - (==high==) Ensure console appender is added in Log4j2 configuration.
+    - (==high==) Ensure file appender is added in Log4j2 configuration.
+    - (==high==) Ensure logger for "com.golf.app" is configured in Log4j2 configuration.
+    - (==high==) Ensure logger for "org.springframework.web" is configured in Log4j2 configuration.
+- **completeness** (==high==)
+    - (==high==) Ensure logging is fully asynchronous in Log4j2 configuration.
+    - (==high==) Ensure LMAX Disruptor is utilized in Log4j2's logging.
+    - (==high==) Ensure file appender is configured as RollingRandomAccessFile in Log4j2 configuration.
+    - (==high==) Ensure ALL Log4j2 loggers are configured as asynchronous.
+    - (==low==) Make sure that parameterized messages are used everywhere in SLF4J logging calls to boost logging performance for disabled logging statements.
+- **completeness** (==high==)
+    - (==high==) Ensure `@Slf4j` annotation is added to `PlayerController` class.
+    - (==high==) Ensure `LOGGER` field declaration is removed from `PlayerController` class.
+    - (==high==) Ensure `PlayerController.addPlayer` method logging is changed to `log.info(...)`.
+    - (==high==) Ensure `PlayerController.updatePlayer` method logging is changed to `log.info(...)`.
+    - (==high==) Ensure `PlayerController.deletePlayer` method logging is changed to `log.info(...)`.
+    - (==high==) Ensure `@Slf4j` annotation is added to `CustomAccessDeniedHandler` class.
+    - (==high==) Ensure `CustomAccessDeniedHandler.handle` method logging is changed to `log.warn(...)`.
+    - (==high==) Ensure `@Slf4j` annotation is added to `CompetitionController` class.
+    - (==high==) Make sure that all calls of `System.out.println(...)` are replaced with SLF4J logging in `CompetitionController` class.
+    - (==high==) Ensure `@Slf4j` annotation is added to `RoundController` class.
+    - (==high==) Make sure that all calls of `System.out.println(...)` are replaced with SLF4J logging in `RoundController` class.
+    - (==high==) Ensure `@Slf4j` annotation is added to `CustomLogoutSuccessHandler` class.
+    - (==high==) Make sure that a call of `System.out.println(...)` are replaced with SLF4J logging in `CustomLogoutSuccessHandler` class.
+- **completeness** (==high==)
+    - (==high==) Verify that the application console output is given and contains the application logs.
+    - (==high==) Verify that the application log file is created AND contains the application log events.
+- **completeness** (==medium==)
+    - (==high==) Ensure that the command `mvn clean install` output is given and contains evidence of the application successfully build.
+    - (==high==) Ensure that the command `mvn spring-boot:run` output is given and contains evidence of the application successful run.
+- **accuracy** (==high==): __functionality__
+    - (==high==) Ensure that the CHANGED code accomplishes the intended functionality.
+    - (==high==) Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.
+- **accuracy** (==high==): __adherence to task requirements__
+    - (==high==) Make sure that the CHANGES are primarily made to achieve the intended functionality.
+    - (==high==) Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.
+- **accuracy** (==high==): __code quality__
+    - (==high==) Ensure that the CHANGED code is syntactically correct, compiles without errors.
+    - (==high==) Ensure that the CHANGED code follows project style guides and maintain consistency with the existing codebase.
+    - (==high==) Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.
+    - (==high==) Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.
+    - (==high==) Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.
+- **accuracy** (==high==): __documentation__
+    - (==high==) Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.
+- **accuracy** (==high==): __security__
+    - (==high==) Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques.
+    - (==high==) Ensure that CHANGED code avoids exposing sensitive data.
+    - (==high==) Ensure that CHANGED code protects the application from common security vulnerabilities.
+- **accuracy** (==high==): __configuration__
+    - (==high==) Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.
 
-```diff
--# Logging Configuration
--logging.level.org.springframework=INFO
--logging.level.com.myapp=DEBUG
-```
+## Additional Notes
 
--  _  src/main/resources/log4j2.xml _  is created and have declaration of the following elements (see exemplar/log4j2.xml sample):
-    - Console appender.
-    - RollingRandomAccessFile appender.
-    - AsyncLogger for "com.golf.app".
-    - AsyncLogger for "org.springframework.web".
-    - AsyncRoot logger.
-- `PlayerController` class has the following updates:
-    - `@Slf4j` annotation is added to the class.
-    - `LOGGER` field declaration is removed.
-    - `addPlayer` method logging is changed to `log.info( "Player {} {} with ID {} has been saved in the DB", player.getSurname(), player.getName(), player.getId() );`.
-    - `updatePlayer` method logging is changed to `log.info( "Player {} {} with ID {} has been updated in the DB", player.getSurname(), player.getName(), player.getId() );`.
-    - `deletePlayer` method logging is changed to `log.info( "Player {} {} with ID {} was REMOVED from DB", player.getSurname(), player.getName(), player.getId() );`.
-- `CustomAccessDeniedHandler` class has the following updates:
-    - `@Slf4j` annotation is added to the class.
-    - `LOG` field declaration is removed.
-    - `handle` method logging is changed to `log.warn( "User: {} attempted to access the protected URL: {}", auth.getName(), request.getRequestURI() );`.
-- `CompetitionController` class has the following updates:
-    - `@Slf4j` annotation is added to the class.
-    - all calls of `System.out.println( ... )` are replaced with `log.info( ... );`.
-- `RoundController` class has the following updates:
-    - `@Slf4j` annotation is added to the class.
-    - all calls of `System.out.println( ... )` are replaced with `log.info( ... );`.
-- `CustomLogoutSuccessHandler` class has the following updates:
-    - `@Slf4j` annotation is added to the class.
-    - `System.out.println( ... )` call is replaced with `log.info( ... );`.
-- The application successfully built with the command `mvn clean install`.
-- The application is run with the command `mvn spring-boot:run` and logs are written to console and to  _ logs/golf-app.log _  file.
-</details>
-
-<details>
-<summary>Automated LLM Assertion:</summary>
-
-Make evaluation following steps described in [auto-llm-eval README](../auto-llm-eval/README.md).
-
-The following manual steps are required before running the evaluation (see [template](../auto-llm-eval/manual-output-include-template.md) ):
-- Add output of `mvn clean install` to output.md.
-- Add output of `mvn dependency:tree -Dincludes=ch.qos.logback:*` to output.md.
-- Add output of `mvn spring-boot:run` to output.md.
-- Add content of logs/golf-app.log to output.md.
-
-</details>
+- See [testing-template.md](testing-template.md) for example of extra report sections.
+- See samples of correct solution in the [exemplar directory](exemplar).

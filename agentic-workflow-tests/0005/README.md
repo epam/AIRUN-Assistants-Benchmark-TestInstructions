@@ -1,110 +1,118 @@
-**0005. Publish competition change events to Kafka topic**
 
-*Act*
+# 0005. Publish competition change events to Kafka
 
-- Open the Golf application project:
-https://github.com/PolinaTolkachova/golf-application
 
-- Open the developer agent interface
-- Add files to context if the agent doesn't support auto-discovering of relevant source code:
-    - pom.xml
-    - src/main/resources/application.properties
-    - src/main/java/com/golf/app/AppConfiguration.java
-    - src/main/java/com/golf/app/mapper/CompetitionMapper.java
-    - src/main/java/com/golf/app/model/Competition.java
-    - src/main/java/com/golf/app/service/CompetitionService.java
-    - src/main/java/com/golf/app/service/CompetitionServiceImpl.java
-    - src/main/java/com/golf/app/repo/CompetitionRepository.java
-- Enter task description:
+**Category:** solution-or-component-generation  
+**Complexity:** high  
+**Repository:** [https://github.com/PolinaTolkachova/golf-application](https://github.com/PolinaTolkachova/golf-application)  
 
-```
+---
+
+## Stack
+
+### Languages
+
+- **Java** (primary)
+
+### Technologies
+
+- Kafka
+
+## Task
+
+```md
 The application allows to manage golf competitions.
-Add publishing competition change events to Kafka topic.
+Add publishing competition change events to Kafka.
 A change event should include change type and the following competition attributes: Id,
 competition name, start date, end date, course name.
 ```
 
-- Submit the task description and wait implementation plan is generated
+## Context
+
+### Files
+
+- `pom.xml`
+- `src/main/resources/application.properties`
+- `src/main/java/com/golf/app/AppConfiguration.java`
+- `src/main/java/com/golf/app/mapper/CompetitionMapper.java`
+- `src/main/java/com/golf/app/model/Competition.java`
+- `src/main/java/com/golf/app/service/CompetitionService.java`
+- `src/main/java/com/golf/app/service/CompetitionServiceImpl.java`
+- `src/main/java/com/golf/app/repo/CompetitionRepository.java`
+
+## Arrangement
+
+N/A
+
+
+## Act
+
+- Submit the task and wait implementation plan is generated
 - Go to the implementation plan
 - Follow the implementation plan steps and modify source code following the instructions
 
-*Assert conditions*
 
-- assert that spring-kafka dependency is added to pom.xml
+## Testing
 
-```xml
-<dependency>
-    <groupId>org.springframework.kafka</groupId>
-    <artifactId>spring-kafka</artifactId>
-</dependency>
-```
+- Update database configuration in application.properties to make it compatible with your local environment
+- Update Kafka configuration in application.properties to match it with your local environment
+- Set KAFKA_FROM_HOST environment variable: `export KAFKA_FROM_HOST=your_kafka_host`
+- Start the container with the command: `docker-compose up`
+- Build the application with the command: `mvn clean install`
+- Launch the application with the command: `mvn spring-boot:run -Dspring-boot.run.arguments="--logging.level.org.springframework.kafka=INFO --logging.level.org.apache.kafka=INFO"`
+- Open application UI at http://localhost:8082/
+- Click  *Competitions*  link and edit competitions:
+                    - create a competition
+                    - update a competition
+        
+- Open Kafka UI at http://localhost:8080/
+- Click  *Topics* on the sidebar and Golf topic then.
+- Click the topic  *Messages*  link and make sure that all competition edits have corresponding Kafka messages.
+- Write down the create, update, delete messages to output.md. See (testing-template.md)[testing-template.md]
 
-- assert that Kafka configuration is added to application.properties
+## Assertion
 
-```properties
-spring.kafka.bootstrap-servers=${KAFKA_HOST:localhost}:9092
-spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
-spring.kafka.consumer.group-id=golf-application
-```
+The generated solution is asserted against the criteria given below:
 
-- assert that Kafka publishing is configured in application.properties. Sample:
 
-```properties
-golf.kafka.topicName=golf-competitions
-golf.kafka.publish.batchSize=10
-golf.kafka.publish.delay=10000
-```
+- **completeness** (==high==)
+    - (==high==) Ensure spring-kafka dependency is added in pom.xml.
+- **completeness** (==high==)
+    - (==high==) Ensure Kafka bootstrap servers have been configured in application.properties.
+    - (==high==) Ensure Kafka producer value serializer is configured as Json serializer in application.properties.
+    - (==low==) Ensure Kafka topic for Golf competitions publishing is configured in application.properties.
+- **completeness** (==high==)
+    - (==high==) Make sure that competition save invokes publishing of competition change event to Kafka.
+    - (==high==) Make sure that competition update invokes publishing of competition change event to Kafka.
+    - (==high==) Make sure that competition deletion invokes publishing of competition change event to Kafka.
+- **completeness** (==high==)
+    - (==high==) Ensure Transactional Outbox pattern is used to publish competition change event to Kafka.
+- **completeness** (==high==)
+    - (==high==) Ensure that competition SAVE message published to Kafka.
+    - (==high==) Ensure that competition SAVE message has the following attributes: Id, competition name, start date, end date, course name.
+    - (==high==) Ensure that competition UPDATE message published to Kafka.
+    - (==high==) Ensure that competition UPDATE message has the following attributes: Id, competition name, start date, end date, course name.
+- **accuracy** (==high==): __functionality__
+    - (==high==) Ensure that the CHANGED code accomplishes the intended functionality.
+    - (==high==) Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.
+- **accuracy** (==high==): __adherence to task requirements__
+    - (==high==) Make sure that the CHANGES are primarily made to achieve the intended functionality.
+    - (==high==) Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.
+- **accuracy** (==high==): __code quality__
+    - (==high==) Ensure that the CHANGED code is syntactically correct, compiles without errors.
+    - (==high==) Ensure that the CHANGED code follows project style guides and maintain consistency with the existing codebase.
+    - (==high==) Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.
+    - (==high==) Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.
+    - (==high==) Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.
+- **accuracy** (==high==): __documentation__
+    - (==high==) Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.
+- **accuracy** (==high==): __security__
+    - (==high==) Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques.
+    - (==high==) Ensure that CHANGED code avoids exposing sensitive data.
+    - (==high==) Ensure that CHANGED code protects the application from common security vulnerabilities.
+- **accuracy** (==high==): __configuration__
+    - (==high==) Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.
 
-- assert Java code changes are generated
-- set KAFKA_FROM_HOST variable to point actual Kafka host in [.env](.env) docker compose configuration file file
-- start Mysql container and Kafka containers with the command:
+## Additional Notes
 
-```bash
-docker-compose up
-```
-
-- update database configuration in application.properties to match it with your local environment.
-- update Kafka configuration in application.properties to match it with your local environment.
-- build the application with the command: `mvn clean install`.
-- make sure the application has been built without errors.
-- start the application with the command: `mvn spring-boot:run`.
-- make sure the application has started, no errors are reported in log.
-- open the application UI at http://localhost:8082/
-- click  *Competitions*  link and edit competitions:
-    - create a competition
-    - update a competition
-    - delete a competition
-- open Kafka UI at http://localhost:8080/
-- click  *Topics* on sidebar and Golf topic then.
-- click the topic  *Messages*  link and make sure that all competition edits have corresponding Kafka messages.
-- assert that messages have change type and the requested competition attributes. Message sample:
-
-```json
-{
-    "id": 1,
-    "aggregateType": "Competition",
-    "aggregateId": "12",
-    "eventType": "UPSERTED",
-    "payload": {
-        "@c": ".CompetitionEvent$Upserted",
-        "id": 12,
-        "startDate": [
-            2024,
-            7,
-            5
-        ],
-        "endDate": [
-            2024,
-            7,
-            26
-        ],
-        "name": "Gold Cup",
-        "courseName": "Minsk Golf Club 01"
-    }
-}
-```
-
-*Additional note*
-
-See a [sample](exemplar/) of correct solution.
-
+- See sample of correct solution in the [exemplar directory](exemplar).

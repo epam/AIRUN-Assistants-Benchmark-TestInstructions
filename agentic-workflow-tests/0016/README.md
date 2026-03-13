@@ -1,20 +1,29 @@
-**0016. Fix an issue with competition removing in Golf application**
 
-*Act*
+# 0016. Fix an issue with competition removing in Golf application
 
-- Open the Golf application project from the repository https://github.com/PolinaTolkachova/golf-application 
 
-- Open the developer agent interface
-- Add files to context if the agent doesn't support auto-discovering of relevant source code:
-    - src/main/java/com/golf/app/controller/CompetitionController.java
-    - src/main/java/com/golf/app/service/CompetitionService.java
-    - src/main/java/com/golf/app/service/CompetitionServiceImpl.java
-    - src/main/resources/templates/competition/competition-details.html
-    - src/main/resources/templates/competition/competition-main.html
-    - src/main/resources/application.properties
-- Enter task description:
+**Category:** code-bugfixing  
+**Complexity:** medium  
+**Repository:** [https://github.com/PolinaTolkachova/golf-application](https://github.com/PolinaTolkachova/golf-application)  
 
-```
+---
+
+## Stack
+
+### Languages
+
+- **Java** (primary)
+- HTML
+- JavaScript
+
+### Technologies
+
+N/A
+
+
+## Task
+
+```md
 Fix the issue described below.
 
 ## Description
@@ -143,55 +152,74 @@ org.springframework.web.servlet.resource.NoResourceFoundException: No static res
 - An user is returned to the Competitions page.
 ```
 
-- Submit the task description and wait implementation plan is generated
+## Context
+
+### Files
+
+- `src/main/java/com/golf/app/controller/CompetitionController.java`
+- `src/main/java/com/golf/app/service/CompetitionService.java`
+- `src/main/java/com/golf/app/service/CompetitionServiceImpl.java`
+- `src/main/resources/templates/competition/competition-details.html`
+- `src/main/resources/templates/competition/competition-main.html`
+- `src/main/resources/application.properties`
+
+## Arrangement
+
+N/A
+
+
+## Act
+
+- Submit the task and wait implementation plan is generated
 - Go to the implementation plan
 - Follow the implementation plan steps and modify source code following the instructions
 
-*Testing*
+
+## Testing
 
 - Update database configuration in application.properties to make it compatible with your local environment
-- build the application with the command: `mvn clean install`
-- start the application with the command: `mvn spring-boot:run`
-- open application UI at http://localhost:8082/competition
-- click on competition id link to visit competition details page
-- click 'Delete competition' button and confirm deletion
+- Build the application with the command: `mvn clean install`
+- Launch the application with the command: `mvn spring-boot:run`
+- Open application UI at http://localhost:8082/competition
+- Click on competition id link to visit competition details page
+- Click 'Delete competition' button and confirm deletion
+- Add results of the manual tests to output.md. See (testing-template.md)[testing-template.md]
 
-*Assertion*
+## Assertion
 
-<details>
-<summary>Manual Assertion:</summary>
-
-- Make sure, the delete competition method has been added in `src/main/java/com/golf/app/controller/CompetitionController.java` :
-
-```java
-    @DeleteMapping("/{id}")
-    public String deleteCompetition(@PathVariable Long id) {
-        competitionService.deleteCompetition(id);
-        return REDIRECT_COMPETITION;
-    }
-```
-
-- Ensure the following changes applied to competition removing form in `src/main/resources/templates/player/player-details.html`:
-    - the form action has been changed to /competition/{id}
-    - a hidden input field with attributes name="_method" value="DELETE" has been added
-- Ensure the property `spring.mvc.hiddenmethod.filter.enabled=true` has been added to `src/main/resources/application.properties`
-
-</details>
-
-<details>
-<summary>Automated LLM Assertion:</summary>
-
-Make evaluation following steps described in [auto-llm-eval README](../auto-llm-eval/README.md).
-
-The following manual steps are required before running the evaluation (see [template](../auto-llm-eval/manual-output-include-template.md) ):
-- Add output of `mvn clean install` to output.md.
-- Add output of `mvn spring-boot:run` to output.md.
-- Add manual test results to output.md.
-
-</details>
+The generated solution is asserted against the criteria given below:
 
 
-*Additional notes*
+- **completeness** (==high==)
+    - (==high==) Ensure the application change fixes the issue with competition deletion
+    - (==high==) Make sure that the solution uses DELETE HTTP method for competition deletion
+    - (==high==) Ensure the application shows competition main page after competition deletion
+    - (==high==) Ensure that competition deletion test reported as passed in test report
+- **completeness** (==medium==)
+    - (==high==) Make sure that the application is built without errors
+    - (==high==) Make sure that the application is launched without errors
+- **accuracy** (==high==): __functionality__
+    - (==high==) Ensure that the CHANGED code accomplishes the intended functionality.
+    - (==high==) Ensure that the CHANGED code handles potential edge cases, exceptions, or invalid inputs gracefully where it is required.
+- **accuracy** (==high==): __adherence to task requirements__
+    - (==high==) Make sure that the CHANGES are primarily made to achieve the intended functionality.
+    - (==high==) Make sure that the CHANGES do not contain unrequested modifications, unused imports or code.
+- **accuracy** (==high==): __code quality__
+    - (==high==) Ensure that the CHANGED code is syntactically correct, compiles without errors.
+    - (==high==) Ensure that the CHANGED code follows project style guides and maintain consistency with the existing codebase.
+    - (==high==) Ensure that the CHANGED code is clean, readable, adheres to best practices and naming conventions.
+    - (==high==) Ensure that the CHANGED code is easily maintainable, with proper structure and separation of concerns.
+    - (==high==) Make sure that Spring Boot's features such as dependency injection, auto-configuration, and data access abstraction are properly utilized in the the CHANGED code.
+- **accuracy** (==high==): __documentation__
+    - (==high==) Ensure that the CHANGED code is well-documented, with clear and concise documentation for each part of the code.
+- **accuracy** (==high==): __security__
+    - (==high==) Ensure that CHANGED code keeps application secure by using proper authentication, authorization, and data validation techniques.
+    - (==high==) Ensure that CHANGED code avoids exposing sensitive data.
+    - (==high==) Ensure that CHANGED code protects the application from common security vulnerabilities.
+- **accuracy** (==high==): __configuration__
+    - (==high==) Ensure that CHANGED application configuration is flexible and externalized to efficiently manage different environments.
 
-- See a sample of correct solution in the [0001-Fix-up-user-registration.patch](exemplar/0001-Fix-up-user-registration.patch).
+## Additional Notes
+
+- See samples of correct solution in the [exemplar directory](exemplar).
 - The sample and the assertion conditions are written for a solution using DELETE HTTP method, that is the semantically correct for resource deletion. However, an alternate solution using POST may be a more practical choice for resource deletion in a traditional web application.
