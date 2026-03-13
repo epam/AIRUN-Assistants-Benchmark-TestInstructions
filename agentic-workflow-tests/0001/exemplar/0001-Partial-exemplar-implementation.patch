@@ -1,0 +1,86 @@
+From 0a4d0c814f6a3ffef63dcc962b812d6f239f2209 Mon Sep 17 00:00:00 2001
+From: siarhei-z1 <148881157+siarhei-z1@users.noreply.github.com>
+Date: Tue, 17 Mar 2026 17:19:46 +0200
+Subject: [PATCH] Partial exemplar implementation
+
+The exemplar implementation includes docker-compose.yml, flyway.conf, .env.example.
+DML script to create Mysql database schema is not provided.
+---
+ .env.example       |  8 ++++++++
+ .gitignore         |  5 ++++-
+ docker-compose.yml | 21 +++++++++++++++++++++
+ flyway.conf        |  4 ++++
+ 4 files changed, 37 insertions(+), 1 deletion(-)
+ create mode 100644 .env.example
+ create mode 100644 docker-compose.yml
+ create mode 100644 flyway.conf
+
+diff --git a/.env.example b/.env.example
+new file mode 100644
+index 0000000..14c940b
+--- /dev/null
++++ b/.env.example
+@@ -0,0 +1,8 @@
++GOLF_APP_DB_JDBC_URL=jdbc:mysql://localhost:3306/golf_db
++GOLF_APP_DB_USERNAME=golf_user
++GOLF_APP_DB_USERPASS=golf_pass
++
++MYSQL_ROOT_PASSWORD=root_pass
++MYSQL_DATABASE=golf_db
++MYSQL_USER=golf_user
++MYSQL_PASSWORD=golf_pass
+diff --git a/.gitignore b/.gitignore
+index 5780f01..e376df4 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -9,4 +9,7 @@
+ 
+ **/bin/
+ **/obj/
+-**/target/
+\ No newline at end of file
++**/target/
++
++.env
++*.env.local
+diff --git a/docker-compose.yml b/docker-compose.yml
+new file mode 100644
+index 0000000..afa232a
+--- /dev/null
++++ b/docker-compose.yml
+@@ -0,0 +1,21 @@
++services:
++  mysql:
++    image: mysql:8.0
++    container_name: golf-mysql
++    command:
++      - --character-set-server=utf8mb4
++      - --collation-server=utf8mb4_unicode_ci
++      - --default-authentication-plugin=caching_sha2_password
++    restart: always
++    environment:
++        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_pass}
++        MYSQL_DATABASE: ${MYSQL_DATABASE:-golf_db}
++        MYSQL_USER: ${MYSQL_USER:-golf_user}
++        MYSQL_PASSWORD: ${MYSQL_PASSWORD:-golf_pass}
++    ports:
++        - 3306:3306
++    volumes:
++        - mysql_data:/var/lib/mysql
++
++volumes:
++  mysql_data:
+\ No newline at end of file
+diff --git a/flyway.conf b/flyway.conf
+new file mode 100644
+index 0000000..46bba66
+--- /dev/null
++++ b/flyway.conf
+@@ -0,0 +1,4 @@
++flyway.url=jdbc:mysql://localhost:3306/golf_db
++flyway.user=${FLYWAY_USER}
++flyway.password=${FLYWAY_PASSWORD}
++flyway.locations=filesystem:src/main/resources/db/migration
+-- 
+2.51.0
+

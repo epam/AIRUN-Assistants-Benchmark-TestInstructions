@@ -1,0 +1,206 @@
+From bd6a8f2240c9b0848fb65a0a968f3a74212d46d4 Mon Sep 17 00:00:00 2001
+From: siarhei-z1 <148881157+siarhei-z1@users.noreply.github.com>
+Date: Tue, 26 May 2026 14:59:12 +0300
+Subject: [PATCH] Exemplar implementation of returning round scores in CSV
+ format
+
+---
+ pom.xml                                       |   5 +
+ .../app/controller/RoundScoreController.java  |   6 +
+ .../RoundScoreCsvHttpMessageConverter.java    | 151 ++++++++++++++++++
+ 3 files changed, 162 insertions(+)
+ create mode 100644 src/main/java/com/golf/app/http/converter/RoundScoreCsvHttpMessageConverter.java
+
+diff --git a/pom.xml b/pom.xml
+index 7d465cc..dab4618 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -112,6 +112,11 @@
+             <artifactId>modelmapper</artifactId>
+             <version>3.2.0</version>
+         </dependency>
++        <dependency>
++            <groupId>org.apache.commons</groupId>
++            <artifactId>commons-csv</artifactId>
++            <version>1.14.1</version>
++        </dependency>
+     </dependencies>
+ 
+     <build>
+diff --git a/src/main/java/com/golf/app/controller/RoundScoreController.java b/src/main/java/com/golf/app/controller/RoundScoreController.java
+index 180a7cc..1f8b9d0 100644
+--- a/src/main/java/com/golf/app/controller/RoundScoreController.java
++++ b/src/main/java/com/golf/app/controller/RoundScoreController.java
+@@ -51,6 +51,12 @@ public class RoundScoreController {
+         return ROUND_SCORE_MAIN;
+     }
+ 
++    @GetMapping(produces = "text/csv")
++    @ResponseBody
++    public Iterable<RoundScore> getRoundScores() {
++        return roundScoreService.getAllRoundScores();
++    }
++
+     @GetMapping("/input")
+     public String displayScoreCardInputPage(Model model) {
+         Iterable<Player> players = playerService.getAllPlayers();
+diff --git a/src/main/java/com/golf/app/http/converter/RoundScoreCsvHttpMessageConverter.java b/src/main/java/com/golf/app/http/converter/RoundScoreCsvHttpMessageConverter.java
+new file mode 100644
+index 0000000..928059f
+--- /dev/null
++++ b/src/main/java/com/golf/app/http/converter/RoundScoreCsvHttpMessageConverter.java
+@@ -0,0 +1,151 @@
++package com.golf.app.http.converter;
++
++import java.io.BufferedWriter;
++import java.io.IOException;
++import java.io.OutputStream;
++import java.io.OutputStreamWriter;
++import java.lang.reflect.ParameterizedType;
++import java.lang.reflect.Type;
++import java.nio.charset.Charset;
++import java.nio.charset.StandardCharsets;
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Optional;
++
++import org.apache.commons.csv.CSVFormat;
++import org.apache.commons.csv.CSVPrinter;
++import org.springframework.http.HttpInputMessage;
++import org.springframework.http.HttpOutputMessage;
++import org.springframework.http.MediaType;
++import org.springframework.http.converter.AbstractGenericHttpMessageConverter;
++import org.springframework.http.converter.HttpMessageConverter;
++import org.springframework.http.converter.HttpMessageNotReadableException;
++import org.springframework.http.converter.HttpMessageNotWritableException;
++import org.springframework.lang.NonNull;
++import org.springframework.lang.Nullable;
++import org.springframework.stereotype.Component;
++
++import com.golf.app.model.RoundScore;
++
++
++/**
++ * Implementation of {@link HttpMessageConverter} that can write iterable
++ * {@link RoundScore RoundScores} in CSV format. CSV response contains the same
++ * fields as scorecardsTable in the round-score-main.html
++ *
++ */
++@Component
++public class RoundScoreCsvHttpMessageConverter extends AbstractGenericHttpMessageConverter<Iterable<RoundScore>> {
++    public static final MediaType TEXT_CSV = new MediaType("text", "csv");
++
++    private static final int HOLE_COUNT = 18;
++    private static final String[] CSV_HEADERS;
++
++    static {
++        List<String> csvHeaders = new ArrayList<>();
++        csvHeaders.addAll(List.of("Id", "Date", "Player", "HCP", "Competition"));
++        for( int i = 1; i<=HOLE_COUNT; i++ ) {
++            csvHeaders.add(String.valueOf(i));
++        }
++        csvHeaders.addAll(List.of("Stroke", "Penalty", "GrossScore", "NetScore", "NetScorePar", "Stableford"));
++        CSV_HEADERS = csvHeaders.toArray(new String[0]);
++    }
++
++    public RoundScoreCsvHttpMessageConverter() {
++        super(TEXT_CSV);
++    }
++
++    @Override
++    protected boolean supports(@NonNull Class<?> clazz) {
++        return Iterable.class.isAssignableFrom(clazz);
++    }
++
++    @Override
++    public boolean canRead(@NonNull Class<?> clazz, @Nullable MediaType mediaType) {
++        return false;
++    }
++
++    @Override
++    public boolean canWrite(@Nullable Type type, @NonNull Class<?> clazz, @Nullable MediaType mediaType) {
++        return isSupportedIterable(type) && canWrite(mediaType);
++    }
++
++    @Override
++    public @NonNull Iterable<RoundScore> read(@NonNull Type type, @Nullable Class<?> contextClass,
++            @NonNull HttpInputMessage inputMessage)
++            throws IOException, HttpMessageNotReadableException {
++        throw new UnsupportedOperationException();
++    }
++
++    @Override
++    protected @NonNull Iterable<RoundScore> readInternal(@NonNull Class<? extends Iterable<RoundScore>> clazz,
++            @NonNull HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
++        throw new UnsupportedOperationException();
++    }
++
++    @Override
++    protected void writeInternal(@NonNull Iterable<RoundScore> roundScores, @Nullable Type type,
++            @NonNull HttpOutputMessage outputMessage)
++            throws IOException, HttpMessageNotWritableException {
++
++        MediaType contentType = outputMessage.getHeaders().getContentType();
++        Charset charset = Optional.ofNullable(contentType).map(MediaType::getCharset).orElse(StandardCharsets.UTF_8);
++
++        outputMessage.getHeaders().setContentType(new MediaType("text", "csv", charset));
++
++        OutputStream out = outputMessage.getBody();
++
++        try (CSVPrinter csvPrinter = CSVFormat.DEFAULT.builder().setHeader(CSV_HEADERS).get()
++                .print(new BufferedWriter(new OutputStreamWriter(out, charset))))
++         {
++             for( RoundScore roundScore : roundScores )
++             {
++                 Object[] values = values(roundScore);
++                 csvPrinter.printRecord(values);
++             }
++         }
++    }
++
++    private boolean isSupportedIterable(Type type) {
++        if (type instanceof ParameterizedType parameterizedType) {
++            Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
++            if (actualTypeArguments.length > 0) {
++                return actualTypeArguments[0].equals(RoundScore.class);
++            }
++        }
++        return false;
++    }
++
++    private Object[] values(RoundScore roundScore) {
++        Object[] values = new Object[CSV_HEADERS.length];
++        int i = 0;
++        // Id
++        values[i++] = roundScore.getId();
++        // Date
++        values[i++] = roundScore.getDate();
++        // Player
++        values[i++] = roundScore.getPlayer().getSurname() + " " + roundScore.getPlayer().getName();
++        // HCP
++        values[i++] = roundScore.getPlayer().getHcp();
++        // Competition
++        values[i++] = roundScore.getCompetition().getName();
++        // 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
++        int scoresLength = roundScore.getScores().size();
++        for (int j = 0; j < HOLE_COUNT; j++) {
++            values[i++] = j < scoresLength ? roundScore.getScores().get(j).getStroke() : null;
++        }
++        // Stroke
++        values[i++] = roundScore.getSumStroke();
++        // Penalty
++        values[i++] = roundScore.getSumPenalty();
++        // GrossScore
++        values[i++] = roundScore.getSumGrossScore();
++        // NetScore
++        values[i++] = roundScore.getSumNetScore();
++        // NetScorePar
++        values[i++] = roundScore.getSumNetScorePar();
++        // Stableford
++        values[i++] = roundScore.getSumStableford();
++        return values;
++    }
++}
+-- 
+2.51.0
+
