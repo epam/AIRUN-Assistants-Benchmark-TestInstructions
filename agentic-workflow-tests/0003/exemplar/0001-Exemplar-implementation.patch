@@ -1,0 +1,120 @@
+From 7f288ace95d568b070944fef57c4643ff1adf669 Mon Sep 17 00:00:00 2001
+From: siarhei-z1 <148881157+siarhei-z1@users.noreply.github.com>
+Date: Tue, 17 Mar 2026 20:48:08 +0200
+Subject: [PATCH] Exemplar implementation
+
+---
+ pom.xml                                       |  4 ++
+ .../golf/app/security/AppSecurityConfig.java  | 53 +++++++------------
+ src/main/resources/application.properties     |  3 ++
+ 3 files changed, 25 insertions(+), 35 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index 7d465cc..74b6c71 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -43,6 +43,10 @@
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter-data-jpa</artifactId>
+         </dependency>
++        <dependency>
++            <groupId>org.springframework.boot</groupId>
++            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
++        </dependency>
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter-test</artifactId>
+diff --git a/src/main/java/com/golf/app/security/AppSecurityConfig.java b/src/main/java/com/golf/app/security/AppSecurityConfig.java
+index 73383ca..8410368 100644
+--- a/src/main/java/com/golf/app/security/AppSecurityConfig.java
++++ b/src/main/java/com/golf/app/security/AppSecurityConfig.java
+@@ -1,57 +1,40 @@
+ 
+ package com.golf.app.security;
+ 
+-import com.golf.app.enums.Role;
+ import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.Configuration;
+ import org.springframework.http.HttpMethod;
++import org.springframework.security.authorization.AuthorityAuthorizationManager;
+ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+ import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+-import org.springframework.security.core.userdetails.User;
+-import org.springframework.security.core.userdetails.UserDetails;
+ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+ import org.springframework.security.crypto.password.PasswordEncoder;
+-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+ import org.springframework.security.web.SecurityFilterChain;
+ 
+ import static org.springframework.security.config.Customizer.withDefaults;
+ 
++import java.util.stream.Stream;
++
+ @Configuration
+ @EnableWebSecurity
+ public class AppSecurityConfig {
+ 
+     @Bean
+-    public InMemoryUserDetailsManager userDetailsService() {
+-        UserDetails user1 = User.withUsername("user")
+-            .password(passwordEncoder().encode("userPass"))
+-            .roles(Role.USER.name())
+-            .build();
+-        UserDetails user2 = User.withUsername("1")
+-            .password(passwordEncoder().encode("1"))
+-            .roles(Role.USER.name())
+-            .build();
+-        UserDetails coach = User.withUsername("coach")
+-            .password(passwordEncoder().encode("coachPass"))
+-            .roles(Role.COACH.name())
+-            .build();
+-        UserDetails admin = User.withUsername("a")
+-            .password(passwordEncoder().encode("a"))
+-            .roles(Role.ADMIN.name())
+-            .build();
+-
+-        return new InMemoryUserDetailsManager(user1, user2, coach, admin);
+-    }
+-
+-    @Bean
+-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+-        http
+-            .csrf().disable()
+-            .authorizeHttpRequests((authorize) -> authorize
+-                .requestMatchers(HttpMethod.POST).permitAll()
+-                .anyRequest().authenticated()
+-            )
+-            .formLogin(withDefaults())
+-            .httpBasic(withDefaults());
++    SecurityFilterChain filterChain( HttpSecurity http ) throws Exception
++    {
++        http.authorizeHttpRequests( ( authorize ) -> authorize
++                        .requestMatchers( "/admin/**" )
++                        .access( AuthorityAuthorizationManager.hasAuthority( "SCOPE_GOLF:ADMIN" ) )
++                        .requestMatchers( ( request ) -> Stream
++                                .of( HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE )
++                                .filter( ( method ) -> method.matches( request.getMethod() ) ).findFirst().isPresent() )
++                        .access( AuthorityAuthorizationManager.hasAuthority( "SCOPE_GOLF:COACH" ) )
++                        .requestMatchers( HttpMethod.GET )
++                        .access( AuthorityAuthorizationManager.hasAnyAuthority( "SCOPE_GOLF:COACH",
++                                "SCOPE_GOLF:USER" ) )
++                        .anyRequest()
++                        .authenticated() )
++                .oauth2ResourceServer( ( oauth2 ) -> oauth2.jwt( withDefaults() ) );
+         return http.build();
+     }
+ 
+diff --git a/src/main/resources/application.properties b/src/main/resources/application.properties
+index 497c7d8..b323f70 100644
+--- a/src/main/resources/application.properties
++++ b/src/main/resources/application.properties
+@@ -19,3 +19,6 @@ swagger.api.version=1.0
+ security.jwt.header=Authorization
+ security.jwt.prefix=Bearer
+ security.jwt.expiration=86400000
++
++spring.security.oauth2.resourceserver.jwt.issuer-uri=${GOLF_APP_OAUTH2_ISSUER_URI:http://localhost:50080}
++
+-- 
+2.51.0
+

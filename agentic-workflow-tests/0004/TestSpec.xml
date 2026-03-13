@@ -71,7 +71,7 @@ Id,Date,Player,HCP,Competition,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,Stro
 ```
 ]]>
         </TestStep>
-        <TestStep>Add results of the manual tests to output.md. See (testing-template.md)[testing-template.md]</TestStep>
+        <TestStep>Add results of the manual tests to output.md. See [testing-template.md](testing-template.md)</TestStep>
     </TestPlan>
     <Criteria>
         <Criterion type="completeness" weight="high">

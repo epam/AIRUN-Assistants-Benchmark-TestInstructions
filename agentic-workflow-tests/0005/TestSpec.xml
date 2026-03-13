@@ -56,7 +56,7 @@ competition name, start date, end date, course name.
         <TestStep>Open Kafka UI at http://localhost:8080/</TestStep>
         <TestStep>Click  *Topics* on the sidebar and Golf topic then.</TestStep>
         <TestStep>Click the topic  *Messages*  link and make sure that all competition edits have corresponding Kafka messages.</TestStep>
-        <TestStep>Write down the create, update, delete messages to output.md. See (testing-template.md)[testing-template.md]</TestStep>
+        <TestStep>Write down the create, update, delete messages to output.md. See [testing-template.md](testing-template.md)</TestStep>
     </TestPlan>
     <Criteria>
         <Criterion type="completeness">

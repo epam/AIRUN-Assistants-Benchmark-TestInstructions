@@ -69,7 +69,7 @@ Other player photo is shown on the page of a player with missing photo.
         <TestStep>Create a new player</TestStep>
         <TestStep>Visit the new player page</TestStep>
         <TestStep>Make sure a photo placeholder is shown instead of missing photo</TestStep>
-        <TestStep>Add results of the manual tests to output.md. See (testing-template.md)[testing-template.md]</TestStep>
+        <TestStep>Add results of the manual tests to output.md. See [testing-template.md](testing-template.md)</TestStep>
     </TestPlan>
     <Criteria>
         <Criterion type="completeness">

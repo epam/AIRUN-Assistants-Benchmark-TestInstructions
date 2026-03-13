@@ -130,5 +130,6 @@ curl -i -u 1:1 http://localhost:8082/round
     </Criteria>
     <MetaInfo>
         <Meta>See [testing-template.md](testing-template.md)</Meta>
+        <Meta>See solution sample in [the test 0001 exemplar directory](../0001/exemplar).</Meta>
     </MetaInfo>
 </TestSpec>

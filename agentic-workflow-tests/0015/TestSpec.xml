@@ -52,7 +52,7 @@ docker run -d -p 9411:9411 openzipkin/zipkin
         <TestStep>Start the application with the command: `mvn spring-boot:run`</TestStep>
         <TestStep>Open the application at http://localhost:8082/ and login</TestStep>
         <TestStep>Verify that traces appeared in the Zipkin UI at http://localhost:9411/zipkin</TestStep>
-        <TestStep>Add results of the manual tests to output.md. See (testing-template.md)[testing-template.md]</TestStep>
+        <TestStep>Add results of the manual tests to output.md. See [testing-template.md](testing-template.md)</TestStep>
     </TestPlan>
     <Criteria>
         <Criterion type="completeness">
