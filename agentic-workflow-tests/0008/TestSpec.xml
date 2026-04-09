@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <TestSpec>
     <Id>0008</Id>
-    <Title>Refactor Golf application, replace logback logging with Log4j 2.x logging framework and SLF4J as logging facade</Title>
+    <Title>Refactor Golf application, replace Logback logging with Log4j 2.x logging framework and SLF4J as logging facade</Title>
     <Category>solution-migration</Category>
     <Complexity>medium</Complexity>
     <CodeRepository>https://github.com/PolinaTolkachova/golf-application</CodeRepository>
@@ -21,12 +21,14 @@ Migrate Logback configuration to Log4j2 configuration.
 Configure Log4j2 for performance.
 
 # logging
+
 Unify the application logging by using SLF4J logging facade:
 - replace all other loggers with SLF4J loggers everywhere in the application.
 - use Lombok annotation to declare logger whether it is used in class.
 - replace printing to system standard output with SLF4J logging in all classes.
 
 # cleanup
+
 Cleanup unused or legacy logging configuration.
 ]]>
     </Task>

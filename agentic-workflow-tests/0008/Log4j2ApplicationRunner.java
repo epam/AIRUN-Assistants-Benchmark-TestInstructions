@@ -16,13 +16,20 @@ public class Log4j2ApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(org.springframework.boot.ApplicationArguments args) throws Exception {
-        LoggerContext context = (LoggerContext) LogManager.getContext(false);
+        Class<?> loggerContextClass = LoggerContext.class;
+        Object context = LogManager.getContext(false);
+        if( ! loggerContextClass.isInstance(context) ) {
+            log.error( "Logger context is not instance of '{}', but istanse of '{}'", loggerContextClass.getName(), context.getClass().getName() );
+            return;
+        }
+        @SuppressWarnings("resource")
+        LoggerContext loggerContext = (LoggerContext) context;
 
         // Check if context is async and all loggers are made asynchronous globally
-        boolean isAsyncContext = context instanceof AsyncLoggerContext;
+        boolean isAsyncContext = loggerContext instanceof AsyncLoggerContext;
         log.info("Async Logger Context: {}", isAsyncContext);
 
-        Configuration config = context.getConfiguration();
+        Configuration config = loggerContext.getConfiguration();
 
         // Check if loggers are individually configured as asynchronous
         config.getLoggers().forEach((name, loggerConfig) -> {
