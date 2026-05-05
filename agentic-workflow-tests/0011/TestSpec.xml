@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <TestSpec>
-    <Id>00011</Id>
+    <Id>0011</Id>
     <Title>Migrate in-memory user and role definitions to database in Golf application</Title>
     <Category>code-refactoring</Category>
     <Complexity>low</Complexity>

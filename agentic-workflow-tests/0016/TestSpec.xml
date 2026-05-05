@@ -17,6 +17,7 @@
 Fix the issue described below.
 
 ## Description
+
 Competition removing fails with error and the following error page is displayed:
 
 <page>
@@ -135,9 +136,11 @@ org.springframework.web.servlet.resource.NoResourceFoundException: No static res
 4. Confirm the competition deletion.
 
 ## Actual results
+
 - The error page given above is displayed.
 
 ## Expected results
+
 - The competition is deleted.
 - An user is returned to the Competitions page.
 ]]>
