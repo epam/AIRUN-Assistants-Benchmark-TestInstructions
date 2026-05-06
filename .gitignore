@@ -1,0 +1,12 @@
+# Ignore all node_modules
+**/node_modules/
+
+# Ignore Cypress artifacts
+**/cypress/screenshots/
+**/cypress/videos/
+**/cypress/downloads/
+**/cypress/reports/
+**/cypress/temp/
+**/cypress.log
+cypress.env.json
+cypress.log
