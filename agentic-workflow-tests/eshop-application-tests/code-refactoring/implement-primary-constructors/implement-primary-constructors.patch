@@ -1,0 +1,31 @@
+diff --git a/src/Ordering.API/.editorconfig b/src/Ordering.API/.editorconfig
+new file mode 100644
+index 0000000..1bba57e
+--- /dev/null
++++ b/src/Ordering.API/.editorconfig
+@@ -0,0 +1,6 @@
++[*.cs]
++# Enable IDE0290 specifically
++dotnet_diagnostic.IDE0290.severity = error
++
++# Ensure primary constructor preference is set
++csharp_style_prefer_primary_constructors = true:error
+diff --git a/src/Ordering.API/Ordering.API.csproj b/src/Ordering.API/Ordering.API.csproj
+index 1b9ac55..0bc7df5 100644
+--- a/src/Ordering.API/Ordering.API.csproj
++++ b/src/Ordering.API/Ordering.API.csproj
+@@ -41,4 +41,13 @@
+     </Content>
+   </ItemGroup>
+ 
++  <PropertyGroup>
++    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
++    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
++  </PropertyGroup>
++
++  <ItemGroup>
++    <None Include=".\.editorconfig" />
++  </ItemGroup>
++
+ </Project>
+\ No newline at end of file
